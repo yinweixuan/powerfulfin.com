@@ -8,7 +8,11 @@
 
 namespace App\Components;
 
-
+/**
+ * redis
+ * Class RedisUtil
+ * @package App\Components
+ */
 class RedisUtil extends \Redis
 {
     const DB_DEFAULT = '0';
@@ -21,12 +25,20 @@ class RedisUtil extends \Redis
         }
         if (!is_object($instance)) {
             $instance = new RedisUtil();
+            $redisConfig = config('database.redis.default');
+            if (empty($redisConfig)) {
+                return false;
+            }
             try {
-                if ($redis = app('redis.connection')) {
+                if ($instance->connect($redisConfig['host'], $redisConfig['port'], $redisConfig['timeout']) == false) {
                     return false;
                 }
-
-                $redis->select($db);
+                if (!empty($redisConfig['password'])) {
+                    if ($instance->auth($redisConfig['password']) == false) {
+                        return false;
+                    }
+                }
+                $instance->select($db);
             } catch (\Exception $exception) {
                 return false;
             }
