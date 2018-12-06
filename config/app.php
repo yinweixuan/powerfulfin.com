@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', '大圣分期'),
 
     /*
     |--------------------------------------------------------------------------
@@ -225,5 +225,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+
+    'company_name' => '北京中宇育达科技有限公司',
 
 ];
