@@ -10,11 +10,12 @@ namespace App\Http\Controllers\App\V1;
 
 
 use App\Http\Controllers\App\AppController;
+use App\Models\ActiveRecord\ARPfUsers;
 
 class IndexController extends AppController
 {
     public function index()
     {
-        echo 1;
+        var_dump(ARPfUsers::test());
     }
 }
