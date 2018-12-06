@@ -8,3 +8,6 @@
 define('PATH_BASE', dirname(__FILE__) . '/..');
 define('PATH_CONFIG', PATH_BASE . '/config');
 define('PATH_VENDOR', PATH_BASE . '/vendor');
+
+
+define('DOMAIN_WEB', 'www.powerfulfin.com');

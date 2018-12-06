@@ -6,7 +6,7 @@
  * Time: 2:53 PM
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\App;
 
 
 class AppController extends Controller

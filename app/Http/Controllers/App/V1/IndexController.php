@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\App\V1;
 
 
-use App\Http\Controllers\AppController;
+use App\Http\Controllers\App\AppController;
 
 class IndexController extends AppController
 {

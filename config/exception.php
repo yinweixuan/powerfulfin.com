@@ -14,3 +14,28 @@ define('ALARM_SMS_RECEIVER', '13426386028@qq.com');
 define('EXCEPTION_NOTICE', 0);          //静默方式处理异常,只记录日志
 define('EXCEPTION_FATAL', 1);           //严重错误,直接终止
 define('EXCEPTION_WARN', 2);            //当前功能点不可用,但不影响其他的功能
+
+define('ERR_OK', 0);
+/**
+ * 系统错误码,1~199
+ */
+/**
+ * 系统未知错误
+ */
+define('ERR_SYS_UNKNOWN', 1);
+define('ERR_SYS_UNKNOWN_CONTENT', '系统未知错误！');
+/**
+ * 数据库错误
+ */
+define('ERR_SYS_DB', 2);
+define('ERR_SYS_DB_CONTENT', "数据库异常");
+/**
+ * 参数错误
+ */
+define('ERR_SYS_PARAM', 3);
+define('ERR_SYS_PARAM_CONTENT', '参数错误');
+/**
+ * 未登录
+ */
+define('ERR_NOLOGIN', 4);
+define('ERR_NOLOGIN_CONTENT', '您未登录，请先登录！');
