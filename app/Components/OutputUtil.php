@@ -9,6 +9,9 @@
 namespace App\Components;
 
 
+use App\Models\DataBus;
+use Illuminate\Support\Facades\Log;
+
 class OutputUtil
 {
     /**

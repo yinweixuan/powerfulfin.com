@@ -33,7 +33,7 @@ class ARPfUsers
             throw new PfException(ERR_SYS_PARAM_CONTENT . "id:" . $id, ERR_SYS_PARAM);
         }
 
-        return DB::table(self::TABLE_NAME)->where('id', $id)->first()->toArray();
+        return DB::table(self::TABLE_NAME)->where('id', $id)->get()->toArray();
     }
 
     /**
@@ -47,7 +47,7 @@ class ARPfUsers
         if (!CheckUtil::checkPhone($phone)) {
             throw new PfException(ERR_SYS_PARAM_CONTENT . "phone:" . $phone, ERR_SYS_PARAM);
         }
-        return DB::table(self::TABLE_NAME)->where('phone', $phone)->first()->toArray();
+        return DB::table(self::TABLE_NAME)->where('phone', $phone)->get()->toArray();
     }
 
     /**
