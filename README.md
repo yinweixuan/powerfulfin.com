@@ -6,3 +6,5 @@
 - Laravel Admin 1.5 https://laravel-admin.org/docs/zh/installation
 - PHP >= 7.1.0
 - composer 安装
+- aliyun-mns-1.3.5
+- aliyun-opensearch-3.1.0
