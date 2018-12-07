@@ -11,17 +11,19 @@ namespace App\Models;
 require PATH_VENDOR . '/autoload.php';
 
 use App\Components\AreaUtil;
+use App\Components\CookieUtil;
+use App\Models\ActiveRecord\ARPfUsers;
 use Mobile_Detect;
 
 class DataBus
 {
     private static $data = [];
+    const COOKIE_KEY = 'powerfulfin_user';
 
     private static function init()
     {
         self::$data['ua'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         self::$data['request'] = $_REQUEST;
-        self::$data['uid'] = self::checkCookie();
         self::$data['ctime'] = date('Y-m-d H:i:s');
         self::$data['date'] = date('Y-m-d');
         self::$data['curtime'] = time();
@@ -46,6 +48,11 @@ class DataBus
         }
         self::$data['cookie'] = $_COOKIE;
         self::$data['isMobile'] = $detect->isMobile();
+        $checkCookie = self::checkCookie();
+        self::$data['uid'] = $checkCookie['uid'];
+        self::$data['phone'] = $checkCookie['phone'];
+        self::$data['username'] = $checkCookie['username'];
+        self::$data['user'] = self::getUserInfo();
     }
 
     public static function get($key)
@@ -53,20 +60,48 @@ class DataBus
         if (empty(self::$data)) {
             self::init();
         }
-        if (isset(self::$data[$key])) {
+
+        if (array_key_exists($key, self::$data)) {
             return self::$data[$key];
         } else {
             return self::$data;
         }
     }
 
+    public static function getUserInfo()
+    {
+        $uid = self::$data['uid'];
+        if ($uid < 1) {
+            return false;
+        }
+
+        return ARPfUsers::getUserInfoByID($uid);
+    }
+
+    public static function getUid()
+    {
+        if (!self::get('uid')) {
+            return 0;
+        } else {
+            return self::get('uid');
+        }
+    }
+
+
     public static function isLogin()
     {
-        return true;
+        return self::getUid() ? true : false;
     }
 
     public static function checkCookie()
     {
-        return true;
+        $cookieValue = CookieUtil::getCookie(self::COOKIE_KEY);
+        if (empty($cookieValue)) {
+            return ['uid' => 0, 'phone' => '', 'username' => ''];
+        }
+        $cookieValue = str_replace(' ', '+', $cookieValue);
+        $userInfo = CookieUtil::strCode($cookieValue, 'DECODE');
+        list($uid, $username, $phone, $safecv) = explode('|', $userInfo);
+        return ['uid' => $uid, 'phone' => $phone, 'username' => $username];
     }
 }

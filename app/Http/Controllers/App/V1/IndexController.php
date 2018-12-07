@@ -12,11 +12,12 @@ namespace App\Http\Controllers\App\V1;
 use App\Components\RedisUtil;
 use App\Http\Controllers\App\AppController;
 use App\Models\ActiveRecord\ARPfUsers;
+use App\Models\DataBus;
 
 class IndexController extends AppController
 {
     public function index()
     {
-        var_dump(RedisUtil::getInstance());
+        var_dump(DataBus::get('11'));
     }
 }

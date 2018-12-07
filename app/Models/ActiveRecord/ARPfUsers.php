@@ -11,7 +11,7 @@ namespace App\Models\ActiveRecord;
 
 use App\Components\ArrayUtil;
 use App\Components\CheckUtil;
-use App\Components\PfException;
+use App\Components\PFException;
 use Illuminate\Support\Facades\DB;
 
 class ARPfUsers
@@ -25,12 +25,12 @@ class ARPfUsers
      * 根据用户ID获取用户信息
      * @param $id
      * @return array
-     * @throws PfException
+     * @throws PFException
      */
     public static function getUserInfoByID($id)
     {
         if (is_null($id) || !is_numeric($id) || $id < 0) {
-            throw new PfException(ERR_SYS_PARAM_CONTENT . "id:" . $id, ERR_SYS_PARAM);
+            throw new PFException(ERR_SYS_PARAM_CONTENT . "id:" . $id, ERR_SYS_PARAM);
         }
 
         return DB::table(self::TABLE_NAME)->where('id', $id)->get()->toArray();
@@ -40,12 +40,12 @@ class ARPfUsers
      * 根据手机号获取用户信息
      * @param $phone
      * @return array
-     * @throws PfException
+     * @throws PFException
      */
     public static function getUserInfoByPhone($phone)
     {
         if (!CheckUtil::checkPhone($phone)) {
-            throw new PfException(ERR_SYS_PARAM_CONTENT . "phone:" . $phone, ERR_SYS_PARAM);
+            throw new PFException(ERR_SYS_PARAM_CONTENT . "phone:" . $phone, ERR_SYS_PARAM);
         }
         return DB::table(self::TABLE_NAME)->where('phone', $phone)->get()->toArray();
     }

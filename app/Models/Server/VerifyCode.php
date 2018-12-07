@@ -9,7 +9,7 @@
 namespace App\Models\Server;
 
 
-use App\Components\PfException;
+use App\Components\PFException;
 use App\Components\RedisUtil;
 use Illuminate\Support\Facades\Redis;
 
@@ -34,14 +34,14 @@ class VerifyCode
      * @param $phone 手机号
      * @param $code 短信验证码
      * @return bool
-     * @throws PfException
+     * @throws PFException
      */
     public static function checkVerifyCode($phone, $ip, $code)
     {
         $redis = RedisUtil::getInstance();
         $redisKey = 'PHONE_CODE_' . $phone . '_' . md5(ip2long($ip));
         if (!$redis->exists($redisKey)) {
-            throw new PfException(ERR_VERIFY_CODE_CONTENT . ':已失效', ERR_VERIFY_CODE);
+            throw new PFException(ERR_VERIFY_CODE_CONTENT . ':已失效', ERR_VERIFY_CODE);
         }
         $data = $redis->get($redisKey);
         if ($data) {
@@ -65,19 +65,19 @@ class VerifyCode
     public static function sendVerifyCode($phone, $ip, $uid = 0)
     {
         if (!CheckUtil::checkPhone($phone)) {
-            throw new PfException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
+            throw new PFException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
         }
         $redis = RedisUtil::getInstance();
         $limitKey = 'PHONE_CODE_LIMIT_' . $phone . '_' . md5(ip2long($ip));
         if ($redis->exists($limitKey)) {
-            throw new PfException(ERR_VERIFY_CODE_CONTENT . ":", ERR_VERIFY_CODE);
+            throw new PFException(ERR_VERIFY_CODE_CONTENT . ":", ERR_VERIFY_CODE);
         }
         $redisKey = 'PHONE_CODE_' . $phone . '_' . md5(ip2long($ip));
         if ($redis->exists($redisKey)) {
             $params = json_decode($redis->get($redisKey), true);
             if ($params['number'] > 5) {
                 $redis->set($limitKey, 1, 30 * 60);
-                throw new PfException(ERR_VERIFY_CODE_CONTENT, ERR_VERIFY_CODE);
+                throw new PFException(ERR_VERIFY_CODE_CONTENT, ERR_VERIFY_CODE);
             } else {
                 $params['number']++;
                 $redis->set($redisKey, json_encode($params), 5 * 60);
@@ -92,7 +92,7 @@ class VerifyCode
         try {
 //            SmsUtil::sendSms($phone, 'verify_code', ['code' => $params['code']], self::orderid());
         } catch (\Exception $exception) {
-            throw new PfException($exception->getMessage(), $exception->getCode());
+            throw new PFException($exception->getMessage(), $exception->getCode());
         }
     }
 

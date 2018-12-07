@@ -53,3 +53,16 @@ define('ERR_PHONE_FORMAT_CONTENT', '手机号格式异常');
 
 define('ERR_VERIFY_CODE', 7);
 define('ERR_VERIFY_CODE_CONTENT', '短信验证码异常');
+
+
+/**
+ * 队列,2201~2299
+ */
+define('ERR_QUEUE_CREATE_CLIENT', 2201);       //创建连接失败
+define('ERR_QUEUE_CREATE_QUEUE', 2202);       //创建队列失败
+define('ERR_QUEUE_DEL_QUEUE', 2203);       //删除队列失败
+define('ERR_QUEUE_GET_QUEUE', 2211);       //获取队列失败
+define('ERR_QUEUE_SEND_MSG', 2212);       //发送消息失败
+define('ERR_QUEUE_REV_MSG', 2213);       //接收消息失败
+define('ERR_QUEUE_DEL_MSG', 2214);       //删除消息失败
+define('ERR_QUEUE_QUEUE_EMPTY', 2215);       //消息队列为空

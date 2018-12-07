@@ -11,7 +11,7 @@ namespace App\Http\Controllers\App\V1;
 
 use App\Components\CheckUtil;
 use App\Components\OutputUtil;
-use App\Components\PfException;
+use App\Components\PFException;
 use App\Http\Controllers\App\AppController;
 use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\DataBus;
@@ -34,11 +34,11 @@ class LoginController extends AppController
                 if ($result) {
                     $userInfo = ARPfUsers::getUserInfoByPhone($phone);
                 } else {
-                    throw new PfException(ERR_REGISTER_CONTENT, ERR_REGISTER);
+                    throw new PFException(ERR_REGISTER_CONTENT, ERR_REGISTER);
                 }
             }
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $userInfo);
-        } catch (PfException $exception) {
+        } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
     }
@@ -48,12 +48,12 @@ class LoginController extends AppController
         try {
             $phone = Input::get("phone");
             if (!CheckUtil::checkPhone($phone)) {
-                throw new PfException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
+                throw new PFException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
             }
             $ip = DataBus::get('ip');
             VerifyCode::sendVerifyCode($phone, $ip);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
-        } catch (PfException $exception) {
+        } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
     }
