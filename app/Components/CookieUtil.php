@@ -70,11 +70,7 @@ class CookieUtil
         } elseif ($cookieValue == '' && $expireTime == 0) {
             return setcookie($cookieName, '', $timestamp - 2678400, $cookiePath, $cookieDomain, $sIsSecure);
         }
-        if (PHP_VERSION < 5.2) {
-            return setcookie($cookieName, $cookieValue, 0, $cookiePath . ($isHttponly ? '; HttpOnly' : ''), $cookieDomain, $sIsSecure);
-        } else {
-            return setcookie($cookieName, $cookieValue, $expireTime, $cookiePath, $cookieDomain, $sIsSecure, $isHttponly);
-        }
+        return setcookie($cookieName, $cookieValue, $expireTime, $cookiePath, $cookieDomain, $sIsSecure, $isHttponly);
     }
 
     /**

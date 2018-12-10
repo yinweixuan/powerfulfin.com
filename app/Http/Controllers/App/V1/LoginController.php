@@ -10,6 +10,7 @@ namespace App\Http\Controllers\App\V1;
 
 
 use App\Components\CheckUtil;
+use App\Components\CookieUtil;
 use App\Components\OutputUtil;
 use App\Components\PFException;
 use App\Http\Controllers\App\AppController;
@@ -37,7 +38,9 @@ class LoginController extends AppController
                     throw new PFException(ERR_REGISTER_CONTENT, ERR_REGISTER);
                 }
             }
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $userInfo);
+            $userInfo = array_shift($userInfo);
+            $cookie = self::getCookie($userInfo);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $cookie);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
@@ -56,5 +59,16 @@ class LoginController extends AppController
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
+    }
+
+    private function getCookie(array $userInfo)
+    {
+        if (empty($userInfo)) {
+            $cookie = [];
+        } else {
+            $strCode = $userInfo['id'] . "|" . $userInfo['username'] . "|" . $userInfo['phone'] . '|' . CookieUtil::createSafecv();
+            $cookie = [DataBus::COOKIE_KEY => CookieUtil::strCode($strCode)];
+        }
+        return $cookie;
     }
 }
