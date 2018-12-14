@@ -20,7 +20,6 @@ Homestead.json
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
 /.idea
 /.vscode
 /nbproject
