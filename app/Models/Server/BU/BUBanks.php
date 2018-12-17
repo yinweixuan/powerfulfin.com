@@ -6,7 +6,7 @@
  * Time: 4:32 PM
  */
 
-namespace App\Models\Server;
+namespace App\Models\Server\BU;
 
 use App\Components\RedisUtil;
 
