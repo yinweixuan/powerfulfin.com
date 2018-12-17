@@ -54,7 +54,20 @@ define('ERR_PHONE_FORMAT_CONTENT', '手机号格式异常');
 define('ERR_VERIFY_CODE', 7);
 define('ERR_VERIFY_CODE_CONTENT', '短信验证码异常');
 
+define('ERR_VCODE_CHECK', 8);
+define('ERR_VCODE_CHECK_CONTENT', '验证码校验失败');
 
+define('ERR_VCODE_CREATE', 9);
+define('ERR_VCODE_CREATE_CONTENT', "验证码创建失败");
+
+define('ERR_SMS_FAIL', 10);
+define('ERR_SMS_FAIL_CONTENT', "短信发送失败");
+
+define('ERR_SMS_MOBILE_FORMAT', 11);
+define('ERR_SMS_MOBILE_FORMAT_CONTENT', "手机号错误");
+
+define('ERR_SMS_CODE_FORMAT', 12);
+define('ERR_SMS_CODE_FORMAT_CONTENT', '验证码错误');
 /**
  * 队列,2201~2299
  */
