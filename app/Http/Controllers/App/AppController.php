@@ -15,5 +15,9 @@ class AppController extends Controller
 {
     public function __construct()
     {
+
+        config("app.env");
+
+        env("DB_CONNECTION");
     }
 }

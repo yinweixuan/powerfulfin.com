@@ -9,6 +9,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.1.3",
+        "ext-json": "*",
+        "ext-mcrypt": "*",
+        "ext-openssl": "*",
         "encore/laravel-admin": "^1.6",
         "fideloper/proxy": "^4.0",
         "jpush/jpush": "^3.6",
@@ -16,6 +19,7 @@
         "laravel/tinker": "^1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "mpdf/mpdf": "^7.1",
+        "phpseclib/phpseclib": "^2.0",
         "predis/predis": "^1.1"
     },
     "require-dev": {
