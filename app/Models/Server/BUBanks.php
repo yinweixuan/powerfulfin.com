@@ -8,9 +8,13 @@
 
 namespace App\Models\Server;
 
-
 use App\Components\RedisUtil;
 
+/**
+ * 银行卡业务处理
+ * Class BUBanks
+ * @package App\Models\Server
+ */
 class BUBanks
 {
     /**
