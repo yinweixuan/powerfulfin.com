@@ -11,11 +11,15 @@ namespace App\Http\Controllers\Inner;
 
 use App\Components\PFException;
 use App\Http\Controllers\Controller;
+use App\Models\Server\BU\BUUdcredit;
 use App\Models\Server\Udcredit\UdcreditNotify;
 use Illuminate\Support\Facades\Log;
 
 class UdcreditController extends Controller
 {
+    /**
+     * 有盾云慧眼回调数据
+     */
     public function notify()
     {
         try {

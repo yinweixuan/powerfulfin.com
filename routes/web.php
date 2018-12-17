@@ -11,8 +11,20 @@
 |
 */
 
+/**
+ * 官网
+ */
 Route::get('/', 'HomeController@index');
 
+/**
+ * 回调路由
+ */
+Route::group(['namespace' => 'Inner'], function () {
+    /**
+     * 有盾回调接口
+     */
+    Route::match(['post'], '/udcredit/notify', 'UdcreditController@notify');
+});
 
 
 /**
