@@ -19,3 +19,16 @@ define('PATH_LIBRARIES', PATH_APP . '/Libraries');
 
 
 define('DOMAIN_WEB', 'www.powerfulfin.com');
+
+
+/**
+ * 数据状态，SUCCESS FAIL
+ */
+define('STATUS_SUCCESS', 'SUCCESS');
+define('STATUS_FAIL', 'FAIL');
+
+/**
+ * 设备类型
+ */
+define('PHONE_TYPE_ANDROID', 'Android');
+define('PHONE_TYPE_IOS', 'IOS');
