@@ -13,7 +13,7 @@ use App\Components\PFException;
 
 class CalcMoney
 {
-//分：小数点
+    //分：小数点
     const SCALE_FEN = 0;
     //元：小数点
     const SCALE_YUAN = 2;
