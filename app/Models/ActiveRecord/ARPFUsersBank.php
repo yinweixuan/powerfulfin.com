@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFUsersBank
 {
-    const TABLE_NAME = 'users_bank';
+    const TABLE_NAME = 'pf_users_bank';
 }

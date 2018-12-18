@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFUsersLocation
 {
-    const TABLE_NAME = 'users_location';
+    const TABLE_NAME = 'pf_users_location';
 }

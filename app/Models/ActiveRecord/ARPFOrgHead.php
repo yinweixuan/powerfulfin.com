@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFOrgHead
 {
-    const TABLE_NAME = 'org_head';
+    const TABLE_NAME = 'pf_org_head';
 }

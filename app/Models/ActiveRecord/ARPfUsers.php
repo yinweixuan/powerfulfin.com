@@ -20,7 +20,7 @@ class ARPfUsers extends Model
     /**
      * 数据表
      */
-    const  TABLE_NAME = 'users';
+    const  TABLE_NAME = 'pf_users';
 
     /**
      * 根据用户ID获取用户信息

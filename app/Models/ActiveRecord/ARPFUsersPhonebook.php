@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFUsersPhonebook
 {
-    const TABLE_NAME = 'users_phonebook';
+    const TABLE_NAME = 'pf_users_phonebook';
 }

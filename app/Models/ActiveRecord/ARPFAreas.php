@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFAreas
 {
-    const TABLE_NAME = 'areas';
+    const TABLE_NAME = 'pf_areas';
 }

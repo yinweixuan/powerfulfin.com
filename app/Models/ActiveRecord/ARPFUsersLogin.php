@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFUsersLogin
 {
-    const TABLE_NAME = 'users_login';
+    const TABLE_NAME = 'pf_users_login';
 }

@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFUsersWork
 {
-    const TABLE_NAME = 'users_work';
+    const TABLE_NAME = 'pf_users_work';
 }

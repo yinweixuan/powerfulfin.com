@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFUsersAuthLog
 {
-    const TABLE_NAME = 'users_auth_log';
+    const TABLE_NAME = 'pf_users_auth_log';
 }

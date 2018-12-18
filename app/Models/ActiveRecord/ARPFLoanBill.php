@@ -11,5 +11,5 @@ namespace App\Models\ActiveRecord;
 
 class ARPFLoanBill
 {
-    const TABLE_NAME = 'loan_bill';
+    const TABLE_NAME = 'pf_loan_bill';
 }
