@@ -19,6 +19,7 @@ define('PATH_LIBRARIES', PATH_APP . '/Libraries');
 
 
 define('DOMAIN_WEB', 'www.powerfulfin.com');
+define('DOMAIN_INNER', 'http://inner.powerfulfin.com');
 
 
 /**

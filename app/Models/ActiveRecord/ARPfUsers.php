@@ -34,7 +34,7 @@ class ARPfUsers extends Model
             throw new PFException(ERR_SYS_PARAM_CONTENT . "id:" . $id, ERR_SYS_PARAM);
         }
 
-        return DB::table(self::TABLE_NAME)->where('id', $id)->get()->toArray();
+        return DB::table(self::TABLE_NAME)->where('id', $id)->first();
     }
 
     /**

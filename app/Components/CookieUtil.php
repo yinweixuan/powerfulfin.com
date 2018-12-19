@@ -8,10 +8,11 @@
 
 namespace App\Components;
 
+use Illuminate\Support\Facades\Cookie;
 
 class CookieUtil
 {
-    const db_cookiepre = 'powerfulfin';
+    const db_cookiepre = 'dw8zh';
     const db_hash = '8RnJMxV/AfOiZar1';
     const db_sitehash = 'pyYowBoaSU3/gylyOTH6YN8kx2iOdw8zh5Z2X7NHvX+xctfdotkZn8/g';
     const db_ckpath = '/';
@@ -54,12 +55,11 @@ class CookieUtil
             }
         }
 
-        $isHttponly = false;
-        if ($cookieName == 'uyeuser') {
-            $agent = strtolower($server['HTTP_USER_AGENT']);
-            if (!($agent && preg_match('/msie ([0-9]\.[0-9]{1,2})/i', $agent) && strstr($agent, 'mac'))) {
-                $isHttponly = true;
-            }
+        $agent = strtolower($server['HTTP_USER_AGENT']);
+        if (!($agent && preg_match('/msie ([0-9]\.[0-9]{1,2})/i', $agent) && strstr($agent, 'mac'))) {
+            $isHttponly = true;
+        } else {
+            $isHttponly = false;
         }
 
         $cookieValue = str_replace("=", '', $cookieValue);
@@ -68,9 +68,9 @@ class CookieUtil
         if ($expireTime === 'F' || $expireTime !== 0) {
             $expireTime = strtotime('+30 minute');
         } elseif ($cookieValue == '' && $expireTime == 0) {
-            return setcookie($cookieName, '', $timestamp - 2678400, $cookiePath, $cookieDomain, $sIsSecure);
+            return Cookie::queue($cookieName, '', -1);
         }
-        return setcookie($cookieName, $cookieValue, $expireTime, $cookiePath, $cookieDomain, $sIsSecure, $isHttponly);
+        return Cookie::queue($cookieName, $cookieValue, $expireTime);
     }
 
     /**

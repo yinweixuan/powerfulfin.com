@@ -17,6 +17,7 @@ use App\Http\Controllers\App\AppController;
 use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\DataBus;
 use App\Models\Server\VerifyCode;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Input;
 
 class LoginController extends AppController
@@ -40,6 +41,7 @@ class LoginController extends AppController
             }
             $userInfo = array_shift($userInfo);
             $cookie = self::getCookie($userInfo);
+            CookieUtil::Cookie(DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $cookie);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
@@ -67,7 +69,7 @@ class LoginController extends AppController
             $cookie = [];
         } else {
             $strCode = $userInfo['id'] . "|" . $userInfo['username'] . "|" . $userInfo['phone'] . '|' . CookieUtil::createSafecv();
-            $cookie = [DataBus::COOKIE_KEY => CookieUtil::strCode($strCode)];
+            $cookie = [CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY => CookieUtil::strCode($strCode)];
         }
         return $cookie;
     }

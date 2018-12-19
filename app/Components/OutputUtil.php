@@ -36,7 +36,11 @@ class OutputUtil
     {
         self::$msgData['code'] = $code;
         self::$msgData['msg'] = $msg;
-        self::$msgData['data'] = $data;
+        if (empty($data)) {
+            self::$msgData['data'] = new \stdClass();
+        } else {
+            self::$msgData['data'] = $data;
+        }
         self::$msgData['isLogin'] = DataBus::isLogin();
         self::$msgData['time'] = DataBus::get('ctime');
         $ret = json_encode(self::$msgData);
@@ -53,7 +57,11 @@ class OutputUtil
     {
         self::$msgData['code'] = $code;
         self::$msgData['msg'] = $msg;
-        self::$msgData['data'] = $data;
+        if (empty($data)) {
+            self::$msgData['data'] = new \stdClass();
+        } else {
+            self::$msgData['data'] = $data;
+        }
         self::$msgData['isLogin'] = DataBus::isLogin();
         self::$msgData['time'] = DataBus::get('ctime');
         $ret = json_encode(self::$msgData);
