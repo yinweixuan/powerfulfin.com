@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Components\PFException;
+use App\Components\ViewUtil;
+use App\Models\Message\MsgInit;
 use App\Models\Message\MsgSMS;
 use Illuminate\Console\Command;
 
@@ -39,14 +41,10 @@ class MsgCommand extends Command
      */
     public function handle()
     {
-        // 入口方法
-        $param1 = $this->argument('param1'); // 不指定参数名的情况下用argument
-        $param2 = $this->option('param2'); // 用--开头指定参数名
-
         ViewUtil::setBeginTime();
         for ($i = 0; $i < 1000; $i++) {
             try {
-                $result = MsgSMS::sendSMS();
+                $result = MsgInit::sendMsg();
                 if ($result == null) {
                     sleep(2);
                 }
