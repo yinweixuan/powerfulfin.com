@@ -27,4 +27,12 @@ class ARPFUsersReal {
         return $data;
     }
 
+    public static function update($uid, $update) {
+        if (is_null($uid) || !is_numeric($uid) || $uid < 0) {
+            return false;
+        }
+        $update['update_time'] = date('Y-m-d H:i:s');
+        return DB::table(self::TABLE_NAME)->where('uid', $uid)->update($update);
+    }
+
 }
