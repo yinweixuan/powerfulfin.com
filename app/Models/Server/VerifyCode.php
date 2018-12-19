@@ -9,6 +9,7 @@
 namespace App\Models\Server;
 
 
+use App\Components\CheckUtil;
 use App\Components\PFException;
 use App\Components\RedisUtil;
 use Illuminate\Support\Facades\Redis;
