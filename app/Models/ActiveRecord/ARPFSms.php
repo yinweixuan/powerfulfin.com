@@ -32,7 +32,6 @@ class ARPFSms
             'msg' => $msg,
             'plat' => $plat,
             'create_time' => date('Y-m-d H:i:s'),
-            'update_time' => date('Y-m-s H:i:s')
         ];
         return DB::table(self::TABLE_NAME)->insertGetId($info);
     }
@@ -46,7 +45,6 @@ class ARPFSms
     public static function _update($id, $info = [])
     {
         $info = ArrayUtil::trimArray($info);
-        $info['update_time'] = date('Y-m-d H:i:s');
         return DB::table(self::TABLE_NAME)->where('id', $id)->update($info);
     }
 }

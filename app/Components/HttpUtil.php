@@ -173,7 +173,7 @@ class HttpUtil
      *              'header'=>array
      *              )
      * @return string
-     * @exception Exception cur
+     * @PFException PFException cur
      */
     public static function doPost($url, $optArr = array(), $needThrow = true, $needRetry = true)
     {
@@ -224,7 +224,7 @@ class HttpUtil
                     $error = curl_error($ch);
                     $message = "curl erron:{$errno},error:{$error},url:{$url}";
                     curl_close($ch);
-                    throw new Exception($message, $errno);
+                    throw new PFException($message, $errno);
                 }
             } else {
                 $success = true;
@@ -236,14 +236,14 @@ class HttpUtil
             $error = curl_error($ch);
             $message = "curl erron:{$errno},error:{$error},url:{$url}";
             curl_close($ch);
-            throw new Exception($message, $errno);
+            throw new PFException($message, $errno);
         }
 
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         if ($needThrow && $httpCode != 200) {
             $message = "http code:{$httpCode},url:{$url}";
             curl_close($ch);
-            throw new Exception($message, $httpCode);
+            throw new PFException($message, $httpCode);
         }
         curl_close($ch);
         return $data;
@@ -256,7 +256,7 @@ class HttpUtil
      *              'proxy'=>"http://proxy.xxx:80"
      *              )
      * @return string
-     * @exception Exception cur
+     * @PFException PFException cur
      */
     public static function doGet($url, $optionArray = array(), $needRetry = true)
     {
@@ -305,7 +305,7 @@ class HttpUtil
                     $error = curl_error($ch);
                     $message = "curl erron:{$errno},error:{$error},url:{$url}";
                     curl_close($ch);
-                    throw new Exception($message, $errno);
+                    throw new PFException($message, $errno);
                 }
             } else {
                 $success = true;
@@ -317,14 +317,14 @@ class HttpUtil
             $error = curl_error($ch);
             $message = "curl erron:{$errno},error:{$error},url:{$url}";
             curl_close($ch);
-            throw new Exception($message, $errno);
+            throw new PFException($message, $errno);
         }
 
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         if ($httpCode != 200) {
             $message = "http code:{$httpCode},url:{$url}";
             curl_close($ch);
-            throw new Exception($message, $httpCode);
+            throw new PFException($message, $httpCode);
         }
         curl_close($ch);
         return $data;
@@ -371,7 +371,7 @@ class HttpUtil
                     $error = curl_error($ch);
                     $message = "curl erron:{$errno},error:{$error},url:{$url}";
                     curl_close($ch);
-                    throw new Exception($message, $errno);
+                    throw new PFException($message, $errno);
                 }
             } else {
                 $success = true;
@@ -383,7 +383,7 @@ class HttpUtil
             $error = curl_error($ch);
             $message = "curl erron:{$errno},error:{$error},url:{$url}";
             curl_close($ch);
-            throw new Exception($message, $errno);
+            throw new PFException($message, $errno);
         }
 
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -391,7 +391,7 @@ class HttpUtil
         if ($httpCode != 200) {
             $message = "http code:{$httpCode},url:{$url}";
             curl_close($ch);
-            throw new Exception($message, $httpCode);
+            throw new PFException($message, $httpCode);
         }
         curl_close($ch);
         $result['header'] = substr($data, 0, $headerSize);

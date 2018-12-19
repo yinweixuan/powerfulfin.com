@@ -146,8 +146,9 @@ class MsgInit
             }
         }
         try {
-            $queueName = self::getQueueName();
-            QueueUtil::sendMessage($queueName, $data, $delaySeconds, $priority);
+//            $queueName = self::getQueueName();
+//            QueueUtil::sendMessage($queueName, $data, $delaySeconds, $priority);
+            self::sendMsg($data);
         } catch (PFException $exception) {
             throw new PFException($exception->getMessage());
         }
@@ -158,21 +159,21 @@ class MsgInit
      * @return bool|null
      * @throws PFException
      */
-    public static function sendMsg()
+    public static function sendMsg($data)
     {
-        $queueName = self::getQueueName();
-        $queueData = QueueUtil::receiveMessage($queueName);
-        if (empty($queueData)) {
-            return null;
-        }
-
-        $data = json_decode($queueData, true);
+//        $queueName = self::getQueueName();
+//        $queueData = QueueUtil::receiveMessage($queueName);
+//        if (empty($queueData)) {
+//            return null;
+//        }
+//
+//        $data = json_decode($queueData, true);
         $type = strtolower($data['type']);
         if ($type == self::SEND_MSG_TYPE_SMS) {
             try {
                 $result = ARPFSms::createNewSMS($data['uid'], $data['device'], $data['content']);
                 MsgSMS::sendSMS($data['device'], $data['content']);
-                ARPFSms::_update($result['id'], array('status' => STATUS_SUCCESS, 'plat' => MsgSMS::SMS_PLAT));
+                ARPFSms::_update($result, array('status' => STATUS_SUCCESS, 'plat' => MsgSMS::SMS_PLAT));
             } catch (PFException $exception) {
                 throw new PFException($exception->getMessage());
             }

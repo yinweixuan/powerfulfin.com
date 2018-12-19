@@ -46,9 +46,8 @@ class MsgSMS
         foreach ($post_data as $k => $v) {
             $tmpArr[] = "{$k}={$v}";
         }
-
         try {
-            $res = HttpUtil::doPost(env("HAOBO_SEND_URLA"), array('request' => implode('&', $tmpArr)), false);
+            $res = HttpUtil::doPost(env("HAOBO_SEND_URL"), array('request' => implode('&', $tmpArr)), false);
             if (strpos($res, 'id=') !== false) {
                 $ret = substr($res, 3, strlen($res) - 3);
             } else {
@@ -56,9 +55,7 @@ class MsgSMS
             }
         } catch (PFException $e) {
             $ret = ERR_SMS_FAIL;
-            Log::error("sms-haobo error.\nreceiver:{$mobile}.\ncontent:{$content}\nreturn:" . print_r($res, true));
         }
-        Log::info("sms-haobo.\nreceiver:{$mobile}.\ncontent:{$content}\nreturn:" . print_r($res, true));
         return $ret;
     }
 
