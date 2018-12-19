@@ -32,3 +32,13 @@ define('STATUS_FAIL', 'FAIL');
  */
 define('PHONE_TYPE_ANDROID', 'Android');
 define('PHONE_TYPE_IOS', 'IOS');
+
+/**
+ * 资金方配置
+ */
+define('RESOURCE_JCFC', 1);
+define('RESOURCE_JCFC_COMPANY', '晋商消费金融股份有限公司');
+define('RESOURCE_FCS', 2);
+define('RESOURCE_FCS_COMPANY', '富登小额贷款（重庆）有限公司');
+define('RESOURCE_FCS_SC', 3);
+define('RESOURCE_FCS_SC_COMPANY', '富登小额贷款(四川)有限公司');
