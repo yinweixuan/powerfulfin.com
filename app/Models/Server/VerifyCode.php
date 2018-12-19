@@ -12,6 +12,7 @@ namespace App\Models\Server;
 use App\Components\CheckUtil;
 use App\Components\PFException;
 use App\Components\RedisUtil;
+use App\Models\Message\MsgInit;
 use Illuminate\Support\Facades\Redis;
 
 class VerifyCode
@@ -91,25 +92,9 @@ class VerifyCode
             $redis->set($redisKey, json_encode($params), 5 * 60);
         }
         try {
-//            SmsUtil::sendSms($phone, 'verify_code', ['code' => $params['code']], self::orderid());
-        } catch (\Exception $exception) {
+            MsgInit::sendMsgQueue(MsgInit::SEND_MSG_TYPE_SMS, $uid, $phone, 'verify_code', [], [$params['code']]);
+        } catch (PFException $exception) {
             throw new PFException($exception->getMessage(), $exception->getCode());
         }
-    }
-
-    public static function orderid()
-    {
-        //订单号码主体（YYYYMMDDHHIISSNNNNNNNN）
-        $order_id_main = date('YmdHis') . rand(10000000, 99999999);
-        //订单号码主体长度
-        $order_id_len = strlen($order_id_main);
-        $order_id_sum = 0;
-        for ($i = 0; $i < $order_id_len; $i++) {
-            $order_id_sum += (int)(substr($order_id_main, $i, 1));
-        }
-        //唯一订单号码（YYYYMMDDHHIISSNNNNNNNNCC）
-        $order_id = $order_id_main . str_pad((100 - $order_id_sum % 100) % 100, 2, '0', STR_PAD_LEFT);
-
-        return $order_id;
     }
 }
