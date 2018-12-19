@@ -70,20 +70,20 @@ class VerifyCode
             throw new PFException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
         }
         $redis = RedisUtil::getInstance();
-        $limitKey = 'PHONE_CODE_LIMIT_' . $phone . '_' . md5(ip2long($ip));
-        if ($redis->exists($limitKey)) {
-            throw new PFException(ERR_VERIFY_CODE_CONTENT . ":", ERR_VERIFY_CODE);
-        }
+//        $limitKey = 'PHONE_CODE_LIMIT_' . $phone . '_' . md5(ip2long($ip));
+//        if ($redis->exists($limitKey)) {
+//            throw new PFException(ERR_VERIFY_CODE_CONTENT . ":", ERR_VERIFY_CODE);
+//        }
         $redisKey = 'PHONE_CODE_' . $phone . '_' . md5(ip2long($ip));
         if ($redis->exists($redisKey)) {
             $params = json_decode($redis->get($redisKey), true);
-            if ($params['number'] > 5) {
-                $redis->set($limitKey, 1, 30 * 60);
-                throw new PFException(ERR_VERIFY_CODE_CONTENT, ERR_VERIFY_CODE);
-            } else {
-                $params['number']++;
-                $redis->set($redisKey, json_encode($params), 5 * 60);
-            }
+//            if ($params['number'] > 5) {
+//                $redis->set($limitKey, 1, 30 * 60);
+//                throw new PFException(ERR_VERIFY_CODE_CONTENT, ERR_VERIFY_CODE);
+//            } else {
+            $params['number']++;
+            $redis->set($redisKey, json_encode($params), 5 * 60);
+//            }
         } else {
             $params = [
                 'code' => self::createCode(),

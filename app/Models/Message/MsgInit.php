@@ -91,8 +91,8 @@ class MsgInit
     public static function sendMsgQueue($type, $uid = 0, $device = null, $key, $titleParams = null, $contentParams = null, $params = array(), $delaySeconds = null, $priority = null)
     {
         //判断相关必要参数
-        if (empty($uid) || empty($type) || empty($device) || empty($key)) {
-            throw new PFException(ERR_SYS_PARAM_CONTENT);
+        if (empty($type) || empty($device) || empty($key)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
         //对消息类型进行判断，获取模板数据类型
         switch ($type) {

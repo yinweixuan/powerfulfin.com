@@ -9,7 +9,7 @@
 namespace App\Components;
 
 
-require_once(PATH_LIBRARIES . '/aliyun-mns-1.3.5/mns-autoloader.php');
+require PATH_LIBRARIES . '/aliyun-mns-1.3.5/mns-autoloader.php';
 
 use AliyunMNS\Client;
 use AliyunMNS\Requests\SendMessageRequest;

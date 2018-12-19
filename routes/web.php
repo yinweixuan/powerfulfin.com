@@ -44,4 +44,8 @@ Route::group(['namespace' => 'APP\V1'], function () {
      * 登录接口
      */
     Route::match(['get', 'post'], APP_V1 . '/login/login', 'LoginController@login');
+    /**
+     * 获取短信验证码
+     */
+    Route::match(['get', 'post'], APP_V1 . '/login/verifycode', 'LoginController@verifycode');
 });
