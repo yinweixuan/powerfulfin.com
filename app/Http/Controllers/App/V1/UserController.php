@@ -22,7 +22,6 @@ class UserController extends AppController
     {
         $this->checkLogin(false);
         $user = DataBus::get('user');
-        var_dump($user);exit;
         if (empty($user)) {
             OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
         }

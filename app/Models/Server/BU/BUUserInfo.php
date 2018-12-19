@@ -50,7 +50,7 @@ class BUUserInfo
 
     public static function getUserReal()
     {
-        $order = self::$user['id'] . DataBus::orderid();
+        $order = self::$user['id'] . '_' . DataBus::orderid();
 
         try {
             $info = ARPFUsersAuthLog::getUserAuthSuccessLast(self::$user['id']);

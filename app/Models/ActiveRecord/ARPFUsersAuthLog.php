@@ -36,12 +36,10 @@ class ARPFUsersAuthLog
     public static function getUserAuthSuccessLast($uid)
     {
         $info = DB::table(self::TABLE_NAME)->select('*')
-            ->where(
-                ['uid' => $uid],
-                ['result_auth' => self::RESULT_AUTH_TRUE],
-                ['be_idcard', '>=', '0.8']
-            )
-            ->orderBy('id DESC')
+            ->where('uid', $uid)
+            ->where('result_auth', self::RESULT_AUTH_TRUE)
+            ->where('be_idcard', '>=', '0.8')
+            ->orderByDesc('id')
             ->first();
         if (empty($info)) {
             return [];
