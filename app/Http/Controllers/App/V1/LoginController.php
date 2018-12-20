@@ -17,7 +17,6 @@ use App\Http\Controllers\App\AppController;
 use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\DataBus;
 use App\Models\Server\VerifyCode;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Input;
 
 class LoginController extends AppController
@@ -26,6 +25,12 @@ class LoginController extends AppController
     {
         try {
             $phone = Input::get("phone");
+            $vcode = Input::get("vcode");
+            $ip = DataBus::get('ip');
+            if (!VerifyCode::checkVerifyCode($phone, $ip, $vcode)) {
+                throw new PFException(ERR_VCODE_CHECK_CONTENT, ERR_VCODE_CHECK);
+            }
+
             $userInfo = ARPfUsers::getUserInfoByPhone($phone);
             if (empty($userInfo)) {
                 $info = [
@@ -39,7 +44,6 @@ class LoginController extends AppController
                     throw new PFException(ERR_REGISTER_CONTENT, ERR_REGISTER);
                 }
             }
-            $userInfo = array_shift($userInfo);
             $cookie = self::getCookie($userInfo);
             CookieUtil::Cookie(DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $cookie);

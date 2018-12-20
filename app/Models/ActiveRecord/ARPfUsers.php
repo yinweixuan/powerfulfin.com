@@ -48,7 +48,7 @@ class ARPfUsers extends Model
         if (!CheckUtil::checkPhone($phone)) {
             throw new PFException(ERR_SYS_PARAM_CONTENT . "phone:" . $phone, ERR_SYS_PARAM);
         }
-        return DB::table(self::TABLE_NAME)->where('phone', $phone)->get()->toArray();
+        return DB::table(self::TABLE_NAME)->where('phone', $phone)->first();
     }
 
     /**
