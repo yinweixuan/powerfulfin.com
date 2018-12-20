@@ -53,4 +53,11 @@ Route::group(['namespace' => 'APP\V1'], function () {
      * 获取用户资料配置
      */
     Route::match(['get', 'post'], APP_V1 . '/user/uconfig', 'UserController@uconfig');
+
+    /**
+     * 地址选择器
+     */
+    Route::match(['get', 'post'], APP_V1 . '/area/province', 'AreaController@province');
+    Route::match(['get', 'post'], APP_V1 . '/area/city', 'AreaController@city');
+    Route::match(['get', 'post'], APP_V1 . '/area/area', 'AreaController@area');
 });

@@ -18,19 +18,27 @@ class BUUserInfo
     private static $user;
     private static $data;
 
+    /**
+     * 获取用户配置
+     * @param $user
+     * @param $data
+     * @param $part
+     * @return array|bool
+     * @throws PFException
+     */
     public static function getUConfig($user, $data, $part)
     {
         self::$user = $user;
         self::$data = $data;
         switch ($part) {
             case 1:
-                $result = self::getUserReal();
+                $result = self::getUserRealConfig();
                 break;
             case 2:
-                $result = self::getUserBanks();
+                $result = self::getUserBanksConfig();
                 break;
             case 3:
-                $result = [];
+                $result = self::getUserContactConfig();
                 break;
             case 4:
                 $result = [];
@@ -52,18 +60,18 @@ class BUUserInfo
         }
     }
 
-    public static function getUserReal()
+    /**
+     * 获取云慧眼认证配置
+     * @return array
+     */
+    public static function getUserRealConfig()
     {
         $order = self::$user['id'] . '_' . DataBus::orderid();
 
-        try {
-            $info = ARPFUsersAuthLog::getUserAuthSuccessLast(self::$user['id']);
-            if (!empty($info)) {
-                $verified = 1;
-            } else {
-                $verified = 0;
-            }
-        } catch (PFException $exception) {
+        $info = ARPFUsersAuthLog::getUserAuthSuccessLast(self::$user['id']);
+        if (!empty($info)) {
+            $verified = 1;
+        } else {
             $verified = 0;
         }
 
@@ -77,17 +85,31 @@ class BUUserInfo
         );
     }
 
-    public static function getUserBanks()
+    /**
+     * 获取银行卡配置
+     * @return array
+     */
+    public static function getUserBanksConfig()
     {
-        try {
-            $banks = BUBanks::getBanksInfo();
-            foreach ($banks as &$bank) {
-                unset($bank['jcfc_bank_code']);
-                unset($bank['jcfc_bank_code_tl']);
-            }
-            return array('bank_list' => array_values($banks));
-        } catch (PFException $e) {
-            throw new PFException($e->getMessage(), $e->getCode());
+        $banks = BUBanks::getBanksInfo();
+        foreach ($banks as &$bank) {
+            unset($bank['jcfc_bank_code']);
+            unset($bank['jcfc_bank_code_tl']);
         }
+        return array('bank_list' => array_values($banks));
+    }
+
+    /**
+     * 获取联系人配置
+     * @return array
+     */
+    public static function getUserContactConfig()
+    {
+        $data = [
+            'relations' => ['父母', '配偶', '监护人', '子女'],
+            'housing_situation' => ['宿舍', '租房', '与父母同住', '与其他亲属同住', '自有住房', '其他'],
+            'marital_status' => ['已婚有子女', '已婚无子女', '未婚', '离异', '其他'],
+        ];
+        return $data;
     }
 }

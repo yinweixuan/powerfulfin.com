@@ -68,6 +68,9 @@ define('ERR_SMS_MOBILE_FORMAT_CONTENT', "手机号错误");
 
 define('ERR_SMS_CODE_FORMAT', 12);
 define('ERR_SMS_CODE_FORMAT_CONTENT', '验证码错误');
+
+define('ERR_AREA', 13);
+define('ERR_AREA_CONTENT', '暂未获取地址数据，请稍后重试');
 /**
  * 队列,2201~2299
  */
