@@ -32,7 +32,7 @@ Route::group(['namespace' => 'Inner'], function () {
  */
 define('APP_V1', '/app/v1');
 
-Route::group(['namespace' => 'APP\V1'], function () {
+Route::group(['namespace' => 'App\V1'], function () {
     // Controllers Within The "App\Http\Controllers\APP\V1" Namespace
     /**
      * 首页
