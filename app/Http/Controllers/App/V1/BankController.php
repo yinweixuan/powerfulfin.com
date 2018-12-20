@@ -72,4 +72,16 @@ class BankController extends AppController
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }
     }
+
+    public function repayCard()
+    {
+        try {
+            $bank_account = Input::get("bank_account");
+            $user = DataBus::get("user");
+            $result = BUUserBank::changeRepayCard($user['uid'], $bank_account);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
+        }
+    }
 }

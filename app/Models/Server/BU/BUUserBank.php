@@ -166,4 +166,20 @@ class BUUserBank
 
         return $info;
     }
+
+    public static function changeRepayCard($uid, $bank_account)
+    {
+        if (is_null($uid) || !is_numeric($uid) || empty($bank_account)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+
+        $bankInfo = ARPFUsersBank::getUserBanksByUidAndBankAccount($uid, $bank_account);
+        if (empty($bankInfo)) {
+            throw new PFException("未正确获取银行卡信息，请稍后重试", ERR_SYS_UNKNOWN);
+        }
+        $update = [
+            'type' => 1,
+        ];
+        return ARPFUsersBank::updateBankInfo($bankInfo['id'], $update);
+    }
 }

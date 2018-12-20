@@ -32,4 +32,24 @@ class ARPFUsersBank
             ->where("uid", $uid)->get()->toArray();
         return $lists;
     }
+
+    public static function getUserBanksByUidAndBankAccount($uid, $bank_account)
+    {
+        if (!is_numeric($uid) || is_null($uid) || is_null($bank_account)) {
+            return [];
+        }
+
+        $info = DB::table(self::TABLE_NAME)->select('*')
+            ->where("uid", $uid)
+            ->where("bank_account", $bank_account)
+            ->first();
+        return $info;
+    }
+
+    public static function updateBankInfo($id, $update = [])
+    {
+        $update = ArrayUtil::trimArray($update);
+
+        return DB::table(self::TABLE_NAME)->where('id', $id)->update($update);
+    }
 }
