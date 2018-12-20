@@ -71,9 +71,10 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/bank/sms', 'BankController@sms');      //获取签约短息
     Route::match(['get', 'post'], APP_V1 . '/bank/bind', 'BankController@bind');    //签约
     Route::match(['get', 'post'], APP_V1 . '/bank/banks', 'BankController@banks');  //拉取用户银行卡列表
+    Route::match(['get', 'post'], APP_V1 . '/bank/change', 'BankController@change');  //切换用户划扣卡
 });
 
-Route::match(['get', 'post'], '/pic/{cate?}/{img?}', function($cate = '', $img = '') {
+Route::match(['get', 'post'], '/pic/{cate?}/{img?}', function ($cate = '', $img = '') {
     $file = PATH_BASE . '/storage/app/public/' . $cate . '/' . $img;
     if (!is_file($file)) {
         header("HTTP/1.1 404 Not Found");

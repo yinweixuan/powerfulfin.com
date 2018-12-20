@@ -73,7 +73,7 @@ class BankController extends AppController
         }
     }
 
-    public function repayCard()
+    public function change()
     {
         try {
             $bank_account = Input::get("bank_account");
