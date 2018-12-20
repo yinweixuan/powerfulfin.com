@@ -32,7 +32,7 @@ class OutputUtil
      * @param $code
      * @param array $data
      */
-    public static function info($msg = '', $code, array $data = [])
+    public static function info($msg = '', $code = ERR_OK, array $data = [])
     {
         self::$msgData['code'] = $code;
         self::$msgData['msg'] = $msg;
@@ -53,7 +53,7 @@ class OutputUtil
      * @param $code
      * @param array $data
      */
-    public static function err($msg = "", $code, array $data = [])
+    public static function err($msg = "", $code = ERR_SYS_UNKNOWN, array $data = [])
     {
         self::$msgData['code'] = $code;
         self::$msgData['msg'] = $msg;
@@ -70,5 +70,14 @@ class OutputUtil
         exit;
     }
 
+    public static function json_encode($value)
+    {
+        return json_encode($value);
+    }
+
+    public static function json_decode($json, $assoc = true)
+    {
+        return json_decode($json, $assoc);
+    }
 
 }

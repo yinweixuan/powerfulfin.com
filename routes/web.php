@@ -52,6 +52,8 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 获取用户资料配置
      */
     Route::match(['get', 'post'], APP_V1 . '/user/uconfig', 'UserController@uconfig');
+    Route::match(['get', 'post'], APP_V1 . '/user/userreal', 'UserController@userreal');
+
 
     /**
      * 地址选择器
