@@ -46,7 +46,7 @@ class LoginController extends AppController
             }
             $cookie = self::getCookie($userInfo);
             CookieUtil::Cookie(DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $cookie);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, [CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY => $_COOKIE['dw8zh_powerfulfin_user']]);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }

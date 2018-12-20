@@ -47,4 +47,17 @@ class ARPFUsersAuthLog
             return $info;
         }
     }
+
+    public static function getInfoByOrder($order)
+    {
+        if (empty($order)) {
+            return [];
+        }
+
+        $info = DB::table(self::TABLE_NAME)->select('*')
+            ->where('order', $order)
+            ->first();
+
+        return $info;
+    }
 }

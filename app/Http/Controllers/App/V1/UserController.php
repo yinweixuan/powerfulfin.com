@@ -39,4 +39,25 @@ class UserController extends AppController
             OutputUtil::err($e->getMessage(), $e->getCode());
         }
     }
+
+    public function usupply()
+    {
+        $this->checkLogin();
+        $user = DataBus::get('user');
+        if (empty($user)) {
+            OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
+        }
+
+        try {
+            $part = Input::get('part');
+            if (!in_array($part, array(1, 2, 3, 4, 5, 6))) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+            }
+            $function = 'supplyUserStep' . $part;
+            $result = BUUserInfo::$function($_POST, $user);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
+        } catch (PFException $e) {
+            OutputUtil::err(ERR_SYS_PARAM_CONTENT, $e->getCode());
+        }
+    }
 }

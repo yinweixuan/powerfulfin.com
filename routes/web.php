@@ -64,4 +64,11 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 搜索机构
      */
     Route::match(['get', 'post'], APP_V1 . '/search/school', 'SearchController@school');
+
+    /**
+     * 银行卡相关
+     */
+    Route::match(['get', 'post'], APP_V1 . '/bank/sms', 'BankController@sms');      //获取签约短息
+    Route::match(['get', 'post'], APP_V1 . '/bank/bind', 'BankController@bind');    //签约
+    Route::match(['get', 'post'], APP_V1 . '/bank/banks', 'BankController@banks');  //拉取用户银行卡列表
 });
