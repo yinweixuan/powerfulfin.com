@@ -9,6 +9,7 @@
 namespace App\Models\Server\BU;
 
 
+use App\Components\CheckUtil;
 use App\Components\PFException;
 use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFUsersBank;
@@ -137,5 +138,32 @@ class BUUserBank
         } catch (PFException $exception) {
             throw new PFException($exception->getMessage(), $exception->getCode());
         }
+    }
+
+    public static function getUserBanks($uid)
+    {
+        if (is_null($uid) || !is_numeric($uid)) {
+            return [];
+        }
+
+        $lists = ARPFUsersBank::getUserBanksByUid($uid);
+        $info = [];
+        if (!empty($lists)) {
+            foreach ($lists as &$list) {
+                $list['logo'] = BUBanks::getBankLogo($list['bank_code']);
+                $list['bank_account'] = CheckUtil::formatCreditCard($list['bank_code']);
+            }
+            $info['banks'] = $lists;
+        } else {
+            $info['banks'] = new \stdClass();
+        }
+
+        $userReal = ARPFUsersReal::getInfo($uid);
+        $info['user_real'] = [
+            'full_name' => $userReal['full_name'],
+            'identity_number' => $userReal['identity_number']
+        ];
+
+        return $info;
     }
 }

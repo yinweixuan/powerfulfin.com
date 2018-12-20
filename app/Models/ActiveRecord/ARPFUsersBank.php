@@ -21,4 +21,15 @@ class ARPFUsersBank
         $info = ArrayUtil::trimArray($info);
         return DB::table(self::TABLE_NAME)->insertGetId($info);
     }
+
+    public static function getUserBanksByUid($uid)
+    {
+        if (!is_numeric($uid) || is_null($uid)) {
+            return [];
+        }
+
+        $lists = DB::table(self::TABLE_NAME)->select('*')
+            ->where("uid", $uid)->get()->toArray();
+        return $lists;
+    }
 }

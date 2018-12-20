@@ -14,7 +14,6 @@ use App\Components\PFException;
 use App\Http\Controllers\App\AppController;
 use App\Models\DataBus;
 use App\Models\Server\BU\BUUserBank;
-use Encore\Admin\Grid\Filter\In;
 use Illuminate\Support\Facades\Input;
 
 class BankController extends AppController
@@ -30,7 +29,9 @@ class BankController extends AppController
     public function banks()
     {
         try {
-
+            $user = DataBus::get("user");
+            $info = BUUserBank::getUserBanks($user['id']);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $info);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }
