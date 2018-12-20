@@ -1,15 +1,15 @@
 <?php
 
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+  |--------------------------------------------------------------------------
+  | Web Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register web routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | contains the "web" middleware group. Now create something great!
+  |
+ */
 
 /**
  * 官网
@@ -30,10 +30,9 @@ Route::group(['namespace' => 'Inner'], function () {
 /**
  * APP v1版本路由
  */
-
 define('APP_V1', '/app/v1');
 
-Route::group(['namespace' => 'APP\V1'], function () {
+Route::group(['namespace' => 'App\V1'], function () {
     // Controllers Within The "App\Http\Controllers\APP\V1" Namespace
     /**
      * 首页
@@ -60,4 +59,9 @@ Route::group(['namespace' => 'APP\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/area/province', 'AreaController@province');
     Route::match(['get', 'post'], APP_V1 . '/area/city', 'AreaController@city');
     Route::match(['get', 'post'], APP_V1 . '/area/area', 'AreaController@area');
+
+    /**
+     * 搜索机构
+     */
+    Route::match(['get', 'post'], APP_V1 . '/search/school', 'SearchController@school');
 });
