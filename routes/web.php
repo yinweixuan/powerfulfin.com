@@ -65,3 +65,15 @@ Route::group(['namespace' => 'App\V1'], function () {
      */
     Route::match(['get', 'post'], APP_V1 . '/search/school', 'SearchController@school');
 });
+
+Route::match(['get', 'post'], '/pic/{cate?}/{img?}', function($cate = '', $img = '') {
+    $file = PATH_BASE . '/storage/app/public/' . $cate . '/' . $img;
+    if (!is_file($file)) {
+        header("HTTP/1.1 404 Not Found");
+        header("Status: 404 Not Found");
+        exit;
+    }
+    header('Content-type: image/jpg');
+    echo file_get_contents($file);
+    exit;
+});
