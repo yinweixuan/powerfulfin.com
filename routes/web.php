@@ -74,8 +74,8 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/bank/change', 'BankController@change');  //切换用户划扣卡
 });
 
-Route::match(['get', 'post'], '/pic/{cate?}/{img?}', function ($cate = '', $img = '') {
-    $file = PATH_BASE . '/storage/app/public/' . $cate . '/' . $img;
+Route::match(['get', 'post'], '/pic/{cate?}/{img?}', function($cate = '', $img = '') {
+    $file = PATH_BASE . '/public/img/' . $cate . '/' . $img;
     if (!is_file($file)) {
         header("HTTP/1.1 404 Not Found");
         header("Status: 404 Not Found");
