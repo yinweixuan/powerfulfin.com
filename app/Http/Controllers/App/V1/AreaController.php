@@ -22,16 +22,15 @@ class AreaController extends AppController
     public function province()
     {
         try {
-//            $redis = RedisUtil::getInstance();
-//            $key = "PF_PROVINCE";
-//            $data = $redis->get($key);
-//            if ($data) {
-//                $list = json_decode($data, true);
-//            } else {
-                $list = ARPFAreas::getAreas(0);
-//                $redis->set($key, json_encode($list), 86400);
-//            }
-            var_dump($list);exit;
+            $redis = RedisUtil::getInstance();
+            $key = "PF_PROVINCE";
+            $data = $redis->get($key);
+            if ($data) {
+                $list = json_decode($data, true);
+            } else {
+            $list = ARPFAreas::getAreas(0);
+                $redis->set($key, json_encode($list), 86400);
+            }
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $list);
         } catch (\Exception $exception) {
             OutputUtil::err(ERR_AREA_CONTENT, ERR_AREA);
