@@ -30,12 +30,16 @@ class BUUserInfo
                 $result = self::getUserBanks();
                 break;
             case 3:
+                $result = [];
                 break;
             case 4:
+                $result = [];
                 break;
             case 5:
+                $result = [];
                 break;
             case 6:
+                $result = [];
                 break;
             default:
                 $result = false;
@@ -75,6 +79,15 @@ class BUUserInfo
 
     public static function getUserBanks()
     {
-
+        try {
+            $banks = BUBanks::getBanksInfo();
+            foreach ($banks as &$bank) {
+                unset($bank['jcfc_bank_code']);
+                unset($bank['jcfc_bank_code_tl']);
+            }
+            return array('bank_list' => array_values($banks));
+        } catch (PFException $e) {
+            throw new PFException($e->getMessage(), $e->getCode());
+        }
     }
 }
