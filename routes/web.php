@@ -51,8 +51,9 @@ Route::group(['namespace' => 'App\V1'], function () {
     /**
      * 获取用户资料配置
      */
-    Route::match(['get', 'post'], APP_V1 . '/user/uconfig', 'UserController@uconfig');
-    Route::match(['get', 'post'], APP_V1 . '/user/userreal', 'UserController@userreal');
+    Route::match(['get', 'post'], APP_V1 . '/user/uconfig', 'UserController@uconfig');  //获取用户配置项
+    Route::match(['get', 'post'], APP_V1 . '/user/userreal', 'UserController@userreal');    //用户实名认证接口
+    Route::match(['get', 'post'], APP_V1 . '/user/phonebook', 'UserController@phonebook');    //提交通讯录
 
 
     /**
@@ -74,6 +75,11 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/bank/bind', 'BankController@bind');    //签约
     Route::match(['get', 'post'], APP_V1 . '/bank/banks', 'BankController@banks');  //拉取用户银行卡列表
     Route::match(['get', 'post'], APP_V1 . '/bank/change', 'BankController@change');  //切换用户划扣卡
+
+    /**
+     * 订单信息
+     */
+    Route::match(['get', 'post'], APP_V1 . '/loan/loanbill', 'LoanController@loanbill');  //获取还款计划表
 });
 
 Route::match(['get', 'post'], '/pic/{cate?}/{img?}', function ($cate = '', $img = '') {

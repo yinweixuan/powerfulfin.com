@@ -82,7 +82,7 @@ class UserController extends AppController
     /**
      * 获取通讯录
      */
-    public function actionpostmobile()
+    public function phonebook()
     {
         $mobiles = Input::get('phonebook');
         $this->checkLogin();
@@ -111,9 +111,9 @@ class UserController extends AppController
             }
 
             if ($this->isAndroid) {
-                $phone_type = 'Android';
+                $phone_type = PHONE_TYPE_ANDROID;
             } elseif ($this->isKZIOS()) {
-                $phone_type = 'IOS';
+                $phone_type = PHONE_TYPE_IOS;
             } else {
                 $phone_type = 'Other';
             }

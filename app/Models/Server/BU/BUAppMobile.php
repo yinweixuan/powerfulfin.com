@@ -53,7 +53,7 @@ class BUAppMobile
                 'brand' => 'Apple',
                 'model' => $mobile,
                 'system' => '',
-                'channel' => '',
+                'channel' => 0,
                 'info' => $userAgent,
                 'ctime' => DataBus::get('ctime'),
             );

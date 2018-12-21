@@ -9,7 +9,18 @@
 namespace App\Models\ActiveRecord;
 
 
+use Illuminate\Support\Facades\DB;
+
 class ARPFLoanBill
 {
     const TABLE_NAME = 'pf_loan_bill';
+
+    public static function getLoanBillByLidAndUid($lid, $uid)
+    {
+        $lists = DB::table(self::TABLE_NAME)->select('*')
+            ->where('lid', $lid)
+            ->where('uid', $uid)
+            ->get()->toArray();
+        return $lists;
+    }
 }
