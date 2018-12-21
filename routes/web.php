@@ -52,9 +52,11 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 获取用户资料配置
      */
     Route::match(['get', 'post'], APP_V1 . '/user/uconfig', 'UserController@uconfig');  //获取用户配置项
-    Route::match(['get', 'post'], APP_V1 . '/user/userreal', 'UserController@userreal');    //用户实名认证接口
+    Route::match(['get', 'post'], APP_V1 . '/user/userreal', 'UserController@userReal');    //用户实名认证接口
+    Route::match(['get', 'post'], APP_V1 . '/user/usercontact', 'UserController@userContact');    //用户联系信息接口
+    Route::match(['get', 'post'], APP_V1 . '/user/userwork', 'UserController@userWork');    //用户工作&学历信息接口
+    Route::match(['get', 'post'], APP_V1 . '/user/userlocation', 'UserController@userLocation');    //用户设备授权接口
     Route::match(['get', 'post'], APP_V1 . '/user/phonebook', 'UserController@phonebook');    //提交通讯录
-
 
     /**
      * 地址选择器

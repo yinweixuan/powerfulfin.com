@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Input;
 
 class UserController extends AppController
 {
+    /**
+     * 获取用户信息配置资料
+     */
     public function uconfig()
     {
         $this->checkLogin(false);
@@ -42,6 +45,9 @@ class UserController extends AppController
         }
     }
 
+    /**
+     * 用户实名认证
+     */
     public function userReal()
     {
         $this->checkLogin(false);
@@ -58,26 +64,60 @@ class UserController extends AppController
         }
     }
 
-    public function usupply()
+    /**
+     * 用户联系信息
+     */
+    public function userContact()
     {
-        $this->checkLogin();
+        $this->checkLogin(false);
         $user = DataBus::get('user');
         if (empty($user)) {
             OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
         }
-
         try {
-            $part = Input::get('part');
-            if (!in_array($part, array(1, 2, 3, 4, 5, 6))) {
-                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
-            }
-            $function = 'supplyUserStep' . $part;
-            $result = BUUserInfo::$function($_POST, $user);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
-        } catch (PFException $e) {
-            OutputUtil::err(ERR_SYS_PARAM_CONTENT, $e->getCode());
+            $data = Input::get();
+            BUUserInfo::userContact($data, DataBus::get("user"));
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }
     }
+
+    /**
+     * 用户工作&学历信息
+     */
+    public function userWork()
+    {
+        $this->checkLogin(false);
+        $user = DataBus::get('user');
+        if (empty($user)) {
+            OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
+        }
+        try {
+            $data = Input::get();
+            BUUserInfo::userWork($data, DataBus::get("user"));
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
+        }
+    }
+
+    public function userLocation()
+    {
+        $this->checkLogin(false);
+        $user = DataBus::get('user');
+        if (empty($user)) {
+            OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
+        }
+        try {
+            $data = Input::get();
+            BUUserInfo::userLocation($data, DataBus::get("user"));
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
+        }
+    }
+
 
     /**
      * 获取通讯录
