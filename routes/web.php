@@ -82,14 +82,3 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/loan/loanbill', 'LoanController@loanbill');  //获取还款计划表
 });
 
-Route::match(['get', 'post'], '/pic/{cate?}/{img?}', function ($cate = '', $img = '') {
-    $file = PATH_BASE . '/storage/app/public/' . $cate . '/' . $img;
-    if (!is_file($file)) {
-        header("HTTP/1.1 404 Not Found");
-        header("Status: 404 Not Found");
-        exit;
-    }
-    header('Content-type: image/jpg');
-    echo file_get_contents($file);
-    exit;
-});
