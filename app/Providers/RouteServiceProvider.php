@@ -35,11 +35,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
-
-        $this->mapWebRoutes();
-
-        //
+        //判断域名进行route的加载
+        if (in_array($_SERVER['SERVER_NAME'], [DOMAIN_ORG])) {
+            $this->mapOrgRoutes();
+        } else {
+            $this->mapApiRoutes();
+            $this->mapWebRoutes();
+        }
     }
 
     /**
