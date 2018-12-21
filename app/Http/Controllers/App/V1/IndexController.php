@@ -19,12 +19,12 @@ class IndexController extends AppController {
         $data['banner'] = [
             [
                 'title' => 'this is banner 1',
-                'img' => '/pic/banner/banner1.png',
+                'img' => '/img/banner/banner1.png',
                 'url' => 'http://www.baidu.com',
             ],
             [
                 'title' => 'this is banner 2',
-                'img' => '/pic/banner/banner2.png',
+                'img' => '/img/banner/banner2.png',
                 'url' => 'http://www.baidu.com',
             ],
         ];
@@ -41,7 +41,7 @@ class IndexController extends AppController {
         ];
         $data['loan'] = [
             'status' => '1',
-            'status_img' => '/pic/loan/audit.png',
+            'status_img' => '/img/loan/audit.png',
             'status_desp' => '审核中',
             'repay_date' => '2019-01-15',
             'repay_money' => '1205.12',
