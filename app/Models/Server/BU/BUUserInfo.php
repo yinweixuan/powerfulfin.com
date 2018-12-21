@@ -11,9 +11,7 @@ namespace App\Models\Server\BU;
 
 use App\Components\CheckUtil;
 use App\Components\PFException;
-use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFUsersAuthLog;
-use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\ActiveRecord\ARPFUsersWork;
 use App\Models\DataBus;
@@ -164,7 +162,7 @@ class BUUserInfo
             throw new PFException("该身份信息已经绑定其他账户，请更换登录账户", ERR_SYS_PARAM);
         }
 
-        $data['sex'] = CheckUtil::getSexByIDCard($data['idcard']);
+        $data['gender'] = CheckUtil::getSexByIDCard($data['idcard']);
         ARPFUsersReal::update($user['id'], $data);
 
         if (!empty($data['udcredit_order'])) {

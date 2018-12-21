@@ -283,9 +283,9 @@ class CheckUtil
     {
         $tmp = intval($idcard[16]);
         if ($tmp % 2 == 1) {
-            $sex = 1;
+            $sex = '男';
         } else {
-            $sex = 2;
+            $sex = '女';
         }
         return $sex;
     }
