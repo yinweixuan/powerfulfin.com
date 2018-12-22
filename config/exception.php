@@ -71,6 +71,10 @@ define('ERR_SMS_CODE_FORMAT_CONTENT', '验证码错误');
 
 define('ERR_AREA', 13);
 define('ERR_AREA_CONTENT', '暂未获取地址数据，请稍后重试');
+
+define('ERR_LOGIN', 14);
+define('ERR_LOGIN_CONTENT', '登录失败，用户名或密码错误');
+
 /**
  * 队列,2201~2299
  */
