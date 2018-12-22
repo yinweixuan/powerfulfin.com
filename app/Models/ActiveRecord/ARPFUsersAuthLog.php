@@ -9,10 +9,12 @@
 namespace App\Models\ActiveRecord;
 
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFUsersAuthLog
+class ARPFUsersAuthLog extends Model
 {
+    protected $table = 'pf_users_auth_log';
     const TABLE_NAME = 'pf_users_auth_log';
 
     /**

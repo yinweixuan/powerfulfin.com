@@ -9,7 +9,10 @@
 namespace App\Models\ActiveRecord;
 
 
-class ARPFUsersLocation
+use Illuminate\Database\Eloquent\Model;
+
+class ARPFUsersLocation extends Model
 {
+    protected $table = 'pf_users_location';
     const TABLE_NAME = 'pf_users_location';
 }

@@ -10,10 +10,12 @@ namespace App\Models\ActiveRecord;
 
 
 use App\Components\ArrayUtil;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFMobileModel
+class ARPFMobileModel extends Model
 {
+    protected $table = 'pf_mobile_model';
     const TABLE_NAME = 'pf_mobile_model';
 
     public static function addInfo($info = [])

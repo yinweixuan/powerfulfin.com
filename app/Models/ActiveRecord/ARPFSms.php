@@ -10,10 +10,12 @@ namespace App\Models\ActiveRecord;
 
 
 use App\Components\ArrayUtil;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFSms
+class ARPFSms extends Model
 {
+    protected $table = 'pf_sms';
     const TABLE_NAME = 'pf_sms';
 
     /**

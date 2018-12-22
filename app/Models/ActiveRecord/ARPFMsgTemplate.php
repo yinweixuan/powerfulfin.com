@@ -10,10 +10,12 @@ namespace App\Models\ActiveRecord;
 
 
 use App\Components\RedisUtil;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFMsgTemplate
+class ARPFMsgTemplate extends Model
 {
+    protected $table = 'pf_msg_template';
     const TABLE_NAME = 'pf_msg_template';
 
     const SCENES_SMS = 1;

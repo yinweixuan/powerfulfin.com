@@ -9,7 +9,10 @@
 namespace App\Models\ActiveRecord;
 
 
-class ARPFUsersContact
+use Illuminate\Database\Eloquent\Model;
+
+class ARPFUsersContact extends Model
 {
+    protected $table = 'pf_users_contact';
     const TABLE_NAME = 'pf_users_contact';
 }

@@ -10,10 +10,12 @@ namespace App\Models\ActiveRecord;
 
 
 use App\Components\ArrayUtil;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFUsersPhonebook
+class ARPFUsersPhonebook extends Model
 {
+    protected $table = 'pf_users_phonebook';
     const TABLE_NAME = 'pf_users_phonebook';
 
     public static function addUserPhoneBook($info = array())

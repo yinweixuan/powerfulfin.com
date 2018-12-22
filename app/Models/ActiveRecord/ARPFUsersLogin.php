@@ -9,7 +9,10 @@
 namespace App\Models\ActiveRecord;
 
 
-class ARPFUsersLogin
+use Illuminate\Database\Eloquent\Model;
+
+class ARPFUsersLogin extends Model
 {
+    protected $table = 'pf_users_login';
     const TABLE_NAME = 'pf_users_login';
 }

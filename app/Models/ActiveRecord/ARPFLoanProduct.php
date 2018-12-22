@@ -9,7 +9,10 @@
 namespace App\Models\ActiveRecord;
 
 
-class ARPFLoanProduct
+use Illuminate\Database\Eloquent\Model;
+
+class ARPFLoanProduct extends Model
 {
+    protected $table = 'pf_loan_product';
     const TABLE_NAME = 'pf_loan_product';
 }

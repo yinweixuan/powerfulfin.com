@@ -9,24 +9,28 @@
 
 namespace App\Models\ActiveRecord;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFOrgHead {
-
+class ARPFOrgHead extends Model
+{
+    protected $table = 'pf_org_head';
     const TABLE_NAME = 'pf_org_head';
 
-    public static function getInfo($hid) {
+    public static function getInfo($hid)
+    {
         if (is_null($hid) || !is_numeric($hid) || $hid < 0) {
             return [];
         }
         $data = DB::table(self::TABLE_NAME)
-                ->select(['*'])
-                ->where('hid', $hid)
-                ->first();
+            ->select(['*'])
+            ->where('hid', $hid)
+            ->first();
         return $data;
     }
-    
-     public static function update($hid, $update) {
+
+    public static function update($hid, $update)
+    {
         if (is_null($hid) || !is_numeric($hid) || $hid < 0) {
             return false;
         }

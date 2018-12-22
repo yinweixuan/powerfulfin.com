@@ -9,7 +9,10 @@
 namespace App\Models\ActiveRecord;
 
 
-class ARPFOrgClass
+use Illuminate\Database\Eloquent\Model;
+
+class ARPFOrgClass extends Model
 {
+    protected $table = 'pf_org_class';
     const TABLE_NAME = 'pf_org_class';
 }

@@ -9,10 +9,12 @@
 namespace App\Models\ActiveRecord;
 
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFAreas
+class ARPFAreas extends Model
 {
+    protected $table = "pf_areas";
     const TABLE_NAME = 'pf_areas';
 
     public static function getAreas($parent_id = -1, $id = 0)

@@ -10,10 +10,12 @@ namespace App\Models\ActiveRecord;
 
 
 use App\Components\ArrayUtil;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFUsersBank
+class ARPFUsersBank extends Model
 {
+    protected $table = 'pf_users_bank';
     const TABLE_NAME = 'pf_users_bank';
 
     public static function addUserBank($info = array())
