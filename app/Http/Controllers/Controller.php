@@ -21,12 +21,12 @@ class Controller extends BaseController
     /**
      * 查询当前登录态
      */
-    public function isLogin()
+    protected function isLogin()
     {
         return DataBus::get('isLogin');
     }
 
-    public function checkLogin($toLogin = false)
+    protected function checkLogin($toLogin = false)
     {
         if (!$this->isLogin()) {
             if ($toLogin) {

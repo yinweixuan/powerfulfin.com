@@ -56,7 +56,7 @@ class DataBus
         self::$data['user'] = self::getUserInfo();
     }
 
-    public static function get($key)
+    public static function get($key = null)
     {
         if (empty(self::$data)) {
             self::init();
@@ -64,8 +64,10 @@ class DataBus
 
         if (array_key_exists($key, self::$data)) {
             return self::$data[$key];
-        } else {
+        } else if ($key === null) {
             return self::$data;
+        } else {
+            return null;
         }
     }
 
