@@ -1,26 +1,22 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: wangyi
- * Date: 2018/12/6
- * Time: 2:55 PM
+ * 继承DataBus,提供机构老师端数据总线.
+ * User: haoxiang
+ * Date: 2018/12/22
+ * Time: 2:42 PM
  */
-
-namespace App\Models;
-
-require PATH_VENDOR . '/autoload.php';
+namespace App\Models\Org;
 
 use App\Components\AreaUtil;
 use App\Components\CookieUtil;
-use App\Models\ActiveRecord\ARPfUsers;
+use App\Models\ActiveRecord\ARPFOrgUsers;
+use App\Models\DataBus;
 use Illuminate\Support\Facades\Cookie;
-use Mobile_Detect;
 
-class DataBus
+class OrgDataBus extends DataBus
 {
-    protected static $data = [];
-    const COOKIE_KEY = 'powerfulfin_user';
 
+    const COOKIE_KEY = 'powerfulfin_org_user';      //cookie的值
     protected static function init()
     {
         self::$data['ua'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
@@ -34,7 +30,7 @@ class DataBus
             self::$data['ip'] = ip2long('127.0.0.1');
         }
         self::$data['isLogin'] = self::isLogin();
-        $detect = new Mobile_Detect();
+        $detect = new \Mobile_Detect();
         if ($detect->isAndroidOS()) {
             self::$data['plat'] = 2;
         } else if ($detect->isIOS()) {
@@ -70,31 +66,10 @@ class DataBus
             return null;
         }
     }
-
-    public static function getUserInfo()
-    {
-        $uid = self::get('uid');
-        if ($uid < 1) {
-            return false;
-        }
-        return ARPfUsers::getUserInfoByID($uid);
-    }
-
-    public static function getUid()
-    {
-        if (!self::get('uid')) {
-            return 0;
-        } else {
-            return self::get('uid');
-        }
-    }
-
-
-    public static function isLogin()
-    {
-        return self::getUid() ? true : false;
-    }
-
+    /**
+     * 解析cookie
+     * @return array
+     */
     public static function checkCookie()
     {
         $cookieValue = Cookie::get(CookieUtil::db_cookiepre . '_' . self::COOKIE_KEY);
@@ -104,22 +79,19 @@ class DataBus
         $cookieValue = str_replace(' ', '+', $cookieValue);
         $userInfo = CookieUtil::strCode($cookieValue, 'DECODE');
         list($uid, $username, $phone, $safecv) = explode('|', $userInfo);
-        return ['uid' => $uid, 'phone' => $phone, 'username' => $username];
+        $ret = ['uid' => $uid, 'phone' => $phone, 'username' => $username];
+        var_dump($ret);
+        return $ret;
     }
 
-    public static function orderid()
+    public static function getUserInfo()
     {
-        //订单号码主体（YYYYMMDDHHIISSNNNNNNNN）
-        $order_id_main = date('YmdHis') . rand(10000000, 99999999);
-        //订单号码主体长度
-        $order_id_len = strlen($order_id_main);
-        $order_id_sum = 0;
-        for ($i = 0; $i < $order_id_len; $i++) {
-            $order_id_sum += (int)(substr($order_id_main, $i, 1));
+        $uid = self::get('uid');
+        if ($uid < 1) {
+            return false;
         }
-        //唯一订单号码（YYYYMMDDHHIISSNNNNNNNNCC）
-        $order_id = $order_id_main . str_pad((100 - $order_id_sum % 100) % 100, 2, '0', STR_PAD_LEFT);
-
-        return $order_id;
+        $res = ARPFOrgUsers::query()->where(['org_uid' => $uid])->first();
+        var_dump($res);
+        return $res;
     }
 }

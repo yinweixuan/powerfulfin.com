@@ -66,7 +66,7 @@ class CookieUtil
         strlen($cookieValue) > 512 && $cookieValue = substr($cookieValue, 0, 512);
         $needPrefix && $cookieName = self::CookiePre() . '_' . $cookieName;
         if ($expireTime === 'F' || $expireTime !== 0) {
-            $expireTime = strtotime('+30 minute');
+            $expireTime = strtotime('+60 minute');
         } elseif ($cookieValue == '' && $expireTime == 0) {
             return Cookie::queue($cookieName, '', -1);
         }

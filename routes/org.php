@@ -18,6 +18,10 @@ Route::group(['namespace' => 'Org'], function () {
     Route::match(['get', 'post'], '/', 'HomeController@index');                 //根域名
     Route::match(['get', 'post'], '/home/index', 'HomeController@index');       //首页
     Route::match(['get', 'post'], '/home/login', 'HomeController@login');       //登录
+    Route::match(['get', 'post'], '/home/logout', 'HomeController@logout');       //登出
+
+
+    Route::match(['get', 'post'], '/test/test1', 'TestController@test1');       //测试
 });
 
 /**
