@@ -81,6 +81,8 @@ Route::group(['namespace' => 'App\V1'], function () {
     /**
      * 订单信息
      */
-    Route::match(['get', 'post'], APP_V1 . '/loan/loanbill', 'LoanController@loanbill');  //获取还款计划表
+    Route::match(['get', 'post'], APP_V1 . '/loan/list', 'LoanController@loanList');  //获取订单列表
+    Route::match(['get', 'post'], APP_V1 . '/loan/info', 'LoanController@loanInfo');  //获取订单信息
+    Route::match(['get', 'post'], APP_V1 . '/loan/bill', 'LoanController@loanBill');  //获取还款计划表
 });
 

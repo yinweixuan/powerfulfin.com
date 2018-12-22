@@ -9,11 +9,14 @@
 namespace App\Http\Controllers\App\Models;
 
 
+use App\Components\CheckUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFLoanBill;
 use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\ActiveRecord\ARPFOrg;
+use App\Models\ActiveRecord\ARPFUsersBank;
+use App\Models\ActiveRecord\ARPFUsersReal;
 
 class Loan
 {
@@ -69,6 +72,8 @@ class Loan
 
         $loanBill = self::getLoanBill($lid, $uid);
         $org = ARPFOrg::getOrgById($loanInfo['oid']);
+        $userReal = ARPFUsersReal::getInfo($uid);
+        $userBank = ARPFUsersBank::getUserRepayBankByUid($uid);
         $info = [
             'lid' => $loanInfo['id'],   //订单号
             'create_time' => $loanInfo['create_time'],  //申请时间
@@ -77,7 +82,31 @@ class Loan
             'repay_need' => count($loanBill),   //总期数
             'org' => $org['org_name'],  //机构名称
             'oid' => $loanInfo['oid'],  //机构ID
+            'full_name' => $userReal['full_name'],
+            'phone' => $userReal['phone'],
+            'bank_account' => CheckUtil::formatCreditCard($userBank['bank_account']),
+            'bank_name' => $userBank['bank_name'],
+            'contract' => ''
         ];
+
+        return $info;
+    }
+
+    public static function getLoanList($uid)
+    {
+        $loanList = ARPFLoan::getLoanByUid($uid);
+
+        $info = [];
+        foreach ($loanList as $item) {
+            $tmp = [
+                'lid' => $item['id'],
+                'borrow_money' => $item['borrow_money'],
+                'status' => $item['status'],
+                'status_desp' => '',
+                'org_name' => ''
+            ];
+            $info[] = $tmp;
+        }
 
         return $info;
     }

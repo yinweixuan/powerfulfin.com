@@ -54,4 +54,12 @@ class ARPFUsersBank extends Model
 
         return DB::table(self::TABLE_NAME)->where('id', $id)->update($update);
     }
+
+    public static function getUserRepayBankByUid($uid)
+    {
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->where('type', 1)
+            ->first();
+    }
 }

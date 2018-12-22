@@ -28,4 +28,15 @@ class ARPFLoan extends Model
             ->where('id', $id)
             ->first();
     }
+
+    public static function getLoanByUid($uid)
+    {
+        if (is_null($uid) || !is_numeric($uid)) {
+            return [];
+        }
+
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->get()->toArray();
+    }
 }

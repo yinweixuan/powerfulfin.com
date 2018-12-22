@@ -23,25 +23,36 @@ class LoanController extends AppController
         $this->checkLogin(false);
     }
 
-    public function loanbill()
+    public function loanBill()
     {
         try {
             $lid = Input::get("lid");
             $user = DataBus::get("user");
-            $info = Loan::getLoanBill($lid, $user['uid']);
+            $info = Loan::getLoanBill($lid, $user['id']);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, ['laon_bill' => $info]);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }
     }
 
-    public function loaninfo()
+    public function loanInfo()
     {
         try {
             $lid = Input::get("lid");
             $user = DataBus::get("user");
-            $info = [];
+            $info = Loan::getLoanInfo($lid, $user['id']);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $info);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
+        }
+    }
+
+    public function loanList()
+    {
+        try {
+            $user = DataBus::get("user");
+            $info = Loan::getLoanList($user['id']);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, ['list' => $info]);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }
