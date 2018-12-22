@@ -124,11 +124,11 @@ class Xinyan extends App\Models\Epay\Epay {
         $PostArry['data_content'] = $Encrypted;
         $url = $this->host . $apiPath;
         //记录日志
-//        Yii::log($this->channel . ':' . $this->scene . " xinyan input:" . print_r($bfParams, true), CLogger::LEVEL_INFO, 'zhifu.op');
+        \Yii::log($this->channel . ':' . $this->scene . " xinyan input:" . print_r($bfParams, true), 'zhifu.op');
         $return = HttpClient::Post($PostArry, $url);  //发送请求到宝付服务器，并输出返回结果。
-//        Yii::log($this->channel . ':' . $this->scene . ' xinyan json result. orderId: ' . $bfParams['trans_id'] . '. result:' . $return, CLogger::LEVEL_INFO, 'zhifu.op');
+        \Yii::log($this->channel . ':' . $this->scene . ' xinyan json result. orderId: ' . $bfParams['trans_id'] . '. result:' . $return, 'zhifu.op');
         $result = json_decode($return, true);
-//        Yii::log($this->channel . ':' . $this->scene . ' xinyan result. orderId: ' . $bfParams['trans_id'] . '. result:' . print_r($result, true), CLogger::LEVEL_INFO, 'zhifu.op');
+        \Yii::log($this->channel . ':' . $this->scene . ' xinyan result. orderId: ' . $bfParams['trans_id'] . '. result:' . print_r($result, true), 'zhifu.op');
         //检查返回结果是否成功
         if (!is_array($result) || !array_key_exists('success', $result)) {
             throw new Exception("xinyan format error.");

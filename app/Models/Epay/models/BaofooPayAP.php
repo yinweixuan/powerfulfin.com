@@ -137,11 +137,11 @@ class BaofooPayAP extends App\Models\Epay\Epay {
      * 请求接口
      */
     public function postRequest($bf_params) {
-//        Yii::log($this->channel . ':' . $this->scene . ',flow_id: ' . $bf_params['msg_id'] . ',input:' . print_r($bf_params, true), CLogger::LEVEL_INFO, 'zhifu.op');
+        \Yii::log($this->channel . ':' . $this->scene . ',flow_id: ' . $bf_params['msg_id'] . ',input:' . print_r($bf_params, true), 'zhifu.op');
         $return = HttpClient::Post($bf_params, $this->request_url);  //发送请求到宝付服务器，并输出返回结果。
         $result = array();
         parse_str($return, $result);
-//        Yii::log($this->channel . ':' . $this->scene . ',flow_id: ' . $bf_params['msg_id'] . ',result:' . print_r($result, true), CLogger::LEVEL_INFO, 'zhifu.op');
+        \Yii::log($this->channel . ':' . $this->scene . ',flow_id: ' . $bf_params['msg_id'] . ',result:' . print_r($result, true), 'zhifu.op');
         //检查返回结果是否成功
         if (!is_array($result) || !array_key_exists('signature', $result)) {
             throw new KZException('请求宝付失败');
