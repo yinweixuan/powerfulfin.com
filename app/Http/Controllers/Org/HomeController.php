@@ -6,7 +6,7 @@
  * Time: 11:11 AM
  */
 
-namespace App\Http\Org;
+namespace App\Http\Controllers\Org;
 
 use App\Models\Org\OrgBaseController;
 
@@ -22,6 +22,6 @@ class HomeController extends OrgBaseController
      */
     public function index()
     {
-
+        echo __FILE__;
     }
 }

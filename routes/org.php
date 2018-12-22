@@ -12,14 +12,10 @@
  */
 
 /**
- * 官网
- */
-Route::get('/', 'HomeController@index');
-
-/**
  * 机构访问
  */
 Route::group(['namespace' => 'Org'], function () {
+    Route::match(['get', 'post'], '/', 'HomeController@index');                 //根域名
     Route::match(['get', 'post'], '/home/index', 'HomeController@index');       //首页
     Route::match(['get', 'post'], '/home/login', 'HomeController@login');       //登录
 });

@@ -58,6 +58,13 @@ class RouteServiceProvider extends ServiceProvider
              ->group(base_path('routes/web.php'));
     }
 
+    protected function mapOrgRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/org.php'));
+    }
+
     /**
      * Define the "api" routes for the application.
      *
