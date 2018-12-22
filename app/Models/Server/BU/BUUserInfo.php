@@ -10,8 +10,11 @@ namespace App\Models\Server\BU;
 
 
 use App\Components\CheckUtil;
+use App\Components\MapUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFUsersAuthLog;
+use App\Models\ActiveRecord\ARPFUsersContact;
+use App\Models\ActiveRecord\ARPFUsersLocation;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\ActiveRecord\ARPFUsersWork;
 use App\Models\DataBus;
@@ -118,7 +121,7 @@ class BUUserInfo
 
 
     /**
-     * 实名认证第一步，个人用户信息
+     * 个人用户信息
      * @param array $data
      * @param array $user
      * @return bool
@@ -163,7 +166,7 @@ class BUUserInfo
         }
 
         $data['gender'] = CheckUtil::getSexByIDCard($data['idcard']);
-        ARPFUsersReal::update($user['id'], $data);
+        ARPFUsersReal::updateInfo($user['id'], $data);
 
         if (!empty($data['udcredit_order'])) {
             $userAuthResult = true;
@@ -189,7 +192,7 @@ class BUUserInfo
 
 
     /**
-     * 实名认证第二步：个人联系方式
+     * 个人联系方式
      * @param array $data
      * @param array $user
      * @return bool
@@ -198,7 +201,7 @@ class BUUserInfo
     public static function userContact($data = array(), $user = array())
     {
         if (empty($data) || empty($user)) {
-            throw new PFException(ERR_SYS_PARAM_CONTENT);
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
         $params = [
             'house_status' => '住房性质',
@@ -233,45 +236,34 @@ class BUUserInfo
             throw new PFException("已婚状态下第一联系人需要填写配偶信息", ERR_SYS_PARAM);
         }
         $userReal = ARPFUsersReal::getInfo($user['id']);
-        self::checkContact($data, $userReal);
 
         $strLength = CheckUtil::getNameLength($data['home_address']);
         if ($strLength < 5) {
             throw new PFException("详细地址不少于5字符", ERR_SYS_PARAM);
         }
 
-
-    }
-
-
-    /**
-     * 检查联系人信息
-     * @param array $ret
-     * @param $userReal
-     * @throws PFException
-     */
-    public static function checkContact($ret = array(), $userReal)
-    {
-        if (CheckUtil::getNameLength($ret['contact_person']) < 2) {
-            throw new PFException("姓名格式有误,请重新填写");
+        if (CheckUtil::getNameLength($data['contact_person']) < 2) {
+            throw new PFException("姓名格式有误,请重新填写", ERR_SYS_PARAM);
         }
 
-        if (!CheckUtil::checkFullName($ret['contact_person'])) {
-            throw new PFException("联系人姓名必须为汉字");
+        if (!CheckUtil::checkFullName($data['contact_person'])) {
+            throw new PFException("联系人姓名必须为汉字", ERR_SYS_PARAM);
         }
 
-        if (!CheckUtil::checkPhone($ret['contact_person_phone'])) {
-            throw new PFException("手机号格式有误,请重新填写");
+        if (!CheckUtil::checkPhone($data['contact_person_phone'])) {
+            throw new PFException("手机号格式有误,请重新填写", ERR_SYS_PARAM);
         }
 
-        if ($ret['contact_person'] == $userReal['full_name']) {
-            throw new PFException("contact_person:联系人不能是本人");
+        if ($data['contact_person'] == $userReal['full_name']) {
+            throw new PFException("contact_person:联系人不能是本人", ERR_SYS_PARAM);
         }
 
         //检查联系人手机号是否重复
-        if ($ret['contact_person_phone'] == $userReal['phone']) {
-            throw new PFException("contact_person_phone:联系人电话不能是本人电话");
+        if ($data['contact_person_phone'] == $userReal['phone']) {
+            throw new PFException("contact_person_phone:联系人电话不能是本人电话", ERR_SYS_PARAM);
         }
+
+        return ARPFUsersContact::updateInfo($user['id'], $data);
     }
 
     /**
@@ -284,7 +276,7 @@ class BUUserInfo
     public static function userWork($data = array(), $user = array())
     {
         if (empty($data) || empty($user)) {
-            throw new PFException(ERR_SYS_PARAM_CONTENT);
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
 
         $params = array('highest_education' => '学历', 'profession' => '工作描述', 'working_status' => '工作状态');
@@ -349,15 +341,37 @@ class BUUserInfo
             throw new PFException("您挣得比俺老孙还多呢，真的吗？", ERR_SYS_PARAM);
         }
         $data['monthly_income'] = $data['monthly_income'] * 100;
-        $data['uid'] = $user['id'];
 
-
+        return ARPFUsersWork::updateInfo($user['id'], $data);
     }
 
-
+    /**
+     * 设备定位信息
+     * @param $data
+     * @param $user
+     * @return int
+     * @throws PFException
+     */
     public static function userLocation($data, $user)
     {
-
+        if (empty($data) || empty($user)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+        $info = [
+            'ip_address' => DataBus::get('ip'),
+            'create_time' => date('Y-m-d H:i:s'),
+            'uid' => $user['id'],
+        ];
+        if (empty($data['lat']) || empty($data['lng'])) {
+            $info['location'] = '0,0';
+            $info['address'] = MapUtil::getPosByIp($info['ip_address']);
+            $info['channel'] = 'IP';
+        } else {
+            $info['location'] = $data['lng'] . ',' . $data['lat'];
+            $info['address'] = MapUtil::getPosInfo($data['lng'], $data['lat']);
+            $info['channel'] = 'GPS';
+        }
+        return ARPFUsersLocation::addUserLocation($info);
     }
 
     /**
@@ -374,6 +388,4 @@ class BUUserInfo
             }
         }
     }
-
-
 }

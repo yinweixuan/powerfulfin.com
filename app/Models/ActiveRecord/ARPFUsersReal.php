@@ -9,8 +9,10 @@
 
 namespace App\Models\ActiveRecord;
 
+use App\Components\PFException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ARPFUsersReal extends Model
 {
@@ -30,14 +32,51 @@ class ARPFUsersReal extends Model
         return $data;
     }
 
-    public static function _update($uid, $update)
+    public static function addUserReal(array $info)
     {
-        if (is_null($uid) || !is_numeric($uid) || $uid < 0) {
-            return false;
+        $info = ArrayUtil::trimArray($info);
+
+        if (empty($info)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
 
-        $update['update_time'] = date('Y-m-d H:i:s');
-        return DB::table(self::TABLE_NAME)->where('uid', $uid)->update($update);
+        if (empty($info['uid'])) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+
+        $ar = new self();
+        $columns = Schema::getColumnListing(self::TABLE_NAME);
+        foreach ($columns as $key) {
+            if (array_key_exists($key, $info)) {
+                $ar->$key = $info[$key];
+            }
+        }
+        $ar->create_time = date('Y-m-d H:i:s');
+
+        if (!$ar->save()) {
+
+        }
+        return $ar->getAttributes();
+    }
+
+    public static function updateInfo($uid, array $info)
+    {
+        if (is_null($uid) || !is_numeric($uid) || $uid < 0) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+        $info = ArrayUtil::trimArray($info);
+
+        $userReal = DB::table(self::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->first();
+
+        if (empty($userReal)) {
+            $info['uid'] = $uid;
+            self::addUserReal($info);
+        } else {
+            $update['update_time'] = date('Y-m-d H:i:s');
+            return DB::table(self::TABLE_NAME)->where('uid', $uid)->update($update);
+        }
     }
 
     public static function checkErrorUserInfo($uid, $identity_number)
