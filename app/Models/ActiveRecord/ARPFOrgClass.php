@@ -10,9 +10,19 @@ namespace App\Models\ActiveRecord;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ARPFOrgClass extends Model
 {
     protected $table = 'pf_org_class';
     const TABLE_NAME = 'pf_org_class';
+
+    public static function getClassByOidWhichCanLoan($oid)
+    {
+        return DB::table(self::TABLE_NAME)->select("*")
+            ->where('oid', $oid)
+            ->where('status', STATUS_SUCCESS)
+            ->get()->toArray();
+    }
+
 }

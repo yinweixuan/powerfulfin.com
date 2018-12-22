@@ -15,6 +15,7 @@ use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFLoanBill;
 use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\ActiveRecord\ARPFOrg;
+use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
 
@@ -109,5 +110,41 @@ class Loan
         }
 
         return $info;
+    }
+
+    public static function getLoanConfig($oid, $uid)
+    {
+        if ($loanList = self::getLoanList($uid)) {
+            foreach ($loanList as $item) {
+                if (in_array($item['status'], [])) {
+                    throw new PFException("贷中");
+                }
+            }
+        }
+
+        $org = ARPFOrg::getOrgById($oid);
+        if (empty($org) || $org['status'] != STATUS_SUCCESS) {
+            throw new PFException("机构暂不支持分期业务，请稍后再试！", ERR_SYS_PARAM);
+        }
+        $class = ARPFOrgClass::getClassByOid($oid);
+        if (empty($classInfo)) {
+            throw new PFException("暂未获取到可分期订单，请稍后再试!", ERR_SYS_PARAM);
+        }
+
+        $classInfo = [];
+        foreach ($class as $k => $v) {
+            $tmp = [
+                'cid' => $v['id'],
+                'class_name' => $v['class_name'],
+                'class_price' => $v['class_price']
+            ];
+            $classInfo[] = $tmp;
+        }
+
+        $data = [
+            'class' => $classInfo,
+            'org' => $org
+        ];
+        return $data;
     }
 }

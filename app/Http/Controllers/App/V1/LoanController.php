@@ -58,4 +58,24 @@ class LoanController extends AppController
         }
     }
 
+    public function loanConfig()
+    {
+        try {
+            $oid = Input::get("oid");
+            $data = Loan::getLoanConfig($oid, DataBus::getUid());
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $data);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
+        }
+    }
+
+    public function loanSubmit()
+    {
+        try {
+            throw new PFException(123123123);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
+        }
+    }
+
 }

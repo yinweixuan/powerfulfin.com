@@ -65,7 +65,9 @@ class OutputUtil
         self::$msgData['isLogin'] = DataBus::isLogin();
         self::$msgData['time'] = DataBus::get('ctime');
         $ret = json_encode(self::$msgData);
-        Log::error($ret);
+
+        $message = 'UID:' . DataBus::getUid() . "====error message:" . $msg . "====error code:" . $code . "====error data:" . self::json_encode($data);
+        \Yii::log($message, 'echo.op');
         echo $ret;
         exit;
     }

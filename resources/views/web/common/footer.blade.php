@@ -29,6 +29,7 @@
                     <div class="copyright">
                         <p>
                             &copy; 2018.powerfulfin.com {{ config('app.company_name') }}
+                            &nbsp;&nbsp; {{ config('app.website_filing') }}
                         </p>
                     </div>
                 </div>
