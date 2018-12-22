@@ -9,11 +9,12 @@
 
 namespace App\Models\ActiveRecord;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class ARPFUsersReal
+class ARPFUsersReal extends Model
 {
-
+    protected $table = 'pf_users_real';
     const TABLE_NAME = 'pf_users_real';
 
     public static function getInfo($uid)
@@ -29,11 +30,12 @@ class ARPFUsersReal
         return $data;
     }
 
-    public static function update($uid, $update)
+    public static function _update($uid, $update)
     {
         if (is_null($uid) || !is_numeric($uid) || $uid < 0) {
             return false;
         }
+
         $update['update_time'] = date('Y-m-d H:i:s');
         return DB::table(self::TABLE_NAME)->where('uid', $uid)->update($update);
     }
