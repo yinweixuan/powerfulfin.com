@@ -35,4 +35,16 @@ class LoanController extends AppController
         }
     }
 
+    public function loaninfo()
+    {
+        try {
+            $lid = Input::get("lid");
+            $user = DataBus::get("user");
+            $info = [];
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $info);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
+        }
+    }
+
 }

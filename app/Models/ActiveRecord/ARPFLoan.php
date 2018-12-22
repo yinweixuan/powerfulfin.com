@@ -10,10 +10,22 @@ namespace App\Models\ActiveRecord;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ARPFLoan extends Model
 {
     protected $table = 'pf_loan';
 
     const TABLE_NAME = 'pf_loan';
+
+    public static function getLoanById($id)
+    {
+        if (is_null($id) || !is_numeric($id)) {
+            return [];
+        }
+
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('id', $id)
+            ->first();
+    }
 }

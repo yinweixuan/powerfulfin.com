@@ -32,7 +32,7 @@ class Controller extends BaseController
             if ($toLogin) {
                 HttpUtil::goLogin();
             } else {
-                OutputUtil::err(ERR_NOLOGIN, ERR_NOLOGIN_CONTENT);
+                OutputUtil::err(ERR_NOLOGIN_CONTENT, ERR_NOLOGIN);
             }
         }
     }
