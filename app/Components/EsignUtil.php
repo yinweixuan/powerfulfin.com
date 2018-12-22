@@ -71,25 +71,16 @@ class EsignUtil {
                 }
                 $sign_service_id = self::userSignPDF($account_id, $contract, $temp_dst_contract, $item, $seal_template);
                 $contract = $temp_dst_contract;
-                //记录数据库
-//                $row = array();
-//                $row['esign_id'] = $account_id;
-//                $row['service_id'] = $sign_service_id;
-//                $row['sign_type'] = $sign_type;
-//                $row['oid'] = $id;
-//                $row['sign_time'] = date('Y-m-d H:i:s');
-//                $row['signed_file'] = $dst_contract;
-//                Yii::app()->db->createCommand()->insert('kz_esign_log', $row);
             }
             if (is_file($temp_dst_contract)) {
                 rename($temp_dst_contract, $dst_contract);
             }
-//            $log = '签章成功：' . $dst_contract . PHP_EOL;
-//            Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+            $log = '签章成功：' . $dst_contract . PHP_EOL;
+            \Yii::log($log, 'loan.sign');
         } catch (\Exception $ex) {
-//            $log = '签章失败：' . $ex->getMessage() . PHP_EOL;
-//            $log .= '参数：' . print_r(func_get_args(), true);
-//            Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+            $log = '签章失败：' . $ex->getMessage() . PHP_EOL;
+            $log .= '参数：' . print_r(func_get_args(), true);
+            \Yii::log($log, 'loan.sign');
             throw $ex;
         }
         return $dst_contract;
@@ -105,10 +96,10 @@ class EsignUtil {
         }
         $esign = new eSign();
         $result = $esign->addPersonAccount($user['phone'], $user['full_name'], $user['identity_number']);
-//        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
-//        $log .= 'request : ' . print_r(array($uid, $user['phone'], $user['idcard_name'], $user['idcard']), true);
-//        $log .= 'response : ' . print_r($result, true);
-//        Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
+        $log .= 'request : ' . print_r(array($uid, $user['phone'], $user['idcard_name'], $user['idcard']), true);
+        $log .= 'response : ' . print_r($result, true);
+        \Yii::log($log, 'loan.sign');
         if ($result['errCode'] == 0 && $result['accountId']) {
             \App\Models\ActiveRecord\ARPFUsersReal::update($uid, array('esign_id' => $result['accountId']));
             //创建印章模板
@@ -154,10 +145,10 @@ class EsignUtil {
             $update['mobile'] = $user['phone'];
             $esign = new eSign();
             $result = $esign->updatePersonAccount($account_id, $update);
-//            $log = 'function : ' . __FUNCTION__ . PHP_EOL;
-//            $log .= 'request : ' . print_r(array($uid, $account_id, $update), true);
-//            $log .= 'response : ' . print_r($result, true);
-//            Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+            $log = 'function : ' . __FUNCTION__ . PHP_EOL;
+            $log .= 'request : ' . print_r(array($uid, $account_id, $update), true);
+            $log .= 'response : ' . print_r($result, true);
+            \Yii::log($log, 'loan.sign');
             if ($result['errCode'] != 0) {
                 throw new \Exception('更新个人账户失败：' . $result['msg']);
             }
@@ -189,10 +180,10 @@ class EsignUtil {
         }
         $esign = new eSign();
         $result = $esign->addOrganizeAccount('', $school['full_name'], $school['business_license'], $reg_type);
-//        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
-//        $log .= 'request : ' . print_r(array($sid, $school['full_name'], $school['license_id'], $reg_type), true);
-//        $log .= 'response : ' . print_r($result, true);
-//        Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
+        $log .= 'request : ' . print_r(array($sid, $school['full_name'], $school['license_id'], $reg_type), true);
+        $log .= 'response : ' . print_r($result, true);
+        \Yii::log($log, 'loan.sign');
         if ($result['errCode'] == 0 && $result['accountId']) {
             \App\Models\ActiveRecord\ARPFOrgHead::update($sid, array('esign_id' => $result['accountId']));
             //创建印章模板
@@ -237,10 +228,10 @@ class EsignUtil {
             $update['name'] = $school['full_name'];
             $esign = new eSign();
             $result = $esign->updateOrganizeAccount($account_id, $update);
-//            $log = 'function : ' . __FUNCTION__ . PHP_EOL;
-//            $log .= 'request : ' . print_r(array($sid, $account_id, $update), true);
-//            $log .= 'response : ' . print_r($result, true);
-//            Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+            $log = 'function : ' . __FUNCTION__ . PHP_EOL;
+            $log .= 'request : ' . print_r(array($sid, $account_id, $update), true);
+            $log .= 'response : ' . print_r($result, true);
+            \Yii::log($log, 'loan.sign');
             if ($result['errCode'] != 0) {
                 throw new \Exception('更新企业账户失败：' . $result['msg']);
             }
@@ -275,10 +266,10 @@ class EsignUtil {
         }
         $esign = new eSign();
         $result = $esign->addTemplateSeal($account_id, $template_type, $seal_color, $h_text, $q_text);
-//        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
-//        $log .= 'request : ' . print_r(array($account_id, $template_cate, $template_type), true);
-//        $log .= 'response : ' . print_r($result, true);
-//        Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
+        $log .= 'request : ' . print_r(array($account_id, $template_cate, $template_type), true);
+        $log .= 'response : ' . print_r($result, true);
+        \Yii::log($log, 'loan.sign');
         if ($result['errCode'] == 0 && $result['imageBase64']) {
             $seal_template_file = self::getSealTemplatePath($account_id) . '/' . $account_id;
             if (!is_dir(self::getSealTemplatePath($account_id))) {
@@ -329,10 +320,10 @@ class EsignUtil {
         $sign_pos_filtered['posY'] += $sign_pos_filtered['width'] / 2 - 10;
         $esign = new eSign();
         $result = $esign->selfSignPDF($sign_file, $sign_pos_filtered, 0, \tech\constants\SignType::SINGLE, $stream = true);
-//        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
-//        $log .= 'request : ' . print_r(array($sign_file, $sign_pos_filtered), true);
-//        $log .= 'response : ' . print_r($result, true);
-//        Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
+        $log .= 'request : ' . print_r(array($sign_file, $sign_pos_filtered), true);
+        $log .= 'response : ' . print_r($result, true);
+        \Yii::log($log, 'loan.sign');
         if ($result['errCode'] == 0 && $result['signServiceId']) {
             return $result['signServiceId'];
         } else {
@@ -362,10 +353,10 @@ class EsignUtil {
         $sign_pos_filtered['posY'] += $sign_pos_filtered['width'] / 2 - 10;
         $esign = new eSign();
         $result = $esign->userSignPDF($account_id, $sign_file, $sign_pos_filtered, \tech\constants\SignType::SINGLE, $seal_template, $stream = true);
-//        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
-//        $log .= 'request : ' . print_r(array($account_id, $sign_file, $sign_pos_filtered), true);
-//        $log .= 'response : ' . print_r($result, true);
-//        Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
+        $log .= 'request : ' . print_r(array($account_id, $sign_file, $sign_pos_filtered), true);
+        $log .= 'response : ' . print_r($result, true);
+        \Yii::log($log, 'loan.sign');
         if ($result['errCode'] == 0 && $result['signServiceId']) {
             return $result['signServiceId'];
         } else {
@@ -379,10 +370,10 @@ class EsignUtil {
     public static function getSignDetail($sign_service_id) {
         $esign = new eSign();
         $result = $esign->getSignDetail($sign_service_id);
-//        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
-//        $log .= 'request : ' . print_r(array($sign_service_id), true);
-//        $log .= 'response : ' . print_r($result, true);
-//        Yii::log($log, CLogger::LEVEL_INFO, 'loan.sign');
+        $log = 'function : ' . __FUNCTION__ . PHP_EOL;
+        $log .= 'request : ' . print_r(array($sign_service_id), true);
+        $log .= 'response : ' . print_r($result, true);
+        \Yii::log($log, 'loan.sign');
         if ($result['errCode'] == 0) {
             return $result['signDetail'];
         } else {

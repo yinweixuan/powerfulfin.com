@@ -230,7 +230,7 @@ class BaofooPay extends App\Models\Epay\Epay {
         $PostArry['txn_sub_type'] = $txn_sub_type;
         $PostArry['data_content'] = $Encrypted;
         //记录日志
-//        Yii::log($this->channel . ':' . $this->scene . " create input:" . print_r($bfParams, true), CLogger::LEVEL_INFO, 'zhifu.op');
+        \Yii::log($this->channel . ':' . $this->scene . " create input:" . print_r($bfParams, true), 'zhifu.op');
         if ($record) {
             //记数据库
             $data = array();
@@ -257,7 +257,7 @@ class BaofooPay extends App\Models\Epay\Epay {
         $return = HttpClient::Post($PostArry, $this->apiurl);  //发送请求到宝付服务器，并输出返回结果。
         $resultJson = $BFRsa->decryptByPublicKey($return); //解密返回的报文
         $result = json_decode($resultJson, true);
-//        Yii::log($this->channel . ':' . $this->scene . ' create result. orderId: ' . $bfParams['trans_id'] . '. result:' . print_r($result, true), CLogger::LEVEL_INFO, 'zhifu.op');
+        \Yii::log($this->channel . ':' . $this->scene . ' create result. orderId: ' . $bfParams['trans_id'] . '. result:' . print_r($result, true), 'zhifu.op');
         //检查返回结果是否成功
         $update = array();
         if (!is_array($result) || !array_key_exists('resp_code', $result)) {

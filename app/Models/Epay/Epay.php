@@ -142,7 +142,7 @@ abstract class Epay {
      * 统一调用入口
      */
     public static function exec($params = array()) {
-//        Yii::log('[' . __CLASS__ . '][' . __FUNCTION__ . '][' . __LINE__ . ']:请求参数：' . var_export($params, true), CLogger::LEVEL_INFO, CalcRepay::YII_LOG_NAME);
+        \Yii::log('epay入口参数：' . print_r($params, true),  'zhifu');
         $data = \KZPayRouter::getFormedData($params);
         $php_file = __DIR__ . '/models/' . $data['class'] . '.php';
         if (is_file($php_file)) {
