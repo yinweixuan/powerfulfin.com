@@ -33,10 +33,12 @@ class IndexController extends AppController {
         ];
         $data['notice'] = [
             [
-                'content' => '这是第一条通知'
+                'content' => '这是第一条通知',
+                'url' => 'http://www.baidu.com',
             ],
             [
-                'content' => '这是第二条通知'
+                'content' => '这是第二条通知',
+                'url' => 'http://www.baidu.com',
             ],
         ];
         $data['loan'] = [

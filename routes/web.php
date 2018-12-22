@@ -47,6 +47,10 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 获取短信验证码
      */
     Route::match(['get', 'post'], APP_V1 . '/login/verifycode', 'LoginController@verifycode');
+    /**
+     * 更改密码
+     */
+    Route::match(['get', 'post'], APP_V1 . '/login/setpassword', 'LoginController@setPassword');
 
     /**
      * 获取用户资料配置

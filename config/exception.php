@@ -75,6 +75,15 @@ define('ERR_AREA_CONTENT', '暂未获取地址数据，请稍后重试');
 define('ERR_LOGIN', 14);
 define('ERR_LOGIN_CONTENT', '登录失败，用户名或密码错误');
 
+define('ERR_USER_EXIST', 15);
+define('ERR_USER_EXIST_CONTENT', '该用户不存在');
+
+define('ERR_PASSWORD', 16);
+define('ERR_PASSWORD_CONTENT', '密码错误');
+
+define('ERR_PASSWORD_FORMAT', 17);
+define('ERR_PASSWORD_FORMAT_CONTENT', '密码格式错误');
+
 /**
  * 队列,2201~2299
  */
