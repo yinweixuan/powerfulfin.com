@@ -53,3 +53,5 @@ define('RESOURCE_FCS', 2);
 define('RESOURCE_FCS_COMPANY', '富登小额贷款（重庆）有限公司');
 define('RESOURCE_FCS_SC', 3);
 define('RESOURCE_FCS_SC_COMPANY', '富登小额贷款(四川)有限公司');
+
+define('FN_REPAY_DAY', 15);

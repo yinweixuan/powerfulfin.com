@@ -121,4 +121,15 @@ class CalcMoney
         $money = self::division($money, 100);
         return $money;
     }
+
+    /**
+     * 计算金额,两位小数,向前进位
+     * @param type $money
+     * @return float|int|string
+     */
+    public static function calcMoney($money)
+    {
+        $ret = sprintf("%.2f", $money);
+        return $ret;
+    }
 }
