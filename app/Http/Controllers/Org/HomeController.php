@@ -85,4 +85,20 @@ class HomeController extends OrgBaseController
         CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . OrgDataBus::COOKIE_KEY,'');
         Redirect::to('/')->send();
     }
+
+    /**
+     * 站内信
+     */
+    public function msglist()
+    {
+        echo __FUNCTION__;
+    }
+
+    /**
+     * 常见问题
+     */
+    public function faq()
+    {
+        echo __FUNCTION__;
+    }
 }

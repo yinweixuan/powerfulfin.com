@@ -19,6 +19,17 @@ Route::group(['namespace' => 'Org'], function () {
     Route::match(['get', 'post'], '/home/index', 'HomeController@index');       //首页
     Route::match(['get', 'post'], '/home/login', 'HomeController@login');       //登录
     Route::match(['get', 'post'], '/home/logout', 'HomeController@logout');       //登出
+    Route::match(['get', 'post'], '/home/msglist', 'HomeController@msglist');       //站内信
+    Route::match(['get', 'post'], '/home/faq', 'HomeController@faq');       //常见问题
+
+    //订单相关
+    Route::match(['get', 'post'], '/order/bookinglist', 'OrderController@bookinglist');       //报名列表
+    Route::match(['get', 'post'], '/order/confirmlist', 'OrderController@confirmlist');       //确认上课列表
+
+    //统计相关
+    Route::match(['get', 'post'], '/stat/list', 'StatController@list');       //订单查询
+    Route::match(['get', 'post'], '/stat/sumup', 'StatController@sumup');       //统计
+
 
 
     Route::match(['get', 'post'], '/test/test1', 'TestController@test1');       //测试

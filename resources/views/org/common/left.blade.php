@@ -5,6 +5,19 @@
  * Date: 2018/12/24
  * Time: 5:07 PM
  */
+$menus = [
+    ['name' => '订单审核', 'url' => '', 'class' => '', 'fa' => 'fa-cubes', 'menus' => [
+        ['name' => '报名确认', 'url' => '/order/bookinglist', 'class' => '', 'fa' => '', ],
+        ['name' => '放款确认', 'url' => '/order/confirmlist', 'class' => '', 'fa' => '',],
+    ]],
+    ['name' => '信息统计', 'url' => '', 'class' => '', 'fa' => 'fa-dashboard', 'menus' => [
+        ['name' => '订单查询', 'url' => '/stat/list', 'class' => '', 'fa' => '',],
+        ['name' => '校区统计', 'url' => '/stat/sumup', 'class' => '', 'fa' => '',],
+    ]],
+    ['name' => '常见问题', 'url' => '/home/faq', 'class' => '', 'fa' => 'fa-question-circle-o', 'menus' => []],
+    ['name' => '站内信', 'url' => '/home/msglist', 'class' => '', 'fa' => 'fa-envelope-open-o', 'menus' => []],
+    ['name' => '退出登录', 'url' => '/home/logout', 'class' => '', 'fa' => 'fa-sign-in', 'menus' => []],
+];
 ?>
 <div class="left-side sticky-left-side">
     <!--logo and iconic logo start-->
@@ -23,15 +36,20 @@
 
     <div class="left-side-inner">
         <ul class="nav nav-pills nav-stacked custom-nav">
-            <li class="menu-list ">
-                <a href="javascript:void(0)">
-                    <i class="fa  fa-file-text-o"></i> <span>信息统计</span>
+        @foreach($menus as $m)
+            <li class="menu-list {{$m['class']}}">
+                <a href="<?php if ($m['url']) {echo $m['url'];} else {echo 'javascript:void(0)';}?>">
+                    <i class="fa {{$m['fa']}}"></i> <span>{{$m['name']}}</span>
                 </a>
-                <ul class="sub-menu-list">
-                    <li class=""><a href="/organize/sstat/schoolloan">分期汇总</a></li>
-                    <li class=""><a href="/organize/sstat/schooldetails">分期明细</a></li>
-                </ul>
+                @if($m['menus'])
+                    <ul class="sub-menu-list">
+                        @foreach ($m['menus'] as $m2)
+                            <li class="{{$m2['class']}}"><i class="fa {{$m2['fa']}}"></i><a href="<?php if ($m2['url']) {echo $m2['url'];} else {echo 'javascript:void(0)';}?>">{{$m2['name']}}</a></li>
+                        @endforeach
+                    </ul>
+                @endif
             </li>
+        @endforeach
         </ul>
     </div>
 </div>
