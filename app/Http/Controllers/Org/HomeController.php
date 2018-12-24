@@ -47,7 +47,6 @@ class HomeController extends OrgBaseController
             try {
                 $name = Input::get("name");
                 $passwd = Input::get("passwd");
-                var_dump(md5($passwd));
 
                 if (empty($name) || empty($passwd)) {
                     throw new PFException("请填写用户名和密码", ERR_SYS_PARAM);
@@ -61,7 +60,7 @@ class HomeController extends OrgBaseController
                     throw new PFException("用户名或密码错误.", ERR_NOLOGIN);
                 }
                 $strCookie = $userInfo['org_uid'] . "|" . $userInfo['org_username'] . "|" . $userInfo['org_username'] . '|' . CookieUtil::createSafecv();
-                CookieUtil::Cookie(OrgDataBus::COOKIE_KEY, $strCookie);
+                CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . OrgDataBus::COOKIE_KEY, CookieUtil::strCode($strCookie, 'ENCODE'));
                 //判断有没有跳入前页面地址,如果有,跳入之前地址,如果没有跳入首页
                 if ($url) {
                     Redirect::to($url)->send();
@@ -73,7 +72,6 @@ class HomeController extends OrgBaseController
                 $data['errmsg'] = $exception->getMessage();
             }
         }
-        var_dump($data);
         return view('org.home.login', $data);
     }
 
@@ -82,7 +80,7 @@ class HomeController extends OrgBaseController
      */
     public function logout()
     {
-        var_dump(Request::path(), Route::currentRouteName());
-        OrgDataBus::getUserInfo();
+        CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . OrgDataBus::COOKIE_KEY,'');
+        Redirect::to('/')->send();
     }
 }

@@ -29,6 +29,12 @@ class OrgDataBus extends DataBus
         if (!is_int(self::$data['ip'])) {
             self::$data['ip'] = ip2long('127.0.0.1');
         }
+        $checkCookie = self::checkCookie();
+        self::$data['uid'] = $checkCookie['uid'];
+        self::$data['phone'] = $checkCookie['username'];
+        self::$data['username'] = $checkCookie['username'];
+        self::$data['user'] = self::getUserInfo();
+
         self::$data['isLogin'] = self::isLogin();
         $detect = new \Mobile_Detect();
         if ($detect->isAndroidOS()) {
@@ -45,11 +51,6 @@ class OrgDataBus extends DataBus
         }
         self::$data['cookie'] = $_COOKIE;
         self::$data['isMobile'] = $detect->isMobile();
-        $checkCookie = self::checkCookie();
-        self::$data['uid'] = $checkCookie['uid'];
-        self::$data['phone'] = $checkCookie['phone'];
-        self::$data['username'] = $checkCookie['username'];
-        self::$data['user'] = self::getUserInfo();
     }
 
     public static function get($key = null)
@@ -66,6 +67,16 @@ class OrgDataBus extends DataBus
             return null;
         }
     }
+
+    /**
+     * 判断是否登录
+     * @return bool
+     */
+    public static function isLogin()
+    {
+        return self::getUid() ? true : false;
+    }
+
     /**
      * 解析cookie
      * @return array
@@ -78,9 +89,8 @@ class OrgDataBus extends DataBus
         }
         $cookieValue = str_replace(' ', '+', $cookieValue);
         $userInfo = CookieUtil::strCode($cookieValue, 'DECODE');
-        list($uid, $username, $phone, $safecv) = explode('|', $userInfo);
+        list($uid, $phone, $username, $safecv) = explode('|', $userInfo);
         $ret = ['uid' => $uid, 'phone' => $phone, 'username' => $username];
-        var_dump($ret);
         return $ret;
     }
 
@@ -91,7 +101,6 @@ class OrgDataBus extends DataBus
             return false;
         }
         $res = ARPFOrgUsers::query()->where(['org_uid' => $uid])->first();
-        var_dump($res);
         return $res;
     }
 }

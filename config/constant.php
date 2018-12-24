@@ -18,8 +18,8 @@ define('PATH_STORAGE', PATH_BASE . '/storage');
 define('PATH_LIBRARIES', PATH_APP . '/Libraries');
 
 if (config("app.env") == 'local') {
-    define('DOMAIN_WEB', 'powerfulfin.kezhanwang.cn');                //官网域名
-    define('DOMAIN_INNER', 'inner.powerfulfin.kezhanwang.cn');        //内部调用域名
+    define('DOMAIN_WEB', 'powerfulfin.com');                //官网域名
+    define('DOMAIN_INNER', 'devinner.powerfulfin.com');        //内部调用域名
     define('DOMAIN_ORG', 'devo.powerfulfin.com');              //机构管理后台域名
 } else if (config("app.env") == 'dev') {
     define('DOMAIN_WEB', 'powerfulfin.kezhanwang.cn');                //官网域名

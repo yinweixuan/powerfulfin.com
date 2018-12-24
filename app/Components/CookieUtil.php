@@ -16,7 +16,7 @@ class CookieUtil
     const db_hash = '8RnJMxV/AfOiZar1';
     const db_sitehash = 'pyYowBoaSU3/gylyOTH6YN8kx2iOdw8zh5Z2X7NHvX+xctfdotkZn8/g';
     const db_ckpath = '/';
-    const db_ckdomain = '/';
+    const db_ckdomain = DOMAIN_WEB;
 
     /**
      * @return array
