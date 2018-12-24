@@ -31,6 +31,16 @@ class ARPFLoanProduct extends Model
      */
     const LOAN_TYPE_EQUAL = 3;
 
+    /**
+     * 资金方ID对照资金方
+     * @var array
+     */
+    public static $resourceCompany = [
+        RESOURCE_JCFC => RESOURCE_JCFC_COMPANY,
+        RESOURCE_FCS => RESOURCE_FCS_COMPANY,
+        RESOURCE_FCS_SC => RESOURCE_FCS_SC_COMPANY
+    ];
+
     public static function getLoanProductByProduct($loan_product)
     {
         if (empty($loan_product)) {

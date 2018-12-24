@@ -114,12 +114,11 @@ class CalcOverdue
 
     /**
      * 计算还款日
-     * @param $resource
      * @return int
      */
-    public static function calcRepayDay($resource)
+    public static function calcRepayDay()
     {
-        return 15;
+        return FN_REPAY_DAY;
     }
 
     /**
