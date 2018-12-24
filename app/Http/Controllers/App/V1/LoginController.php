@@ -31,9 +31,9 @@ class LoginController extends AppController {
                 throw new PFException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
             }
             if ($vcode && $ip) {
-                if (!VerifyCode::checkVerifyCode($phone, $ip, $vcode)) {
-                    throw new PFException(ERR_VCODE_CHECK_CONTENT, ERR_VCODE_CHECK);
-                }
+//                if (!VerifyCode::checkVerifyCode($phone, $ip, $vcode)) {
+//                    throw new PFException(ERR_VCODE_CHECK_CONTENT, ERR_VCODE_CHECK);
+//                }
                 $userInfo = ARPfUsers::getUserInfoByPhone($phone);
                 if (empty($userInfo)) {
                     $info = [
@@ -76,12 +76,12 @@ class LoginController extends AppController {
             $data['uid'] = $userInfo['id'];
             $data['phone'] = $phone;
             $data['name'] = $userInfo['username'];
-            $data['has_password'] = $userInfo['password'] ? 1 : 0;
+            $data['has_password'] = $userInfo['password'] ? '1' : '0';
             $cookie = self::getCookie($userInfo);
             CookieUtil::Cookie(DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $data);
+            OutputUtil::out($data);
         } catch (PFException $exception) {
-            OutputUtil::err($exception->getMessage(), $exception->getCode());
+            OutputUtil::out($exception);
         }
     }
 
@@ -128,10 +128,10 @@ class LoginController extends AppController {
                 $login_log['phone_type'] = 'unknown';
             }
             \App\Models\ActiveRecord\ARPFUsersLogin::add($login_log);
-            setcookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, '',0,'/');
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
+            setcookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, '', 0, '/');
+            OutputUtil::out();
         } catch (PFException $exception) {
-            OutputUtil::err($exception->getMessage(), $exception->getCode());
+            OutputUtil::out($exception);
         }
     }
 
@@ -162,12 +162,12 @@ class LoginController extends AppController {
             $data['uid'] = $user['id'];
             $data['phone'] = $user['phone'];
             $data['name'] = $user['username'];
-            $data['has_password'] = 1;
+            $data['has_password'] = '1';
             $cookie = self::getCookie($user);
             CookieUtil::Cookie(DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $data);
+            OutputUtil::out($data);
         } catch (PFException $exception) {
-            OutputUtil::err($exception->getMessage(), $exception->getCode());
+            OutputUtil::out($exception);
         }
     }
 

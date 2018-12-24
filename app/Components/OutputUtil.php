@@ -71,6 +71,24 @@ class OutputUtil
         echo $ret;
         exit;
     }
+    
+    /**
+     * 统一输出，统一类型
+     */
+    public static function out($mixed = [], $str = true) {
+        if ($mixed instanceof \Exception) {
+            self::err($mixed->getMessage(), $mixed->getCode());
+        } else {
+            if ($str && is_array($mixed)) {
+                array_walk_recursive($mixed, function(&$val) {
+                    if (is_numeric($val)) {
+                        $val .= '';
+                    }
+                });
+            }
+            self::info(ERR_OK_CONTENT, ERR_OK, $mixed);
+        }
+    }
 
     public static function json_encode($value)
     {

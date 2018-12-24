@@ -27,7 +27,8 @@ class IndexController extends AppController {
             ],
         ];
         $data['customer_service'] = [
-            'phone' => '4000029691'
+            'phone' => '4000029691',
+            'email' => '123123@powerfulfin.com'
         ];
         $data['notice'] = [
             'content' => '这是通知，就一条',
@@ -50,13 +51,13 @@ class IndexController extends AppController {
                 [
                     'name' => '分期确认',
                     'url' => 'powerfulfin://loanconfirm?lid=123',
-                    'style' => '2'
+                    'style' => 2
                 ]
             ],
-            'school_id' => '123456',
+            'school_id' => 12345,
             'school_name' => '恒企教育（东风北桥分校）',
         ];
-        OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $data);
+        OutputUtil::out($data);
     }
 
 }

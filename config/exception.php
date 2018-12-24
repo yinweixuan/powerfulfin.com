@@ -76,7 +76,7 @@ define('ERR_LOGIN', 14);
 define('ERR_LOGIN_CONTENT', '登录失败，用户名或密码错误');
 
 define('ERR_USER_EXIST', 15);
-define('ERR_USER_EXIST_CONTENT', '该用户不存在');
+define('ERR_USER_EXIST_CONTENT', '您未设置密码，请使用短信验证码登录');
 
 define('ERR_PASSWORD', 16);
 define('ERR_PASSWORD_CONTENT', '密码错误');
