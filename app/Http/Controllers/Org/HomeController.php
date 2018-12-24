@@ -41,12 +41,14 @@ class HomeController extends OrgBaseController
     public function login()
     {
         $url = Input::get('url');
-        $data = ['url' => $url, ];
+        $data = ['url' => $url, 'errmsg' => '', 'name' => '', 'passwd' => '',];
         //处理提交密码验证请求
         if (strtolower(Request::method()) == 'post') {
             try {
                 $name = Input::get("name");
                 $passwd = Input::get("passwd");
+                $data['name'] = $name;
+                $data['passwd'] = $passwd;
 
                 if (empty($name) || empty($passwd)) {
                     throw new PFException("请填写用户名和密码", ERR_SYS_PARAM);

@@ -45,7 +45,7 @@ class OrgBaseController extends Controller
             }
         } else if (!$isLogin) {
             if (!$isAjax) {
-                $url = URL::current();
+                $url = URL::full();
                 Redirect::to("/home/login?url={$url}")->send();
             } else {
                 OutputUtil::err(ERR_NOLOGIN, ERR_NOLOGIN_CONTENT);

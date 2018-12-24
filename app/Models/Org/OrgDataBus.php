@@ -17,6 +17,7 @@ class OrgDataBus extends DataBus
 {
 
     const COOKIE_KEY = 'powerfulfin_org_user';      //cookie的值
+
     protected static function init()
     {
         self::$data['ua'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
