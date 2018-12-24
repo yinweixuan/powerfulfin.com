@@ -76,4 +76,20 @@ class ARPfUsers extends Model
         $userInfo['updated_at'] = date('Y-m-d H:i:s');
         return DB::table(self::TABLE_NAME)->where('id', $id)->update($update);
     }
+
+
+    public static function getUserAllInfo($uid)
+    {
+        if (is_null($uid) || !is_numeric($uid) || $uid < 0) {
+            return [];
+        }
+        $data = DB::table(self::TABLE_NAME . ' as u')
+            ->leftJoin(ARPFUsersReal::TABLE_NAME . ' as ur', 'u.id', '=', 'ur.uid')
+            ->leftJoin(ARPFUsersWork::TABLE_NAME . ' as uw', 'u.id', '=', 'uw.uid')
+            ->leftJoin(ARPFUsersContact::TABLE_NAME . ' as uc', 'u.id', '=', 'uc.uid')
+            ->select('*')
+            ->where('u.id', $uid)
+            ->first();
+        return $data;
+    }
 }

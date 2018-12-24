@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\App\Models;
 
 
+use App\Components\ArrayUtil;
 use App\Components\CheckUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFLoan;
@@ -16,8 +17,13 @@ use App\Models\ActiveRecord\ARPFLoanBill;
 use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFOrgClass;
+use App\Models\ActiveRecord\ARPFOrgHead;
+use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
+use App\Models\Calc\CalcResource;
+use App\Models\Server\BU\BULoanConfig;
+use App\Models\Server\BU\BULoanProduct;
 
 class Loan
 {
@@ -117,34 +123,72 @@ class Loan
         if ($loanList = self::getLoanList($uid)) {
             foreach ($loanList as $item) {
                 if (in_array($item['status'], [])) {
-                    throw new PFException("贷中");
+                    throw new PFException("您目前存在贷中订单，请稍后重试", ERR_SYS_PARAM);
                 }
             }
+        }
+
+        $user = ARPfUsers::getUserAllInfo($uid);
+        if (empty($user)) {
+            throw new PFException("暂未正确获取用户信息，请稍后再试！", ERR_SYS_PARAM);
         }
 
         $org = ARPFOrg::getOrgById($oid);
         if (empty($org) || $org['status'] != STATUS_SUCCESS) {
             throw new PFException("机构暂不支持分期业务，请稍后再试！", ERR_SYS_PARAM);
         }
-        $class = ARPFOrgClass::getClassByOid($oid);
+
+        $orgHead = ARPFOrgHead::getInfo($org['hid']);
+        if (empty($orgHead) || empty($orgHead['loan_product'])) {
+            throw new PFException("机构暂不支持分期业务，请稍后再试！", ERR_SYS_PARAM);
+        }
+
+        $class = ARPFOrgClass::getClassByOidWhichCanLoan($oid);
         if (empty($classInfo)) {
             throw new PFException("暂未获取到可分期订单，请稍后再试!", ERR_SYS_PARAM);
         }
 
-        $classInfo = [];
-        foreach ($class as $k => $v) {
-            $tmp = [
-                'cid' => $v['id'],
-                'class_name' => $v['class_name'],
-                'class_price' => $v['class_price']
-            ];
-            $classInfo[] = $tmp;
+        $loan_product = ArrayUtil::escapeEmpty(explode(',', $orgHead['loan_product']));
+        $loanProducts = BULoanProduct::getLoanTypeByIds($loan_product, false);
+
+        //计算用户支持的费率ID
+        $resource = self::getUserResource($user['uid'], $loanProducts, $orgHead, $org);
+        foreach ($loanProducts as $key => $loanType) {
+            if ($loanType['resource'] != $resource) {
+                unset($loanProducts[$key]);
+            }
         }
 
-        $data = [
-            'class' => $classInfo,
-            'org' => $org
-        ];
+        $loanProducts = array_values($loanProducts);
+        $data = BULoanConfig::getConfig($user, $org, $orgHead, $class, $loanProducts, $resource);
+
+        //判断资金方是否需要手持身份证照片
+        $data['idcard_person_pic_switch'] = BULoanConfig::getIdcardPersonPic($resource);
+        //判断资金方是否需要场景照
+        $data['school_pic_switch'] = BULoanConfig::getSchoolPic($resource);
+        //判断是否开启审核时间
+        $data['review_time_switch'] = BULoanConfig::getReviewTimeSwitch();
+        //开课时间
+        $data['course_open_time_switch'] = true;
+        //判断班级是否需要开启，目前为潭州必须填写
+        $data['class_switch'] = BULoanConfig::getClassSwitch($orgHead['hid']);
+        //重新定义是否需要培训协议照片
+        $data['train'] = BULoanConfig::getTrainingContractSwitch($resource, $orgHead['hid']);
         return $data;
+    }
+
+    /**
+     * 获取用户所属资金方
+     * @param $uid
+     * @param $loanTypes
+     * @param $orgHead
+     * @param $org
+     * @return int
+     * @throws PFException
+     */
+    static public function getUserResource($uid, $loanTypes, $orgHead, $org)
+    {
+        //计算用户资金方
+        return CalcResource::getUserResource($uid, $loanTypes, $orgHead, $org);
     }
 }

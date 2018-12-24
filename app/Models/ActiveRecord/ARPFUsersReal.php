@@ -9,6 +9,7 @@
 
 namespace App\Models\ActiveRecord;
 
+use App\Components\ArrayUtil;
 use App\Components\PFException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
