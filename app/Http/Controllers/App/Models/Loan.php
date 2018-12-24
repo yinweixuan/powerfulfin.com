@@ -22,6 +22,7 @@ use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\Calc\CalcResource;
+use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BULoanConfig;
 use App\Models\Server\BU\BULoanProduct;
 
@@ -190,5 +191,40 @@ class Loan
     {
         //计算用户资金方
         return CalcResource::getUserResource($uid, $loanTypes, $orgHead, $org);
+    }
+
+
+    /**
+     * 提交订单申请
+     * @param $data
+     * @param $uid
+     * @return
+     * @throws PFException
+     */
+    public static function submitLoan($data, $uid)
+    {
+        if (empty($data) || empty($uid)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+
+        $data = ArrayUtil::trimArray($data);
+        //获取用户关键信息
+        $userInfo = ARPfUsers::getUserAllInfo($uid);
+        if (empty($userInfo)) {
+            throw new PFException("获取用户基本资料失败，请稍后再试！", ERR_SYS_PARAM);
+        }
+
+        //对分期申请人的年龄进行判断
+        $age = CheckUtil::getAgeByIdCard($userInfo['identity_number']);
+        if ($age > 45) {
+            throw new PFException("很抱歉，大于45周岁不予学费分期！", ERR_SYS_PARAM);
+        }
+
+        try {
+            $data = BULoanApply::checkParams($data, $userInfo);
+        } catch (PFException $exception) {
+            throw new PFException($exception->getMessage(), $exception->getCode());
+        }
+        return BULoanApply::createSimpleLoanApplyInfo($data, $userInfo);
     }
 }

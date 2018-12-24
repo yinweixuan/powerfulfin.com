@@ -23,4 +23,12 @@ class ARPFUsersPhonebook extends Model
         $info = ArrayUtil::trimArray($info);
         return DB::table(self::TABLE_NAME)->insertGetId($info);
     }
+
+    public static function getPhoneBookLastOneByUid($uid)
+    {
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->orderByDesc('id')
+            ->first();
+    }
 }

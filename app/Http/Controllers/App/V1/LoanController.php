@@ -13,6 +13,7 @@ use App\Components\OutputUtil;
 use App\Components\PFException;
 use App\Http\Controllers\App\AppController;
 use App\Http\Controllers\App\Models\Loan;
+use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\DataBus;
 use Illuminate\Support\Facades\Input;
 
@@ -72,7 +73,9 @@ class LoanController extends AppController
     public function loanSubmit()
     {
         try {
-            throw new PFException(123123123);
+            $data = !empty($_POST) ? $_POST : $_GET;
+            $result = Loan::submitLoan($data, DataBus::getUid());
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, ['lid' => $result['id'], 'resource_company' => ARPFLoanProduct::$resourceCompany[$result['resource']]]);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }

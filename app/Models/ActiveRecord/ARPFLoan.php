@@ -9,6 +9,7 @@
 namespace App\Models\ActiveRecord;
 
 
+use App\Components\PFException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -39,4 +40,44 @@ class ARPFLoan extends Model
             ->where('uid', $uid)
             ->get()->toArray();
     }
+
+    public static function addLoan($info)
+    {
+        if (empty($info)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+
+        $data = [
+            'uid' => $info['uid'],
+            'oid' => $info['oid'],
+            'hid' => $info['hid'],
+            'class' => $info['cid'],
+            'status' => $info['status'],
+            'borrow_money' => $info['borrow_money'],
+            'loan_product' => $info['loan_product'],
+            'resource' => $info['resource'],
+            'class_start_date' => $info['class_start_date'],
+            'create_time' => date('Y-m-d H:i:s'),
+        ];
+
+        foreach ($data as $datum) {
+            if (empty($datum)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+            }
+        }
+
+        $data['scene_pic'] = $info[''];
+        $data['person_pic'] = $info[''];
+        $data['train_contract_pic'] = $info[''];
+        $data['train_statement_pic'] = $info[''];
+
+        return DB::table(self::TABLE_NAME)->insertGetId($data);
+    }
+
+    public static function _update($id, $info)
+    {
+        return DB::table(self::TABLE_NAME)->where('id', $id)
+            ->update($info);
+    }
+
 }

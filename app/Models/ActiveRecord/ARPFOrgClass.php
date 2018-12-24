@@ -25,4 +25,11 @@ class ARPFOrgClass extends Model
             ->get()->toArray();
     }
 
+    public static function getById($cid)
+    {
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('cid', $cid)
+            ->first();
+    }
+
 }
