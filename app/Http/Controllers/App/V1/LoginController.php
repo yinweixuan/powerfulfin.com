@@ -27,6 +27,9 @@ class LoginController extends AppController {
             $vcode = Input::get('vcode');
             $password = Input::get('password');
             $ip = DataBus::get('ip');
+            if (!CheckUtil::checkPhone($phone)) {
+                throw new PFException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
+            }
             if ($vcode && $ip) {
                 if (!VerifyCode::checkVerifyCode($phone, $ip, $vcode)) {
                     throw new PFException(ERR_VCODE_CHECK_CONTENT, ERR_VCODE_CHECK);
@@ -56,9 +59,27 @@ class LoginController extends AppController {
             } else {
                 throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
             }
+            $login_log = [];
+            $login_log['uid'] = $userInfo['id'];
+            $login_log['login_time'] = date('Y-m-d H:i:s');
+            $login_log['ip'] = $ip;
+            $login_log['device'] = '';
+            if (DataBus::get('plat') == 1) {
+                $login_log['phone_type'] = 'IOS';
+            } elseif (DataBus::get('plat') == 2) {
+                $login_log['phone_type'] = 'Android';
+            } else {
+                $login_log['phone_type'] = 'unknown';
+            }
+            \App\Models\ActiveRecord\ARPFUsersLogin::add($login_log);
+            $data = [];
+            $data['uid'] = $userInfo['id'];
+            $data['phone'] = $phone;
+            $data['name'] = $userInfo['username'];
+            $data['has_password'] = $userInfo['password'] ? 1 : 0;
             $cookie = self::getCookie($userInfo);
             CookieUtil::Cookie(DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, [CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY => $cookie['dw8zh_powerfulfin_user']]);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $data);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
@@ -115,9 +136,14 @@ class LoginController extends AppController {
             $update = [];
             $update['password'] = $this->getEncryptedPassword($password_new);
             ARPfUsers::updateUserInfo($uid, $update);
+            $data = [];
+            $data['uid'] = $user['id'];
+            $data['phone'] = $user['phone'];
+            $data['name'] = $user['username'];
+            $data['has_password'] = 1;
             $cookie = self::getCookie($user);
             CookieUtil::Cookie(DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, [CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY => $cookie['dw8zh_powerfulfin_user']]);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $data);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }

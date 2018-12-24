@@ -18,12 +18,10 @@ class IndexController extends AppController {
         $data = [];
         $data['banner'] = [
             [
-                'title' => 'this is banner 1',
                 'img' => '/img/banner/banner1.png',
                 'url' => 'http://www.baidu.com',
             ],
             [
-                'title' => 'this is banner 2',
                 'img' => '/img/banner/banner2.png',
                 'url' => 'http://www.baidu.com',
             ],
@@ -32,24 +30,29 @@ class IndexController extends AppController {
             'phone' => '4000029691'
         ];
         $data['notice'] = [
-            [
-                'content' => '这是第一条通知',
-                'url' => 'http://www.baidu.com',
-            ],
-            [
-                'content' => '这是第二条通知',
-                'url' => 'http://www.baidu.com',
-            ],
+            'content' => '这是通知，就一条',
+            'url' => 'powerfulfin://loandetail?lid=123',
         ];
         $data['loan'] = [
             'status' => '1',
-            'status_img' => '/img/loan/audit.png',
-            'status_desp' => '审核中',
+            'status_img_2x' => '/img/loan/confirm2x.png',
+            'status_img_3x' => '/img/loan/confirm3x.png',
+            'status_desp' => '待确认',
             'repay_date' => '2019-01-15',
             'repay_money' => '1205.12',
-            'remark' => '您的贷款正在审核中，请耐心等待',
-        ];
-        $data['recommend'] = [
+            'remark' => '请确认分期',
+            'buttons' => [
+                [
+                    'name' => '订单详情',
+                    'url' => 'powerfulfin://loandetail?lid=123',
+                    'style' => '1'
+                ],
+                [
+                    'name' => '分期确认',
+                    'url' => 'powerfulfin://loanconfirm?lid=123',
+                    'style' => '2'
+                ]
+            ],
             'school_id' => '123456',
             'school_name' => '恒企教育（东风北桥分校）',
         ];
