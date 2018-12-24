@@ -32,7 +32,7 @@ class HomeController extends OrgBaseController
      */
     public function index()
     {
-        echo __FILE__;
+        return $this->view('org.home.index');
     }
 
     /**

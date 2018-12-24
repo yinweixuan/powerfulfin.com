@@ -28,6 +28,18 @@ class OrgBaseController extends Controller
     }
 
     /**
+     * 默认加入各类配置和数据
+     * @param $view
+     * @param array $data
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view($view, $data = [])
+    {
+        return view($view, $data, OrgDataBus::get());
+    }
+
+
+    /**
      * 检查是否登录,未登录跳登录页
      * @param bool $toLogin
      */
