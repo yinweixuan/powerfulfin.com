@@ -110,7 +110,29 @@ class LoginController extends AppController {
     }
 
     public function logout() {
-        
+        try {
+            $uid = DataBus::getUid();
+            if (!$uid) {
+                throw new PFException(ERR_NOLOGIN_CONTENT, ERR_NOLOGIN);
+            }
+            $login_log = [];
+            $login_log['uid'] = $uid;
+            $login_log['logout_time'] = date('Y-m-d H:i:s');
+            $login_log['ip'] = DataBus::get('ip');
+            $login_log['device'] = '';
+            if (DataBus::get('plat') == 1) {
+                $login_log['phone_type'] = 'IOS';
+            } elseif (DataBus::get('plat') == 2) {
+                $login_log['phone_type'] = 'Android';
+            } else {
+                $login_log['phone_type'] = 'unknown';
+            }
+            \App\Models\ActiveRecord\ARPFUsersLogin::add($login_log);
+            setcookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, '',0,'/');
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode());
+        }
     }
 
     public function setPassword() {

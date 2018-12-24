@@ -43,6 +43,12 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 登录接口
      */
     Route::match(['get', 'post'], APP_V1 . '/login/login', 'LoginController@login');
+    
+    /**
+     * 登出接口
+     */
+    Route::match(['get', 'post'], APP_V1 . '/logout', 'LoginController@logout');
+    
     /**
      * 获取短信验证码
      */
