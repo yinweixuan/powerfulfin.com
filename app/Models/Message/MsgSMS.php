@@ -51,7 +51,7 @@ class MsgSMS
             if (strpos($res, 'id=') !== false) {
                 $ret = substr($res, 3, strlen($res) - 3);
             } else {
-                throw new PFException('发送失败');
+                throw new PFException('发送失败', ERR_SYS_UNKNOWN);
             }
         } catch (PFException $e) {
             $ret = ERR_SMS_FAIL;
@@ -74,12 +74,12 @@ class MsgSMS
             if (self::SMS_PLAT == 1) {
                 $ret = self::sendHaobo($phone, $content);
                 if ($ret == ERR_SMS_FAIL) {
-                    throw new PFException("发送失败:" . $ret);
+                    throw new PFException("发送失败:" . $ret, ERR_SYS_PARAM);
                 }
             }
             return $ret;
         } catch (PFException $exception) {
-            throw new PFException($exception->getMessage());
+            throw new PFException($exception->getMessage(), $exception->getCode());
         }
     }
 }
