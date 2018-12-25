@@ -17,23 +17,5 @@ class Controller extends BaseController
     public function __construct()
     {
     }
-
-    /**
-     * 查询当前登录态
-     */
-    protected function isLogin()
-    {
-        return DataBus::get('isLogin');
-    }
-
-    protected function checkLogin($toLogin = false)
-    {
-        if (!$this->isLogin()) {
-            if ($toLogin) {
-                HttpUtil::goLogin();
-            } else {
-                OutputUtil::err(ERR_NOLOGIN_CONTENT, ERR_NOLOGIN);
-            }
-        }
-    }
+    
 }

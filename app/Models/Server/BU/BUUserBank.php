@@ -34,7 +34,7 @@ class BUUserBank
             'phone' => $phone,
             'verify' => 4,
             'api' => 'verify',
-            'env' => config('env')
+            'env' => config('app.env')
         );
         $redisKey = 'PF_BANK_CHECK_' . md5(json_encode($params));
         $bankCheckData = $redis->get($redisKey);

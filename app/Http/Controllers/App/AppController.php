@@ -9,7 +9,9 @@
 namespace App\Http\Controllers\App;
 require PATH_VENDOR . '/autoload.php';
 
+use App\Components\OutputUtil;
 use App\Http\Controllers\Controller;
+use App\Models\DataBus;
 use App\Models\Server\BU\BUAppMobile;
 
 class AppController extends Controller
@@ -32,6 +34,21 @@ class AppController extends Controller
         $this->isWX = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'micromessenger') !== false ? true : false);
         $this->isAppcan = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'appcan') !== false ? true : false);
         $this->mobileModel();
+    }
+
+    /**
+     * 查询当前登录态
+     */
+    protected function isLogin()
+    {
+        return DataBus::get('isLogin');
+    }
+
+    protected function checkLogin()
+    {
+        if (!$this->isLogin()) {
+            OutputUtil::err(ERR_NOLOGIN_CONTENT, ERR_NOLOGIN);
+        }
     }
 
     /**

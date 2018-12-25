@@ -29,51 +29,6 @@ class CookieUtil
     }
 
     /**
-     * @param $cookieName
-     * @param $cookieValue
-     * @param string $expireTime
-     * @param bool $needPrefix
-     * @return bool
-     */
-    public static function Cookie($cookieName, $cookieValue, $expireTime = 'F', $needPrefix = true)
-    {
-        $timestamp = time();
-        $server = $_SERVER;
-        $cookiePath = self::db_ckpath;
-        $cookieDomain = self::db_ckdomain;
-
-        static $sIsSecure = null;
-
-        if ($sIsSecure === null) {
-            if (!$server['REQUEST_URI'] || ($parsed = @parse_url($server['REQUEST_URI'])) === false) {
-                $parsed = array();
-            }
-            if (isset($parsed['scheme']) && $parsed['scheme'] == 'https' || (empty($parsed['scheme']) && (isset($server['HTTP_SCHEME']) && $server['HTTP_SCHEME'] == 'https' || isset($server['HTTPS']) && $server['HTTPS'] && strtolower($server['HTTPS']) != 'off'))) {
-                $sIsSecure = true;
-            } else {
-                $sIsSecure = false;
-            }
-        }
-
-        $agent = strtolower($server['HTTP_USER_AGENT']);
-        if (!($agent && preg_match('/msie ([0-9]\.[0-9]{1,2})/i', $agent) && strstr($agent, 'mac'))) {
-            $isHttponly = true;
-        } else {
-            $isHttponly = false;
-        }
-
-        $cookieValue = str_replace("=", '', $cookieValue);
-        strlen($cookieValue) > 512 && $cookieValue = substr($cookieValue, 0, 512);
-        $needPrefix && $cookieName = self::CookiePre() . '_' . $cookieName;
-        if ($expireTime === 'F' || $expireTime !== 0) {
-            $expireTime = strtotime('+60 minute');
-        } elseif ($cookieValue == '' && $expireTime == 0) {
-            return Cookie::queue($cookieName, '', -1);
-        }
-        return Cookie::queue($cookieName, $cookieValue, $expireTime);
-    }
-
-    /**
      * 生成cookie前缀
      *
      * @global string $cookiepre

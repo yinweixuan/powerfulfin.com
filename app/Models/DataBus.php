@@ -97,7 +97,7 @@ class DataBus
 
     public static function checkCookie()
     {
-        $cookieValue = Cookie::get(CookieUtil::db_cookiepre . '_' . self::COOKIE_KEY);
+        $cookieValue = CookieUtil::getCookie(self::COOKIE_KEY);
         if (empty($cookieValue)) {
             return ['uid' => 0, 'phone' => '', 'username' => ''];
         }
