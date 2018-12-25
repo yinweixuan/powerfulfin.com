@@ -24,6 +24,7 @@ class AppController extends Controller
     public function __construct()
     {
 
+        parent::__construct();
         config("app.env");
 
         env("DB_CONNECTION");

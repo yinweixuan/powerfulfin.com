@@ -14,10 +14,15 @@ use App\Components\PFException;
 use App\Components\RedisUtil;
 use App\Http\Controllers\App\AppController;
 use App\Models\ActiveRecord\ARPFAreas;
+use App\Models\DataBus;
 use Illuminate\Support\Facades\Input;
 
 class AreaController extends AppController
 {
+    public function __construct()
+    {
+        DataBus::get();
+    }
 
     public function province()
     {

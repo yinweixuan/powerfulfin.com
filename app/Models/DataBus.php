@@ -33,7 +33,7 @@ class DataBus
         if (!is_int(self::$data['ip'])) {
             self::$data['ip'] = ip2long('127.0.0.1');
         }
-        self::$data['isLogin'] = self::isLogin();
+
         $detect = new Mobile_Detect();
         if ($detect->isAndroidOS()) {
             self::$data['plat'] = 2;
@@ -54,6 +54,7 @@ class DataBus
         self::$data['phone'] = $checkCookie['phone'];
         self::$data['username'] = $checkCookie['username'];
         self::$data['user'] = self::getUserInfo();
+        self::$data['isLogin'] = self::isLogin();
     }
 
     public static function get($key = null)

@@ -24,6 +24,8 @@ class UserController extends AppController
 
     public function __construct()
     {
+        parent::__construct();
+        $this->checkLogin();
         self::$user = DataBus::get('user');
         if (empty(self::$user)) {
             throw new PFException("暂未获取用户登录信息，请重新登录", ERR_NOLOGIN);
