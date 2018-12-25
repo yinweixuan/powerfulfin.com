@@ -35,7 +35,10 @@ class AliyunOSSUtil {
     /**
      * 获取访问域名
      */
-    public static function getEndpoint() {
+    public static function getEndpoint($out = false) {
+        if ($out) {
+            return self::ENDPOINT_PUBLIC;
+        }
         if (config('app.env') == 'local') {
             return self::ENDPOINT_PUBLIC;
         } else {
@@ -57,9 +60,9 @@ class AliyunOSSUtil {
     /**
      * 获取oss client
      */
-    public static function getOSSClient() {
+    public static function getOSSClient($out = false) {
         if (!is_object(self::$oss_client)) {
-            self::$oss_client = new \OSS\OssClient(env('ALIYUN_OSS_ACCESS_KEY_ID'), env('ALIYUN_OSS_ACCESS_KEY_SECRET'), self::getEndpoint());
+            self::$oss_client = new \OSS\OssClient(env('ALIYUN_OSS_ACCESS_KEY_ID'), env('ALIYUN_OSS_ACCESS_KEY_SECRET'), self::getEndpoint($out));
         }
         return self::$oss_client;
     }
@@ -189,7 +192,7 @@ class AliyunOSSUtil {
      * @param int $timeout 链接过期时间，秒
      */
     public static function getAccessUrl($bucket, $object, $timeout = 3600) {
-        $oss_client = self::getOSSClient();
+        $oss_client = self::getOSSClient(true);
         $signed_url = $oss_client->signUrl($bucket, $object, $timeout);
         return $signed_url;
     }
