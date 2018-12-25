@@ -35,14 +35,14 @@ class ARPFUsersContact extends Model
 
         if (empty($userContact)) {
             $info['uid'] = $uid;
-            return self::addUserContract($info);
+            return self::addUserContact($info);
         } else {
             return DB::table(self::TABLE_NAME)->where('uid', $uid)
                 ->update($info);
         }
     }
 
-    public static function addUserContract(array $info)
+    public static function addUserContact(array $info)
     {
         $info = ArrayUtil::trimArray($info);
         if (empty($info)) {
@@ -66,5 +66,12 @@ class ARPFUsersContact extends Model
 
         }
         return $ar->getAttributes();
+    }
+
+    public static function getContractInfo($uid)
+    {
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->first();
     }
 }

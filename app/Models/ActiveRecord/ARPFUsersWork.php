@@ -71,4 +71,11 @@ class ARPFUsersWork extends Model
                 ->update($info);
         }
     }
+
+    public static function getUserWork($uid)
+    {
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->first();
+    }
 }

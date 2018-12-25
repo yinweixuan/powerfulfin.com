@@ -13,11 +13,13 @@ use App\Components\CheckUtil;
 use App\Components\MapUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFUsersAuthLog;
+use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersContact;
 use App\Models\ActiveRecord\ARPFUsersLocation;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\ActiveRecord\ARPFUsersWork;
 use App\Models\DataBus;
+use Illuminate\Support\Facades\DB;
 
 class BUUserInfo
 {
@@ -397,4 +399,82 @@ class BUUserInfo
             }
         }
     }
+
+    public static function getUserRealInfo($uid)
+    {
+        $userReal = ARPFUsersReal::getInfo($uid);
+
+        $params = ['full_name', 'identity_number', 'nationality', 'start_date', 'end_date', 'address', 'issuing_authority', 'idcard_information_pic', 'idcard_national_pic'];
+        $need = false;
+        foreach ($params as $param) {
+            if (empty($userReal[$param]) || !array_key_exists($param, $userReal)) {
+                $need = true;
+                break;
+            }
+        }
+
+        $userReal['need'] = $need;
+        return $userReal;
+    }
+
+    public static function getUserBankInfo($uid)
+    {
+        $userBank = ARPFUsersBank::getUserRepayBankByUid($uid);
+        if (empty($userBank)) {
+            $userBank['need'] = true;
+        } else {
+            $userBank['need'] = false;
+        }
+        return $userBank;
+    }
+
+    public static function getUserContact($uid)
+    {
+        $userContact = ARPFUsersContact::getContractInfo($uid);
+
+        $params = ['email', 'home_province', 'home_city', 'home_area', 'home_address', 'housing_situation', 'marital_status', 'contact_person', 'contact_person_relation', 'contact_person_phone'];
+        $need = false;
+        foreach ($params as $param) {
+            if (empty($userContact[$param]) || !array_key_exists($param, $userContact)) {
+                $need = true;
+                break;
+            }
+        }
+        $userContact['need'] = $need;
+        return $userContact;
+    }
+
+    public static function getUserWork($uid)
+    {
+        $userWork = ARPFUsersWork::getUserWork($uid);
+        $need = false;
+        switch ($userWork['working_status']) {
+            case ARPFUsersWork::WORKING_CONDITION_WORKING:
+                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'edu_pic', 'work_name', 'work_province', 'work_city', 'work_area', 'work_address', 'work_entry_time', 'work_profession', 'work_contact'];
+                break;
+            case ARPFUsersWork::WORKING_CONDITION_READING:
+                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'edu_pic', 'school_name', 'school_province', 'school_city', 'school_area', 'school_address', 'school_contact', 'school_major', 'education_system', 'entrance_time'];
+                break;
+            case ARPFUsersWork::WORKING_CONDITION_UNEMPLOYED:
+                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'train_contact'];
+                break;
+            default:
+                $need = true;
+                break;
+        }
+        if ($need) {
+            $userWork['need'] = $need;
+            return $userWork;
+        } else {
+            foreach ($params as $param) {
+                if (empty($userWork[$param]) || !array_key_exists($param, $userWork)) {
+                    $need = true;
+                    break;
+                }
+            }
+            $userWork['need'] = $need;
+            return $userWork;
+        }
+    }
+
 }
