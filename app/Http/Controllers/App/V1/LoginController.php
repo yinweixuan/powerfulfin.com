@@ -78,7 +78,7 @@ class LoginController extends AppController {
             $data['name'] = $userInfo['username'];
             $data['has_password'] = $userInfo['password'] ? '1' : '0';
             $cookie = self::getCookie($userInfo);
-            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY], time() + 86400 * 365);
+            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY], 86400 * 365);
             OutputUtil::out($data);
         } catch (PFException $exception) {
             OutputUtil::out($exception);
@@ -128,7 +128,7 @@ class LoginController extends AppController {
                 $login_log['phone_type'] = 'unknown';
             }
             \App\Models\ActiveRecord\ARPFUsersLogin::add($login_log);
-            setcookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, '', 0, '/');
+            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, '');
             OutputUtil::out();
         } catch (PFException $exception) {
             OutputUtil::out($exception);
@@ -164,7 +164,7 @@ class LoginController extends AppController {
             $data['name'] = $user['username'];
             $data['has_password'] = '1';
             $cookie = self::getCookie($user);
-            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY], time() + 86400 * 365);
+            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY], 86400 * 365);
             OutputUtil::out($data);
         } catch (PFException $exception) {
             OutputUtil::out($exception);
