@@ -16,8 +16,23 @@
     <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/AdminLTE/plugins/iCheck/square/blue.css") }}">
     <link href="{{ admin_asset("/org/css/style.css") }}" rel="stylesheet">
     <link href="{{ admin_asset("/org/css/style-responsive.css") }}" rel="stylesheet">
+    <link href="{{ admin_asset("/css/datepicker3.css") }}" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!-- jQuery 2.1.4 -->
+    <script src="{{ admin_asset("/vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js")}} "></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="{{ admin_asset("/vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js")}}"></script>
+    <!-- iCheck -->
+    <script src="{{ admin_asset("/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js")}}"></script>
+    <script src="{{ admin_asset("/js/jquery-migrate-1.2.1.min.js")}}"></script>
+    <script src="{{ admin_asset("/js/jquery-ui-1.9.2.custom.min.js")}}"></script>
+    <script src="{{ admin_asset("/js/jquery.nicescroll.js")}}"></script>
+    <script src="{{ admin_asset("/js/bootstrap-datepicker.js") }}"></script>
+    <script src="{{ admin_asset("/js/jquery.pjax.js") }}"></script>
+    <script src="{{ admin_asset("/js/modernizr.min.js")}}"></script>
+    <script src="{{ admin_asset("/js/respond.min.js")}}"></script>
+    <script src="{{ admin_asset("/org/js/common.js")}}"></script>
     <!--[if lt IE 9]>
     <script src="{{ admin_asset("/js/html5shiv.min.js") }}"></script>
     <script src="{{ admin_asset("/js/respond.min.js") }}"></script>
@@ -36,17 +51,5 @@
 {{-- 包含页脚 --}}
 @include('org.common.footer')
 </div>
-<!-- jQuery 2.1.4 -->
-<script src="{{ admin_asset("/vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js")}} "></script>
-<!-- Bootstrap 3.3.5 -->
-<script src="{{ admin_asset("/vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js")}}"></script>
-<!-- iCheck -->
-<script src="{{ admin_asset("/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js")}}"></script>
-<script src="{{ admin_asset("/js/jquery-migrate-1.2.1.min.js")}}"></script>
-<script src="{{ admin_asset("/js/jquery-ui-1.9.2.custom.min.js")}}"></script>
-<script src="{{ admin_asset("/js/jquery.nicescroll.js")}}"></script>
-<script src="{{ admin_asset("/js/modernizr.min.js")}}"></script>
-<script src="{{ admin_asset("/js/respond.min.js")}}"></script>
-<script src="{{ admin_asset("/org/js/common.js")}}"></script>
 </body>
 </html>

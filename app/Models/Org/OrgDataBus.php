@@ -9,6 +9,8 @@ namespace App\Models\Org;
 
 use App\Components\AreaUtil;
 use App\Components\CookieUtil;
+use App\Components\PFException;
+use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFOrgUsers;
 use App\Models\DataBus;
 use Illuminate\Support\Facades\Cookie;
@@ -35,6 +37,15 @@ class OrgDataBus extends DataBus
         self::$data['phone'] = $checkCookie['username'];
         self::$data['username'] = $checkCookie['username'];
         self::$data['user'] = self::getUserInfo();
+
+        //获取对应的机构
+        self::$data['org_id'] = self::$data['user']['org_id'];
+        $org = ARPFOrg::getOrgById(self::$data['org_id']);
+        if ($org && $org['status'] == STATUS_SUCCESS) {
+            self::$data['org'] = $org;
+        } else {
+            throw new PFException("校区信息不存在");
+        }
 
         self::$data['isLogin'] = self::isLogin();
         $detect = new \Mobile_Detect();
@@ -95,13 +106,23 @@ class OrgDataBus extends DataBus
         return $ret;
     }
 
+    /**
+     * 获取用户信息
+     * @return array|bool
+     * @throws PFException
+     */
     public static function getUserInfo()
     {
         $uid = self::get('uid');
         if ($uid < 1) {
             return false;
         }
-        $res = ARPFOrgUsers::query()->where(['org_uid' => $uid])->first();
-        return $res;
+
+        $res = ARPFOrgUsers::query()->select('*')->where(['org_uid' => $uid, 'status' => STATUS_SUCCESS,])->first();
+        if ($res) {
+            return $res->getAttributes();
+        } else {
+            throw new PFException("用户配置不存在,请重新登录", ERR_NOLOGIN);
+        }
     }
 }
