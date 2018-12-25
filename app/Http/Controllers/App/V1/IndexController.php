@@ -11,10 +11,13 @@ namespace App\Http\Controllers\App\V1;
 
 use App\Http\Controllers\App\AppController;
 use App\Components\OutputUtil;
+use App\Http\Controllers\App\Models\Loan;
 
-class IndexController extends AppController {
+class IndexController extends AppController
+{
 
-    public function index() {
+    public function index()
+    {
         $data = [];
         $data['banner'] = [
             [
@@ -34,29 +37,7 @@ class IndexController extends AppController {
             'content' => '这是通知，就一条',
             'url' => 'powerfulfin://loandetail?lid=123',
         ];
-        $data['loan'] = [
-            'status' => '1',
-            'status_img_2x' => '/img/loan/confirm2x.png',
-            'status_img_3x' => '/img/loan/confirm3x.png',
-            'status_desp' => '待确认',
-            'repay_date' => '2019-01-15',
-            'repay_money' => '1205.12',
-            'remark' => '请确认分期',
-            'buttons' => [
-                [
-                    'name' => '订单详情',
-                    'url' => 'powerfulfin://loandetail?lid=123',
-                    'style' => '1'
-                ],
-                [
-                    'name' => '分期确认',
-                    'url' => 'powerfulfin://loanconfirm?lid=123',
-                    'style' => 2
-                ]
-            ],
-            'school_id' => 12345,
-            'school_name' => '恒企教育（东风北桥分校）',
-        ];
+        $data['loan'] = Loan::getHomeLoanInfo(1);   //需提交UID,如果是未登录状态则返回空
         OutputUtil::out($data);
     }
 

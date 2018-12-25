@@ -25,6 +25,8 @@ use App\Models\Calc\CalcResource;
 use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BULoanConfig;
 use App\Models\Server\BU\BULoanProduct;
+use App\Models\Server\BU\BULoanStatus;
+use Illuminate\Support\Facades\DB;
 
 class Loan
 {
@@ -226,5 +228,85 @@ class Loan
             throw new PFException($exception->getMessage(), $exception->getCode());
         }
         return BULoanApply::createSimpleLoanApplyInfo($data, $userInfo);
+    }
+
+    /**
+     * 首页获取订单详情
+     * @param $uid
+     * @return array
+     * @throws PFException
+     */
+    public static function getHomeLoanInfo($uid)
+    {
+        if (is_null($uid) || !is_numeric($uid)) {
+            return [];
+        }
+
+        if (config('app.env') == 'product') {
+
+
+            $loan = DB::table(ARPFLoan::TABLE_NAME)->select('*')
+                ->where('uid', $uid)
+                ->orderByDesc('id')
+                ->first();
+
+            if (empty($loan)) {
+                return [];
+            }
+
+            $org = ARPFOrg::getOrgById($loan['oid']);
+            $data = [
+                'status' => $loan['status'],
+                'status_desp' => BULoanStatus::getStatusDescriptionForC($loan['status']),
+                'repay_date' => '2019-01-15',
+                'repay_money' => '1205.12',
+                'remark' => $loan['remark'],
+                'buttons' => [
+                    [
+                        'name' => '订单详情',
+                        'url' => 'powerfulfin://loandetail?lid=' . $loan['id'],
+                        'style' => '1'
+                    ],
+
+                ],
+                'school_id' => $loan['oid'],
+                'school_name' => $org['name'],
+            ];
+
+            if (in_array($loan['status'], [LOAN_10000_REPAY, LOAN_11100_OVERDUE_KZ])) {
+                $data['repay_date'] = '2019-01-15';
+                $data['repay_money'] = '1205.12';
+                $data['buttons'][] = [
+                    'name' => '分期确认',
+                    'url' => 'powerfulfin://loanconfirm?lid=' . $loan['id'],
+                    'style' => 2
+                ];
+            }
+            return $data;
+        } else {
+            return $data = [
+                'status' => '1',
+                'status_img_2x' => '/img/loan/confirm2x.png',
+                'status_img_3x' => '/img/loan/confirm3x.png',
+                'status_desp' => '待确认',
+                'repay_date' => '2019-01-15',
+                'repay_money' => '1205.12',
+                'remark' => '请确认分期',
+                'buttons' => [
+                    [
+                        'name' => '订单详情',
+                        'url' => 'powerfulfin://loandetail?lid=123',
+                        'style' => '1'
+                    ],
+                    [
+                        'name' => '分期确认',
+                        'url' => 'powerfulfin://loanconfirm?lid=123',
+                        'style' => 2
+                    ]
+                ],
+                'school_id' => 12345,
+                'school_name' => '恒企教育（东风北桥分校）',
+            ];
+        }
     }
 }
