@@ -15,6 +15,7 @@ use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\Epay\Epay;
+use Illuminate\Support\Facades\DB;
 
 class BUUserBank
 {
@@ -149,6 +150,12 @@ class BUUserBank
                     'protocol_no' => $result['data']['protocol_no'],
                     'create_time' => date('Y-m-d H:i:s'),
                 ];
+
+                $banks = ARPFUsersBank::getUserRepayBankByUid($uid);
+                if (empty($banks)) {
+                    $info['type'] = 1;
+                }
+
                 ARPFUsersBank::addUserBank($info);
                 return true;
             } else {
@@ -199,6 +206,11 @@ class BUUserBank
         $update = [
             'type' => 1,
         ];
-        return ARPFUsersBank::updateBankInfo($bankInfo['id'], $update);
+        ARPFUsersBank::updateBankInfo($bankInfo['id'], $update);
+        DB::table(ARPFUsersBank::TABLE_NAME)
+            ->where('uid', $uid)
+            ->where('bank_account', '!=', $bank_account)
+            ->update($update);
+        return true;
     }
 }
