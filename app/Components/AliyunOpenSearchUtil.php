@@ -83,9 +83,13 @@ class AliyunOpenSearchUtil {
     }
 
     public static function searchSchool($keyword, $lng = null, $lat = null, $page = 1, $pagesize = 10) {
-        $query = 'default:"' . $keyword . '" OR id:"' . $keyword . '"';
+        $query = 'id:"' . $keyword . '"';
+        $keyword_array = explode(' ', $keyword);
+        foreach ($keyword_array as $word) {
+            $query .= ' OR default:"' . $word . '"';
+        }
         if ($lng > 1 && $lat > 1) {
-            $query .= '&&sort=+distance(lng,lat,"' . $lng . '","' . $lat . '")';
+            $query .= '&&sort=+distance(lng,lat,"' . $lng . '","' . $lat . '");-RANK';
         }
         $params = self::getSearchParams(self::APP_SCHOOL, $query, $page, $pagesize);
         $result = self::search($params);

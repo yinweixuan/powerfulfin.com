@@ -24,6 +24,15 @@ class SearchController {
         $page = Input::get('page', '1');
         $pagesize = Input::get('pagesize', '10');
         try {
+            if (!$lng < 1 || $lat < 1) {
+                $ip = \App\Models\DataBus::get('ip');
+                if ($ip) {
+                    $ip = $ip == 2130706433 ? null : $ip;
+                    $location = \App\Components\MapUtil::getPosByIp($ip);
+                    $lng = $location['lng'];
+                    $lat = $location['lat'];
+                }
+            }
             $data = AliyunOpenSearchUtil::searchSchool($keyword, $lng, $lat, $page, $pagesize);
             if (!empty($data['list'])) {
                 $new_list = [];

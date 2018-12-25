@@ -19,11 +19,9 @@ use App\Models\DataBus;
 use App\Models\Server\VerifyCode;
 use Illuminate\Support\Facades\Input;
 
-class LoginController extends AppController
-{
+class LoginController extends AppController {
 
-    public function login()
-    {
+    public function login() {
         try {
             $phone = Input::get('phone');
             $vcode = Input::get('vcode');
@@ -80,15 +78,14 @@ class LoginController extends AppController
             $data['name'] = $userInfo['username'];
             $data['has_password'] = $userInfo['password'] ? '1' : '0';
             $cookie = self::getCookie($userInfo);
-            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
+            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY], time() + 86400 * 365);
             OutputUtil::out($data);
         } catch (PFException $exception) {
             OutputUtil::out($exception);
         }
     }
 
-    public function verifycode()
-    {
+    public function verifycode() {
         try {
             $phone = Input::get('phone');
             if (!CheckUtil::checkPhone($phone)) {
@@ -102,8 +99,7 @@ class LoginController extends AppController
         }
     }
 
-    private function getCookie(array $userInfo)
-    {
+    private function getCookie(array $userInfo) {
         if (empty($userInfo)) {
             $cookie = [];
         } else {
@@ -113,8 +109,7 @@ class LoginController extends AppController
         return $cookie;
     }
 
-    public function logout()
-    {
+    public function logout() {
         try {
             $uid = DataBus::getUid();
             if (!$uid) {
@@ -140,8 +135,7 @@ class LoginController extends AppController
         }
     }
 
-    public function setPassword()
-    {
+    public function setPassword() {
         try {
             $uid = DataBus::getUid();
             if (!$uid) {
@@ -170,15 +164,14 @@ class LoginController extends AppController
             $data['name'] = $user['username'];
             $data['has_password'] = '1';
             $cookie = self::getCookie($user);
-            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY]);
+            CookieUtil::setCookie(CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY, $cookie[CookieUtil::db_cookiepre . '_' . DataBus::COOKIE_KEY], time() + 86400 * 365);
             OutputUtil::out($data);
         } catch (PFException $exception) {
             OutputUtil::out($exception);
         }
     }
 
-    public function getEncryptedPassword($password)
-    {
+    public function getEncryptedPassword($password) {
         return strtolower(sha1(env('PASSWORD_SALT') . $password));
     }
 
