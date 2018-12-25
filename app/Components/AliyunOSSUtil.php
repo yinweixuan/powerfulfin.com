@@ -183,4 +183,24 @@ class AliyunOSSUtil {
         return $result;
     }
 
+    /**
+     * 获取文件访问url
+     * @param string $object 需要访问的文件
+     * @param int $timeout 链接过期时间，秒
+     */
+    public static function getAccessUrl($bucket, $object, $timeout = 3600) {
+        $oss_client = self::getOSSClient();
+        $signed_url = $oss_client->signUrl($bucket, $object, $timeout);
+        return $signed_url;
+    }
+
+    /**
+     * 获取订单文件访问链接
+     */
+    public static function getLoanFileUrl($resource, $sbid, $lid, $filename, $timeout = 3600) {
+        $bucket = self::getLoanBucket();
+        $object = self::getObjectPrefix($resource, $sbid, $lid) . '/' . $filename;
+        return self::getAccessUrl($bucket, $object, $timeout);
+    }
+
 }
