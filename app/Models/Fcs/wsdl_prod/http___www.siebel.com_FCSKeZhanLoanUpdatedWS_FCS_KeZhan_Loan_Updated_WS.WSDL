@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ targetNamespace="http://www.siebel.com/FCSKeZhanLoanUpdatedWS"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://www.siebel.com/FCSKeZhanLoanUpdatedWS"
+><types
+></types
+><message
+ name="KZUpdateLoanStatue_Input"
+><part
+ name="YLZD01"
+ type="xsd:string"
+></part
+><part
+ name="YLZD04"
+ type="xsd:string"
+></part
+><part
+ name="attachment2"
+ type="xsd:string"
+></part
+><part
+ name="YLZD05"
+ type="xsd:string"
+></part
+><part
+ name="channel"
+ type="xsd:string"
+></part
+><part
+ name="YLZD02"
+ type="xsd:string"
+></part
+><part
+ name="attachment1"
+ type="xsd:string"
+></part
+><part
+ name="loanStatue"
+ type="xsd:string"
+></part
+><part
+ name="YLZD03"
+ type="xsd:string"
+></part
+><part
+ name="loanId"
+ type="xsd:string"
+></part
+></message
+><message
+ name="KZUpdateLoanStatue_Output"
+><part
+ name="code"
+ type="xsd:string"
+></part
+><part
+ name="message"
+ type="xsd:string"
+></part
+></message
+><portType
+ name="FCS_spcKeZhan_spcLoan_spcUpdated_spcWS"
+><operation
+ name="KZUpdateLoanStatue"
+><input
+ message="tns:KZUpdateLoanStatue_Input"
+></input
+><output
+ message="tns:KZUpdateLoanStatue_Output"
+></output
+></operation
+></portType
+><binding
+ name="FCS_spcKeZhan_spcLoan_spcUpdated_spcWS"
+ type="tns:FCS_spcKeZhan_spcLoan_spcUpdated_spcWS"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="rpc"
+></soap:binding
+><operation
+ name="KZUpdateLoanStatue"
+><soap:operation
+ soapAction="rpc/http://www.siebel.com/FCSKeZhanLoanUpdatedWS:KZUpdateLoanStatue"
+></soap:operation
+><input
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanUpdatedWS"
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanUpdatedWS"
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="FCS_spcKeZhan_spcLoan_spcUpdated_spcWS"
+><port
+ binding="tns:FCS_spcKeZhan_spcLoan_spcUpdated_spcWS"
+ name="FCS_spcKeZhan_spcLoan_spcUpdated_spcWS"
+><soap:address
+ location="http://10.200.201.36/eai_chs/start.swe?SWEExtSource=WebService&amp;SWEExtCmd=Execute&amp;WSSOAP=1;&amp;UserName=EAIUSER&amp;Password=EAIUSER"
+></soap:address
+></port
+></service
+></definitions
+>

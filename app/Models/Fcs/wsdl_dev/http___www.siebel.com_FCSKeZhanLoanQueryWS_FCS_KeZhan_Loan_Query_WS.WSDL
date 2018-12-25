@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ targetNamespace="http://www.siebel.com/FCSKeZhanLoanQueryWS"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://www.siebel.com/FCSKeZhanLoanQueryWS"
+><types
+></types
+><message
+ name="KZQueryLoanStatue_Input"
+><part
+ name="YLZD06"
+ type="xsd:string"
+></part
+><part
+ name="YLZD01"
+ type="xsd:string"
+></part
+><part
+ name="YLZD04"
+ type="xsd:string"
+></part
+><part
+ name="YLZD05"
+ type="xsd:string"
+></part
+><part
+ name="YLZD07"
+ type="xsd:string"
+></part
+><part
+ name="YLZD08"
+ type="xsd:string"
+></part
+><part
+ name="channel"
+ type="xsd:string"
+></part
+><part
+ name="YLZD09"
+ type="xsd:string"
+></part
+><part
+ name="YLZD02"
+ type="xsd:string"
+></part
+><part
+ name="YLZD10"
+ type="xsd:string"
+></part
+><part
+ name="YLZD03"
+ type="xsd:string"
+></part
+><part
+ name="loanId"
+ type="xsd:string"
+></part
+></message
+><message
+ name="KZQueryLoanStatue_Output"
+><part
+ name="DecisionReason"
+ type="xsd:string"
+></part
+><part
+ name="code"
+ type="xsd:string"
+></part
+><part
+ name="loanStatue"
+ type="xsd:string"
+></part
+><part
+ name="message"
+ type="xsd:string"
+></part
+><part
+ name="YLZD01"
+ type="xsd:string"
+></part
+><part
+ name="YLZD02"
+ type="xsd:string"
+></part
+><part
+ name="YLZD03"
+ type="xsd:string"
+></part
+><part
+ name="YLZD04"
+ type="xsd:string"
+></part
+><part
+ name="YLZD05"
+ type="xsd:string"
+></part
+><part
+ name="YLZD06"
+ type="xsd:string"
+></part
+><part
+ name="YLZD07"
+ type="xsd:string"
+></part
+><part
+ name="YLZD08"
+ type="xsd:string"
+></part
+><part
+ name="YLZD09"
+ type="xsd:string"
+></part
+><part
+ name="YLZD10"
+ type="xsd:string"
+></part
+></message
+><portType
+ name="FCS_spcKeZhan_spcLoan_spcQuery_spcWS"
+><operation
+ name="KZQueryLoanStatue"
+><input
+ message="tns:KZQueryLoanStatue_Input"
+></input
+><output
+ message="tns:KZQueryLoanStatue_Output"
+></output
+></operation
+></portType
+><binding
+ name="FCS_spcKeZhan_spcLoan_spcQuery_spcWS"
+ type="tns:FCS_spcKeZhan_spcLoan_spcQuery_spcWS"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="rpc"
+></soap:binding
+><operation
+ name="KZQueryLoanStatue"
+><soap:operation
+ soapAction="rpc/http://www.siebel.com/FCSKeZhanLoanQueryWS:KZQueryLoanStatue"
+></soap:operation
+><input
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanQueryWS"
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanQueryWS"
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="FCS_spcKeZhan_spcLoan_spcQuery_spcWS"
+><port
+ binding="tns:FCS_spcKeZhan_spcLoan_spcQuery_spcWS"
+ name="FCS_spcKeZhan_spcLoan_spcQuery_spcWS"
+><soap:address
+ location="http://10.200.5.158/eai_chs/start.swe?SWEExtSource=WebService&amp;SWEExtCmd=Execute&amp;WSSOAP=1;&amp;UserName=EAIUSER&amp;Password=EAIUSER"
+></soap:address
+></port
+></service
+></definitions
+>

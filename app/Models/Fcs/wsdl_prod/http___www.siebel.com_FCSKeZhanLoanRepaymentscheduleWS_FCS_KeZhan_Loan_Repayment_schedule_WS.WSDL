@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:xsdLocal0="http://www.siebel.com/xml/FCS%20Repayment%20schedule%20IO"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ targetNamespace="http://www.siebel.com/FCSKeZhanLoanRepaymentscheduleWS"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://www.siebel.com/FCSKeZhanLoanRepaymentscheduleWS"
+><types
+><xsd:schema
+ elementFormDefault="qualified"
+ xmlns:xsdLocal0="http://www.siebel.com/xml/FCS%20Repayment%20schedule%20IO"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://www.siebel.com/xml/FCS%20Repayment%20schedule%20IO"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:annotation
+><xsd:documentation
+>Copyright (C) 2001-2004 Siebel Systems, Inc. All rights reserved. Siebel XSD Generation</xsd:documentation
+></xsd:annotation
+><xsd:element
+ name="ListOfScheduleInfo"
+ type="xsdLocal0:ListOfScheduleInfo"
+></xsd:element
+><xsd:complexType
+ name="ListOfScheduleInfoTopElmt"
+><xsd:sequence
+><xsd:element
+ name="ListOfScheduleInfo"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal0:ListOfScheduleInfo"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ListOfScheduleInfo"
+><xsd:sequence
+><xsd:element
+ name="PostLoanEntry"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal0:PostLoanEntry"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="PostLoanEntry"
+><xsd:sequence
+><xsd:element
+ name="loanSequence"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="productName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="loanAmount"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="loanTerm"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="loanDate"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="interestRate"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="repaymentMethod"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="repaymentCycle"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="interestReceivable"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="approvalReceivable"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="serviceReceivable"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="actualApproval"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="repaymentDate"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="bankName"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="bankAccount"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="firstDayOfRepayment"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="ListOfScheduleEntry"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsdLocal0:ListOfScheduleEntry"
+></xsd:element
+><xsd:element
+ name="ListOfPaymentHistoryEntry"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsdLocal0:ListOfPaymentHistoryEntry"
+></xsd:element
+><xsd:element
+ name="ListOfOverdueEntry"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsdLocal0:ListOfOverdueEntry"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ListOfScheduleEntry"
+><xsd:sequence
+><xsd:element
+ name="ScheduleEntry"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal0:ScheduleEntry"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ScheduleEntry"
+><xsd:sequence
+><xsd:element
+ name="loanSequence"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Periods"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="dueDate"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="principalPayable"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="interestPayable"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="serviceChargePayable"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="totalAmountPayable"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ListOfPaymentHistoryEntry"
+><xsd:sequence
+><xsd:element
+ name="PaymentHistoryEntry"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal0:PaymentHistoryEntry"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="PaymentHistoryEntry"
+><xsd:sequence
+><xsd:element
+ name="Description"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="actualRepayDate"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="overdueDaysBeRepay"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="RepayTotal"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="actualPrincipal"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="actualInterest"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="actualPenalty"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="actualService"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="RepayIsOverdue"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="Amount"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ListOfOverdueEntry"
+><xsd:sequence
+><xsd:element
+ name="OverdueEntry"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal0:OverdueEntry"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="OverdueEntry"
+><xsd:sequence
+><xsd:element
+ name="loanSequence"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="FCSPeriod"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="PlanRepayDate"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CurrentIsOverdue"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="TotalOverduePeriod"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CurrentOverduePeriod"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="CurrentOverdueAmount"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="OverdueService"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="actualOverdueService"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:schema
+></types
+><message
+ name="KZRepaymentSchedule_Input"
+><part
+ name="channel"
+ type="xsd:string"
+></part
+><part
+ name="loanId"
+ type="xsd:string"
+></part
+></message
+><message
+ name="KZRepaymentSchedule_Output"
+><part
+ name="DeferredPayable"
+ type="xsd:string"
+></part
+><part
+ name="KZRepaySchInfo"
+ type="xsdLocal0:ListOfScheduleInfoTopElmt"
+></part
+><part
+ name="OverdueDays"
+ type="xsd:string"
+></part
+><part
+ name="PenaltyPayable"
+ type="xsd:string"
+></part
+><part
+ name="code"
+ type="xsd:string"
+></part
+><part
+ name="message"
+ type="xsd:string"
+></part
+></message
+><portType
+ name="FCS_spcKeZhan_spcLoan_spcRepayment_spcschedule_spcWS"
+><operation
+ name="KZRepaymentSchedule"
+><input
+ message="tns:KZRepaymentSchedule_Input"
+></input
+><output
+ message="tns:KZRepaymentSchedule_Output"
+></output
+></operation
+></portType
+><binding
+ name="FCS_spcKeZhan_spcLoan_spcRepayment_spcschedule_spcWS"
+ type="tns:FCS_spcKeZhan_spcLoan_spcRepayment_spcschedule_spcWS"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="rpc"
+></soap:binding
+><operation
+ name="KZRepaymentSchedule"
+><soap:operation
+ soapAction="rpc/http://www.siebel.com/FCSKeZhanLoanRepaymentscheduleWS:KZRepaymentSchedule"
+></soap:operation
+><input
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanRepaymentscheduleWS"
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanRepaymentscheduleWS"
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="FCS_spcKeZhan_spcLoan_spcRepayment_spcschedule_spcWS"
+><port
+ binding="tns:FCS_spcKeZhan_spcLoan_spcRepayment_spcschedule_spcWS"
+ name="FCS_spcKeZhan_spcLoan_spcRepayment_spcschedule_spcWS"
+><soap:address
+ location="http://10.200.201.36/eai_chs/start.swe?SWEExtSource=WebService&amp;SWEExtCmd=Execute&amp;WSSOAP=1;&amp;UserName=EAIUSER&amp;Password=EAIUSER"
+></soap:address
+></port
+></service
+></definitions
+>

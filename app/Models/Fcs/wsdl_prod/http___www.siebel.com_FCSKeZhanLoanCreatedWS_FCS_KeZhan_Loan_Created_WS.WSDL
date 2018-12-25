@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ targetNamespace="http://www.siebel.com/FCSKeZhanLoanCreatedWS"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://www.siebel.com/FCSKeZhanLoanCreatedWS"
+><types
+></types
+><message
+ name="KZCreateLoan_Input"
+><part
+ name="birth"
+ type="xsd:string"
+></part
+><part
+ name="phoneId"
+ type="xsd:string"
+></part
+><part
+ name="tkAccountName"
+ type="xsd:string"
+></part
+><part
+ name="attachment9"
+ type="xsd:string"
+></part
+><part
+ name="callRecord"
+ type="xsd:string"
+></part
+><part
+ name="merchantAddress"
+ type="xsd:string"
+></part
+><part
+ name="YLZD06"
+ type="xsd:string"
+></part
+><part
+ name="nickName"
+ type="xsd:string"
+></part
+><part
+ name="Position"
+ type="xsd:string"
+></part
+><part
+ name="QQ"
+ type="xsd:string"
+></part
+><part
+ name="YLZD01"
+ type="xsd:string"
+></part
+><part
+ name="YLZD04"
+ type="xsd:string"
+></part
+><part
+ name="applyAmount"
+ type="xsd:string"
+></part
+><part
+ name="attachment2"
+ type="xsd:string"
+></part
+><part
+ name="custChannel"
+ type="xsd:string"
+></part
+><part
+ name="merchantName"
+ type="xsd:string"
+></part
+><part
+ name="schoolAddress"
+ type="xsd:string"
+></part
+><part
+ name="unitAddressProvience"
+ type="xsd:string"
+></part
+><part
+ name="attachment7"
+ type="xsd:string"
+></part
+><part
+ name="bossPhone"
+ type="xsd:string"
+></part
+><part
+ name="otherRiskInfo"
+ type="xsd:string"
+></part
+><part
+ name="KZType"
+ type="xsd:string"
+></part
+><part
+ name="registerDate"
+ type="xsd:string"
+></part
+><part
+ name="custName"
+ type="xsd:string"
+></part
+><part
+ name="degree"
+ type="xsd:string"
+></part
+><part
+ name="passFlag"
+ type="xsd:string"
+></part
+><part
+ name="YLZD05"
+ type="xsd:string"
+></part
+><part
+ name="attachment6"
+ type="xsd:string"
+></part
+><part
+ name="emergCon1Phone"
+ type="xsd:string"
+></part
+><part
+ name="schoolPhone"
+ type="xsd:string"
+></part
+><part
+ name="deviceFingerprint"
+ type="xsd:string"
+></part
+><part
+ name="housingStatus"
+ type="xsd:string"
+></part
+><part
+ name="attachment3"
+ type="xsd:string"
+></part
+><part
+ name="region"
+ type="xsd:string"
+></part
+><part
+ name="branchName"
+ type="xsd:string"
+></part
+><part
+ name="loanPeriod"
+ type="xsd:string"
+></part
+><part
+ name="JD"
+ type="xsd:string"
+></part
+><part
+ name="cardEndDate"
+ type="xsd:string"
+></part
+><part
+ name="channel"
+ type="xsd:string"
+></part
+><part
+ name="courseStartDate"
+ type="xsd:string"
+></part
+><part
+ name="liveAddressCity"
+ type="xsd:string"
+></part
+><part
+ name="workUnit"
+ type="xsd:string"
+></part
+><part
+ name="YLZD07"
+ type="xsd:string"
+></part
+><part
+ name="YLZD08"
+ type="xsd:string"
+></part
+><part
+ name="applyPeriod"
+ type="xsd:string"
+></part
+><part
+ name="emergCon1Relation"
+ type="xsd:string"
+></part
+><part
+ name="faceResult"
+ type="xsd:string"
+></part
+><part
+ name="intendProduct"
+ type="xsd:string"
+></part
+><part
+ name="phone"
+ type="xsd:string"
+></part
+><part
+ name="analysisStartDate"
+ type="xsd:string"
+></part
+><part
+ name="cardStartDate"
+ type="xsd:string"
+></part
+><part
+ name="manager"
+ type="xsd:string"
+></part
+><part
+ name="historyRejectNum"
+ type="xsd:string"
+></part
+><part
+ name="schoolSystem"
+ type="xsd:string"
+></part
+><part
+ name="WeChat"
+ type="xsd:string"
+></part
+><part
+ name="courseLength"
+ type="xsd:string"
+></part
+><part
+ name="email"
+ type="xsd:string"
+></part
+><part
+ name="emergCon2Name"
+ type="xsd:string"
+></part
+><part
+ name="liveAddressProvience"
+ type="xsd:string"
+></part
+><part
+ name="analysisEndDate"
+ type="xsd:string"
+></part
+><part
+ name="merchantAddrPhone"
+ type="xsd:string"
+></part
+><part
+ name="YLZD09"
+ type="xsd:string"
+></part
+><part
+ name="appProduct"
+ type="xsd:string"
+></part
+><part
+ name="applyCourse"
+ type="xsd:string"
+></part
+><part
+ name="hkOpenBank"
+ type="xsd:string"
+></part
+><part
+ name="courseDuration"
+ type="xsd:string"
+></part
+><part
+ name="mechanismPosition"
+ type="xsd:string"
+></part
+><part
+ name="YLZD02"
+ type="xsd:string"
+></part
+><part
+ name="emergCon1Name"
+ type="xsd:string"
+></part
+><part
+ name="hkAccountName"
+ type="xsd:string"
+></part
+><part
+ name="liveAddressBorough"
+ type="xsd:string"
+></part
+><part
+ name="taobao"
+ type="xsd:string"
+></part
+><part
+ name="unitAddressBorough"
+ type="xsd:string"
+></part
+><part
+ name="unitDetailAddress"
+ type="xsd:string"
+></part
+><part
+ name="attachment5"
+ type="xsd:string"
+></part
+><part
+ name="tkBankCard"
+ type="xsd:string"
+></part
+><part
+ name="unitAddressCity"
+ type="xsd:string"
+></part
+><part
+ name="applyPosition"
+ type="xsd:string"
+></part
+><part
+ name="attachment1"
+ type="xsd:string"
+></part
+><part
+ name="emergCon2Phone"
+ type="xsd:string"
+></part
+><part
+ name="enrolmentDate"
+ type="xsd:string"
+></part
+><part
+ name="coursePrice"
+ type="xsd:string"
+></part
+><part
+ name="professional"
+ type="xsd:string"
+></part
+><part
+ name="school"
+ type="xsd:string"
+></part
+><part
+ name="attachment8"
+ type="xsd:string"
+></part
+><part
+ name="YLZD10"
+ type="xsd:string"
+></part
+><part
+ name="YLZD03"
+ type="xsd:string"
+></part
+><part
+ name="attachment4"
+ type="xsd:string"
+></part
+><part
+ name="cardNum"
+ type="xsd:string"
+></part
+><part
+ name="hkBankCard"
+ type="xsd:string"
+></part
+><part
+ name="analysisCardNum"
+ type="xsd:string"
+></part
+><part
+ name="locationDistance"
+ type="xsd:string"
+></part
+><part
+ name="major"
+ type="xsd:string"
+></part
+><part
+ name="custType"
+ type="xsd:string"
+></part
+><part
+ name="emergCon2Relation"
+ type="xsd:string"
+></part
+><part
+ name="gender"
+ type="xsd:string"
+></part
+><part
+ name="liveDetailAddress"
+ type="xsd:string"
+></part
+><part
+ name="monthlyIncome"
+ type="xsd:string"
+></part
+><part
+ name="tkOpenBank"
+ type="xsd:string"
+></part
+><part
+ name="bossWorkLandline"
+ type="xsd:string"
+></part
+><part
+ name="maritalStatus"
+ type="xsd:string"
+></part
+></message
+><message
+ name="KZCreateLoan_Output"
+><part
+ name="code"
+ type="xsd:string"
+></part
+><part
+ name="custId"
+ type="xsd:string"
+></part
+><part
+ name="loanId"
+ type="xsd:string"
+></part
+><part
+ name="message"
+ type="xsd:string"
+></part
+></message
+><portType
+ name="FCS_spcKeZhan_spcLoan_spcCreated_spcWS"
+><operation
+ name="KZCreateLoan"
+><input
+ message="tns:KZCreateLoan_Input"
+></input
+><output
+ message="tns:KZCreateLoan_Output"
+></output
+></operation
+></portType
+><binding
+ name="FCS_spcKeZhan_spcLoan_spcCreated_spcWS"
+ type="tns:FCS_spcKeZhan_spcLoan_spcCreated_spcWS"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="rpc"
+></soap:binding
+><operation
+ name="KZCreateLoan"
+><soap:operation
+ soapAction="rpc/http://www.siebel.com/FCSKeZhanLoanCreatedWS:KZCreateLoan"
+></soap:operation
+><input
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanCreatedWS"
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanCreatedWS"
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="FCS_spcKeZhan_spcLoan_spcCreated_spcWS"
+><port
+ binding="tns:FCS_spcKeZhan_spcLoan_spcCreated_spcWS"
+ name="FCS_spcKeZhan_spcLoan_spcCreated_spcWS"
+><soap:address
+ location="http://10.200.201.36/eai_chs/start.swe?SWEExtSource=WebService&amp;SWEExtCmd=Execute&amp;WSSOAP=1;&amp;UserName=EAIUSER&amp;Password=EAIUSER"
+></soap:address
+></port
+></service
+></definitions
+>
