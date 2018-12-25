@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:xsdLocal0="http://www.siebel.com/xml/FCS%20KZ%20Loan%20PhoneBookSyn%20IO"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ targetNamespace="http://www.siebel.com/FCSKeZhanLoanPhoneBookSynWS"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://www.siebel.com/FCSKeZhanLoanPhoneBookSynWS"
+><types
+><xsd:schema
+ elementFormDefault="qualified"
+ xmlns:xsdLocal0="http://www.siebel.com/xml/FCS%20KZ%20Loan%20PhoneBookSyn%20IO"
+ attributeFormDefault="unqualified"
+ targetNamespace="http://www.siebel.com/xml/FCS%20KZ%20Loan%20PhoneBookSyn%20IO"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+><xsd:annotation
+><xsd:documentation
+>Copyright (C) 2001-2004 Siebel Systems, Inc. All rights reserved. Siebel XSD Generation</xsd:documentation
+></xsd:annotation
+><xsd:element
+ name="ListOfPhoneBookInfo"
+ type="xsdLocal0:ListOfPhoneBookInfo"
+></xsd:element
+><xsd:complexType
+ name="ListOfPhoneBookInfoTopElmt"
+><xsd:sequence
+><xsd:element
+ name="ListOfPhoneBookInfo"
+ maxOccurs="1"
+ minOccurs="1"
+ type="xsdLocal0:ListOfPhoneBookInfo"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="ListOfPhoneBookInfo"
+><xsd:sequence
+><xsd:element
+ name="PhoneBookEntry"
+ maxOccurs="unbounded"
+ minOccurs="0"
+ type="xsdLocal0:PhoneBookEntry"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+><xsd:complexType
+ name="PhoneBookEntry"
+><xsd:sequence
+><xsd:element
+ name="lastname"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="firstname"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="email"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="mobile1"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="mobile2"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="mobile3"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="YLZD01"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="YLZD02"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="YLZD03"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="YLZD04"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+><xsd:element
+ name="YLZD05"
+ maxOccurs="1"
+ minOccurs="0"
+ type="xsd:string"
+></xsd:element
+></xsd:sequence
+></xsd:complexType
+></xsd:schema
+></types
+><message
+ name="KZPhoneBookSyn_Input"
+><part
+ name="channel"
+ type="xsd:string"
+></part
+><part
+ name="KZPhoneBookInfo"
+ type="xsdLocal0:ListOfPhoneBookInfoTopElmt"
+></part
+><part
+ name="loanId"
+ type="xsd:string"
+></part
+></message
+><message
+ name="KZPhoneBookSyn_Output"
+><part
+ name="code"
+ type="xsd:string"
+></part
+><part
+ name="message"
+ type="xsd:string"
+></part
+></message
+><portType
+ name="FCS_spcKeZhan_spcLoan_spcPhoneBookSyn_spcWS"
+><operation
+ name="KZPhoneBookSyn"
+><input
+ message="tns:KZPhoneBookSyn_Input"
+></input
+><output
+ message="tns:KZPhoneBookSyn_Output"
+></output
+></operation
+></portType
+><binding
+ name="FCS_spcKeZhan_spcLoan_spcPhoneBookSyn_spcWS"
+ type="tns:FCS_spcKeZhan_spcLoan_spcPhoneBookSyn_spcWS"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="rpc"
+></soap:binding
+><operation
+ name="KZPhoneBookSyn"
+><soap:operation
+ soapAction="rpc/http://www.siebel.com/FCSKeZhanLoanPhoneBookSynWS:KZPhoneBookSyn"
+></soap:operation
+><input
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanPhoneBookSynWS"
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ namespace="http://www.siebel.com/FCSKeZhanLoanPhoneBookSynWS"
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="FCS_spcKeZhan_spcLoan_spcPhoneBookSyn_spcWS"
+><port
+ binding="tns:FCS_spcKeZhan_spcLoan_spcPhoneBookSyn_spcWS"
+ name="FCS_spcKeZhan_spcLoan_spcPhoneBookSyn_spcWS"
+><soap:address
+ location="http://10.200.201.36/eai_chs/start.swe?SWEExtSource=WebService&amp;SWEExtCmd=Execute&amp;WSSOAP=1;&amp;UserName=EAIUSER&amp;Password=EAIUSER"
+></soap:address
+></port
+></service
+></definitions
+>
