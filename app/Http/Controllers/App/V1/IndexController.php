@@ -178,18 +178,30 @@ class IndexController extends AppController {
     }
 
     public function getRecommend() {
-        $sid = 123456;
-        return [
-            'status' => '0',
-            'school_id' => $sid,
-            'school_name' => '恒企教育（东风北桥分校）',
-            'status_img_2x' => '/img/loan/recommend2x.png',
-            'status_img_3x' => '/img/loan/recommend3x.png',
-            'buttons' => [
-                $this->getButton(4, $sid),
-                $this->getButton(5)
-            ]
-        ];
+        $sid = mt_rand(0, 1) ? 0 : 123456;
+        if ($sid) {
+            $recommend = [
+                'status' => '0',
+                'school_id' => $sid,
+                'school_name' => '恒企教育（东风北桥分校）',
+                'status_img_2x' => '/img/loan/recommend2x.png',
+                'status_img_3x' => '/img/loan/recommend3x.png',
+                'buttons' => [
+                    $this->getButton(4, $sid),
+                    $this->getButton(5)
+                ]
+            ];
+        } else {
+            $recommend = [
+                'status' => '0',
+                'status_img_2x' => '/img/loan/noresult2x.png',
+                'status_img_3x' => '/img/loan/noresult3x.png',
+                'buttons' => [
+                    $this->getButton(5)
+                ]
+            ];
+        }
+        return $recommend;
     }
 
 }
