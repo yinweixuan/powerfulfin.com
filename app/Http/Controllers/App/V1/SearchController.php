@@ -36,9 +36,9 @@ class SearchController {
                 }
                 $data['list'] = $new_list;
             }
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $data);
+            OutputUtil::out($data);
         } catch (\Exception $ex) {
-            OutputUtil::err($ex->getMessage(), $ex->getCode());
+            OutputUtil::out($ex);
         }
     }
 
