@@ -17,10 +17,12 @@ class RedisUtil extends \Redis
 {
     const DB_DEFAULT = '0';
 
+    const ENABLE = true;
+
     public static function getInstance($db = self::DB_DEFAULT)
     {
         static $instance = null;
-        if (!class_exists('Redis')) {
+        if (!class_exists('Redis') || !self::ENABLE) {
             return false;
         }
         if (!is_object($instance)) {
