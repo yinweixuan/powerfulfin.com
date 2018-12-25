@@ -47,7 +47,7 @@ class BUUserInfo
                 $result = self::getUserContactConfig();
                 break;
             case 4:
-                $result = [];
+                $result = self::getUserWorkConfig();
                 break;
             case 5:
                 $result = [];
@@ -84,7 +84,7 @@ class BUUserInfo
         return $data = array(
             'key' => env('UDCREDIT_MERCHANT_KEY'),
             'order' => $order,
-            'notify_url' => DOMAIN_INNER . '/udcredit/notify',
+            'notify_url' => 'http://' . DOMAIN_INNER . '/udcredit/notify',
             'user_id' => ARPFUsersAuthLog::USER_ID_SUFFIX . self::$user['id'],
             'safe_mode' => ARPFUsersAuthLog::SAFE_MODE_HIGH,
             'verified' => $verified,
@@ -112,11 +112,20 @@ class BUUserInfo
     public static function getUserContactConfig()
     {
         $data = [
-            'relations' => ['父母', '配偶', '监护人', '子女'],
-            'housing_situation' => ['宿舍', '租房', '与父母同住', '与其他亲属同住', '自有住房', '其他'],
-            'marital_status' => ['已婚有子女', '已婚无子女', '未婚', '离异', '其他'],
+            'relations' => BULoanConfig::getRelationsOne(),
+            'housing_situation' => BULoanConfig::getHouseStatus(),
+            'marital_status' => BULoanConfig::getMarriageStatus(),
         ];
         return $data;
+    }
+
+    public static function getUserWorkConfig()
+    {
+        return [
+            'highest_education' => BULoanConfig::getHighestEducation(),
+            'work_profession' => BULoanConfig::getPosition(),
+            'profession' => BULoanConfig::getWorkDesc(),
+        ];
     }
 
 

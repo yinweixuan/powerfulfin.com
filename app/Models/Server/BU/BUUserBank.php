@@ -14,6 +14,7 @@ use App\Components\PFException;
 use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
+use App\Models\Epay\Epay;
 
 class BUUserBank
 {
@@ -40,20 +41,17 @@ class BUUserBank
         $bankCheckData = $redis->get($redisKey);
         if ($bankCheckData) {
             $result = json_decode($bankCheckData, true);
-            throw new PFException("支付机构检查结果：" . $result['data']['org_desc'], ERR_SYS_UNKNOWN);
+            throw new PFException("支付机构检查结果：" . $result['data']['org_desc'], ERR_BANK_ACCOUNT);
         } else {
             //TODO
-            $result = ['success' => true];
+            $result = Epay::exec($params);
             if ($result['success'] == true && !empty($result['data'])) {
                 if ($result['data']['code'] != 0) {
                     $redis->set($redisKey, json_encode($result), 1800);
-                    throw new PFException("支付机构验核：" . $result['data']['org_desc']);
+                    throw new PFException("支付机构验核：" . $result['data']['org_desc'], ERR_BANK_ACCOUNT);
                 }
-//                if (Xinyan::$xinyan_banks[$data['bank_id']] != $result['data']['bank_id']) {
-//                    throw new PFException("卡片校验归属银行异常，请选择正确银行");
-//                }
             } else {
-                throw new PFException($result['errorMsg'], ERR_SYS_UNKNOWN);
+                throw new PFException($result['errorMsg'], ERR_BANK_ACCOUNT);
             }
         }
     }
@@ -76,15 +74,28 @@ class BUUserBank
                 throw new PFException("暂未获取用户认证信息", ERR_SYS_PARAM);
             }
             self::checkBankAccount($userInfo, $phone, $bank_account);
-
-            $binds = [];
+            $params = [
+                'api' => 'query_bind',
+                'uid' => $uid,
+                'env' => config('app.env')
+            ];
+            $binds = Epay::exec($params);
             foreach ($binds['data'] as $bind) {
                 if ($bind['bank_account'] == $bank_account) {
-                    throw new PFException("该银行卡已经签约绑定，请勿重复绑定", ERR_SYS_PARAM);
+                    throw new PFException("该银行卡已经签约绑定，请勿重复绑定", ERR_BANK_ACCOUNT);
                 }
             }
-            $smsInfo = [];
-            $result['data']['unique_code'] = '';
+            $smsConfig = [
+                'api' => 'prebind',
+                'uid' => $uid,
+                'env' => config('app.env'),
+                'idcard_name' => $userInfo['full_name'],
+                'idcard_number' => $userInfo['identity_number'],
+                'phone' => $phone,
+                'bank_account' => $bank_account,
+                'bank_code' => $bank_code
+            ];
+            $result = Epay::exec($smsConfig);
             return array(
                 'serialnumber' => $result['data']['unique_code'],
             );
@@ -106,18 +117,26 @@ class BUUserBank
     public static function bindBaofu($uid, $phone, $bank_account, $bank_code, $vcode, $serialNumber)
     {
         try {
-            $binds = [];
+            $params = [
+                'api' => 'query_bind',
+                'uid' => $uid,
+                'env' => config('app.env')
+            ];
+            $binds = Epay::exec($params);
             foreach ($binds['data'] as $bind) {
                 if ($bind['bank_account'] == $bank_account) {
-                    throw new PFException("该银行卡已经签约绑定，请勿重复绑定", ERR_SYS_PARAM);
+                    throw new PFException("该银行卡已经签约绑定，请勿重复绑定", ERR_BANK_ACCOUNT);
                 }
             }
             $bindData = array(
+                'api' => 'bind',
+                'uid' => $uid,
+                'env' => config('app.env'),
                 'unique_code' => $serialNumber,
                 'sms_code' => $vcode,
             );
 
-            $result = [];
+            $result = Epay::exec($bindData);
             if (!empty($result['data']['protocol_no'])) {
                 $info = [
                     'uid' => $uid,
@@ -133,7 +152,7 @@ class BUUserBank
                 ARPFUsersBank::addUserBank($info);
                 return true;
             } else {
-                throw new PFException("未正确获得协议号", ERR_SYS_UNKNOWN);
+                throw new PFException("未正确获得协议号", ERR_BANK_ACCOUNT);
             }
         } catch (PFException $exception) {
             throw new PFException($exception->getMessage(), $exception->getCode());
@@ -175,7 +194,7 @@ class BUUserBank
 
         $bankInfo = ARPFUsersBank::getUserBanksByUidAndBankAccount($uid, $bank_account);
         if (empty($bankInfo)) {
-            throw new PFException("未正确获取银行卡信息，请稍后重试", ERR_SYS_UNKNOWN);
+            throw new PFException("未正确获取银行卡信息，请稍后重试", ERR_BANK_ACCOUNT);
         }
         $update = [
             'type' => 1,

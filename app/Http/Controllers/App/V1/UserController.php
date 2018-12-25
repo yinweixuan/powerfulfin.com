@@ -154,7 +154,16 @@ class UserController extends AppController
             ARPFUsersPhonebook::addUserPhoneBook($info);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
         } catch (PFException $e) {
-            OutputUtil::err(ERR_LOAN_COLLECT_MOBILE, $e->getMessage());
+            OutputUtil::err(ERR_LOAN_COLLECT_MOBILE_CONTENT, ERR_LOAN_COLLECT_MOBILE);
+        }
+    }
+
+    public function getUserInfo()
+    {
+        try {
+
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
     }
 }

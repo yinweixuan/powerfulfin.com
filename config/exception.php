@@ -87,6 +87,10 @@ define('ERR_PASSWORD_FORMAT_CONTENT', '密码格式错误');
 define('ERR_LOAN_COLLECT_MOBILE', 18);
 define('ERR_LOAN_COLLECT_MOBILE_CONTENT', '获取用户通讯录失败');
 
+define('ERR_BANK_ACCOUNT', 19);
+define('ERR_BANK_ACCOUNT_CONTENT', '银行卡业务异常');
+
+
 /**
  * 队列,2201~2299
  */
