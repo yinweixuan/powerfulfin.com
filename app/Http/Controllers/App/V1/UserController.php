@@ -20,17 +20,22 @@ use Illuminate\Support\Facades\Input;
 
 class UserController extends AppController
 {
+    private static $user = null;
+
+    public function __construct()
+    {
+        $this->checkLogin();
+        self::$user = DataBus::get('user');
+        if (empty(self::$user)) {
+            throw new PFException("暂未获取用户登录信息，请重新登录", ERR_NOLOGIN);
+        }
+    }
+
     /**
      * 获取用户信息配置资料
      */
     public function uconfig()
     {
-        $this->checkLogin(false);
-        $user = DataBus::get('user');
-        if (empty($user)) {
-            OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
-        }
-
         try {
             $part = Input::get('part');
             if (!in_array($part, array(1, 2, 3, 4, 5, 6))) {
@@ -38,7 +43,7 @@ class UserController extends AppController
             }
             $methodType = strtolower($_SERVER['REQUEST_METHOD']);
             $data = $methodType == 'post' ? $_POST : $_GET;
-            $result = BUUserInfo::getUConfig($user, $data, $part);
+            $result = BUUserInfo::getUConfig(self::$user, $data, $part);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
         } catch (PFException $e) {
             OutputUtil::err($e->getMessage(), $e->getCode());
@@ -50,14 +55,9 @@ class UserController extends AppController
      */
     public function userReal()
     {
-        $this->checkLogin(false);
-        $user = DataBus::get('user');
-        if (empty($user)) {
-            OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
-        }
         try {
             $data = Input::get();
-            BUUserInfo::userReal($data, DataBus::get("user"));
+            BUUserInfo::userReal($data, self::$user);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
@@ -69,14 +69,9 @@ class UserController extends AppController
      */
     public function userContact()
     {
-        $this->checkLogin(false);
-        $user = DataBus::get('user');
-        if (empty($user)) {
-            OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
-        }
         try {
             $data = Input::get();
-            BUUserInfo::userContact($data, DataBus::get("user"));
+            BUUserInfo::userContact($data, self::$user);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
@@ -88,14 +83,9 @@ class UserController extends AppController
      */
     public function userWork()
     {
-        $this->checkLogin(false);
-        $user = DataBus::get('user');
-        if (empty($user)) {
-            OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
-        }
         try {
             $data = Input::get();
-            BUUserInfo::userWork($data, DataBus::get("user"));
+            BUUserInfo::userWork($data, self::$user);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
@@ -104,14 +94,9 @@ class UserController extends AppController
 
     public function userLocation()
     {
-        $this->checkLogin(false);
-        $user = DataBus::get('user');
-        if (empty($user)) {
-            OutputUtil::err("未获取用户信息", ERR_NOLOGIN);
-        }
         try {
             $data = Input::get();
-            BUUserInfo::userLocation($data, DataBus::get("user"));
+            BUUserInfo::userLocation($data, self::$user);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
@@ -124,9 +109,8 @@ class UserController extends AppController
      */
     public function phonebook()
     {
-        $mobiles = Input::get('phonebook');
-        $this->checkLogin();
         try {
+            $mobiles = Input::get('phonebook');
             $res = OutputUtil::json_decode($mobiles);
 
             $rows = array();
@@ -159,7 +143,7 @@ class UserController extends AppController
             }
 
             $info = [
-                'uid' => DataBus::get('uid'),
+                'uid' => self::$user['id'],
                 'phonebook_count' => count($rows),
                 'phonebook' => OutputUtil::json_encode($rows),
                 'phone_type' => $phone_type,

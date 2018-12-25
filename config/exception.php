@@ -84,6 +84,9 @@ define('ERR_PASSWORD_CONTENT', '密码错误');
 define('ERR_PASSWORD_FORMAT', 17);
 define('ERR_PASSWORD_FORMAT_CONTENT', '密码格式错误');
 
+define('ERR_LOAN_COLLECT_MOBILE', 18);
+define('ERR_LOAN_COLLECT_MOBILE_CONTENT', '获取用户通讯录失败');
+
 /**
  * 队列,2201~2299
  */
