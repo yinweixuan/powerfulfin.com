@@ -11,6 +11,7 @@ namespace App\Http\Controllers\App\V1;
 
 use App\Http\Controllers\App\AppController;
 use App\Components\OutputUtil;
+use App\Components\AliyunOpenSearchUtil;
 
 class IndexController extends AppController {
 
@@ -22,10 +23,6 @@ class IndexController extends AppController {
         $data['notice'] = $this->getNotice();
         $data['loan'] = $this->getLoan();
         OutputUtil::out($data);
-    }
-
-    public function getAppStoreAudit() {
-        return mt_rand(0, 1);
     }
 
     public function getBanner() {
@@ -64,6 +61,7 @@ class IndexController extends AppController {
             'status_desp' => '',
             'repay_date' => '',
             'repay_money' => '',
+            'is_overdue' => '',
             'remark' => '',
             'buttons' => [],
             'school_id' => '',
@@ -129,6 +127,7 @@ class IndexController extends AppController {
                 'remark' => '您已逾期，请尽快偿还',
                 'repay_date' => '2019-01-15',
                 'repay_money' => '1205.12',
+                'is_overdue' => mt_rand(0, 1),
                 'buttons' => [
                     $this->getButton(1, $lid),
                     $this->getButton(3, $lid)
@@ -202,6 +201,70 @@ class IndexController extends AppController {
             ];
         }
         return $recommend;
+    }
+
+    public function getAppStoreAudit() {
+        $flag = mt_rand(0, 1);
+        $list = [];
+        if ($flag) {
+            $data = AliyunOpenSearchUtil::searchSchool('恒企');
+            if (!empty($data['list'])) {
+                $list = [];
+                foreach ($data['list'] as $item) {
+                    $new_item = [];
+                    $new_item['name'] = $item['name'];
+                    $new_item['address'] = $item['address'];
+                    $list[] = $new_item;
+                }
+            } else {
+                $list = [
+                    [
+                        'name' => '恒企教育（东莞长安分校）',
+                        'address' => '东莞市长安镇长盛社区长中路118号名店大厦5楼503恒企教育'
+                    ],
+                    [
+                        'name' => '恒企教育（苏州高新校区）',
+                        'address' => '苏州高新区长江路436号绿宝广场商务楼8009'
+                    ],
+                    [
+                        'name' => '恒企教育（江苏观前街校区）',
+                        'address' => '苏州市平江区干将东路666号和基广场527室'
+                    ],
+                    [
+                        'name' => '恒企教育（泉州校区）',
+                        'address' => '福建省泉州市丰泽区泉秀路882号大洋百货七楼'
+                    ],
+                    [
+                        'name' => '恒企教育（广西柳州柳江校区）',
+                        'address' => '广西壮族自治区柳州市柳江县拉堡镇柳北路6号'
+                    ],
+                    [
+                        'name' => '恒企教育（昆明南亚校区）',
+                        'address' => '昆明市日新西路英茂嘉园6栋3楼'
+                    ],
+                    [
+                        'name' => '恒企教育（广州江南西校区）',
+                        'address' => '广州海珠区江南大道中路180号1104房'
+                    ],
+                    [
+                        'name' => '恒企教育（广州芳村校区）',
+                        'address' => '广州市荔湾区芳村大道中169号二楼B07'
+                    ],
+                    [
+                        'name' => '恒企教育（广州番禺校区）',
+                        'address' => '广州市番禺区市桥街富华西路35号华南大厦8楼810'
+                    ],
+                    [
+                        'name' => '恒企教育（柳州鹿寨校区）',
+                        'address' => '鹿寨县鹿寨镇建中西路34号广鹿华夏综合楼201商铺'
+                    ]
+                ];
+            }
+        }
+        return [
+            'flag' => $flag,
+            'list' => $list
+        ];
     }
 
 }
