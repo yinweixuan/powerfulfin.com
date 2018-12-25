@@ -30,14 +30,25 @@ class OrderController extends OrgBaseController
      */
     public function bookinglist()
     {
-        echo __FUNCTION__;
+        $data = [];
+        return $this->view('org.order.bookinglist', $data);
     }
 
     /**
-     * 确认上课列表
+     * 确认上课放款列表
      */
     public function confirmlist()
     {
-        echo __FUNCTION__;
+        $data = [];
+        return $this->view('org.order.confirmlist', $data);
+    }
+
+    /**
+     * 分期详情
+     */
+    public function detail()
+    {
+        $data = [];
+        return $this->view('org.order.detail', $data);
     }
 }

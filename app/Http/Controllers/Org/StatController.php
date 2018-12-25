@@ -30,7 +30,8 @@ class StatController extends OrgBaseController
      */
     public function list()
     {
-        echo __FUNCTION__;
+        $data = [];
+        return $this->view('org.stat.list', $data);
     }
 
     /**
@@ -38,6 +39,7 @@ class StatController extends OrgBaseController
      */
     public function sumup()
     {
-        echo __FUNCTION__;
+        $data = [];
+        return $this->view('org.stat.sumup', $data);
     }
 }

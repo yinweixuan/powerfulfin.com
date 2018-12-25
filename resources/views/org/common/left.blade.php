@@ -36,20 +36,35 @@ $menus = [
 
     <div class="left-side-inner">
         <ul class="nav nav-pills nav-stacked custom-nav">
-        @foreach($menus as $m)
-            <li class="menu-list {{$m['class']}}">
+        <?php foreach($menus as $m) {
+            $currentPath = '/' . Request::path();
+            //判断是否有选中本级菜单
+            if ($currentPath == $m['url']) {
+                $isActive = true;
+            } else {
+                $isActive = false;
+                foreach ($m['menus'] as $m2) {
+                    if ($currentPath == $m2['url']) {
+                        $isActive = true;
+                    }
+                }
+            }
+            ?>
+            <li class="menu-list {{$m['class']}} <?php if ($isActive) echo 'nav-active';?>">
                 <a href="<?php if ($m['url']) {echo $m['url'];} else {echo 'javascript:void(0)';}?>">
                     <i class="fa {{$m['fa']}}"></i> <span>{{$m['name']}}</span>
                 </a>
                 @if($m['menus'])
                     <ul class="sub-menu-list">
                         @foreach ($m['menus'] as $m2)
-                            <li class="{{$m2['class']}}"><i class="fa {{$m2['fa']}}"></i><a href="<?php if ($m2['url']) {echo $m2['url'];} else {echo 'javascript:void(0)';}?>">{{$m2['name']}}</a></li>
+                            <li class="{{$m2['class']}} <?php if ('/' . Request::path() == $m2['url']) echo 'active';?>"><i class="fa {{$m2['fa']}}"></i><a href="<?php if ($m2['url']) {echo $m2['url'];} else {echo 'javascript:void(0)';}?>">{{$m2['name']}}</a></li>
                         @endforeach
                     </ul>
                 @endif
             </li>
-        @endforeach
+        <?php
+        $isActive = false;
+        }?>
         </ul>
     </div>
 </div>

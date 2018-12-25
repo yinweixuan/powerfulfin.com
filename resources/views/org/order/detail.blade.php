@@ -1,13 +1,12 @@
 @extends('org.common.base')
-@section('title',  '首页')
+@section('title',  '分期详情')
 @section('content')
 <?php
 /**
- * 首页展示
+ * 分期详情
  * User: haoxiang
- * Date: 2018/12/24
- * Time: 3:42 PM
+ * Date: 2018/12/25
+ * Time: 10:30 AM
  */
-echo 11111;
 ?>
 @endsection
