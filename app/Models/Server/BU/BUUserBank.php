@@ -172,8 +172,16 @@ class BUUserBank
             return [];
         }
 
-        $lists = ARPFUsersBank::getUserBanksByUid($uid);
         $info = [];
+        $userReal = ARPFUsersReal::getInfo($uid);
+        if (empty($userReal) || empty($userReal['full_name']) || empty($userReal['identity_number'])) {
+            throw new PFException("请先进行实名认证！", ERR_SYS_PARAM);
+        }
+        $info['user_real'] = [
+            'full_name' => $userReal['full_name'],
+            'identity_number' => $userReal['identity_number']
+        ];
+        $lists = ARPFUsersBank::getUserBanksByUid($uid);
         if (!empty($lists)) {
             foreach ($lists as &$list) {
                 $list['logo'] = BUBanks::getBankLogo($list['bank_code']);
