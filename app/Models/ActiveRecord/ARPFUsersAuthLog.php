@@ -9,8 +9,10 @@
 namespace App\Models\ActiveRecord;
 
 
+use App\Components\PFException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ARPFUsersAuthLog extends Model
 {
@@ -62,4 +64,32 @@ class ARPFUsersAuthLog extends Model
 
         return $info;
     }
+
+    /**
+     * 更新数据通过订单号
+     * @param array $info
+     * @return array|bool
+     * @throws PFException
+     */
+    public static function _updateByOrder($info = array())
+    {
+        if (!isset($info['order']) || empty($info)) {
+            return false;
+        }
+
+        $ar = new self();
+        $columns = Schema::getColumnListing(self::TABLE_NAME);
+        foreach ($columns as $key) {
+            if (array_key_exists($key, $info)) {
+                $ar->$key = $info[$key];
+            }
+        }
+        $ar->create_time = date('Y-m-d H:i:s');
+
+        if (!$ar->save()) {
+
+        }
+        return $ar->getAttributes();
+    }
+
 }
