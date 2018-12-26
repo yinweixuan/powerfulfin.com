@@ -15,7 +15,7 @@ class Xinyan extends App\Models\Epay\Epay {
         $this->industry_type = 'C13';
         if ($this->env == self::ENV_DEV) {
             //测试环境
-            $this->host = 'http://test.xinyan.com';
+            $this->host = 'https://test.xinyan.com';
             $this->member_id = env('XINYAN_MEMBER_ID_DEV');
             $this->terminal_id = env('XINYAN_TERMINAL_ID_DEV');
             $this->pfxpath = PATH_BASE . '/cer/baofoo/xinyan/cer_test/8000013189_pri.pfx';
