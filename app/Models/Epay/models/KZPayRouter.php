@@ -25,10 +25,10 @@ class KZPayRouter extends App\Models\Epay\Epay {
             throw new Exception('参数错误：env');
         }
         $data['api'] = $params['api'];
-        $data['config']['env'] = $params['env'];
-        $data['config']['userid'] = $params['uid'];
-        $data['config']['busi_id'] = $params['busi_id'];
-        $data['config']['busi_type'] = $params['api'];
+        $data['config']['env'] = isset($params['env']) ? $params['env'] : '';
+        $data['config']['userid'] = isset($params['uid']) ? $params['uid'] : '';
+        $data['config']['busi_id'] = isset($params['busi_id']) ? $params['busi_id'] : '';
+        $data['config']['busi_type'] = isset($params['api']) ? $params['api'] : '';
         //其他参数
         if ($data['api'] == self::$busi_type_withhold) {
             //代扣
