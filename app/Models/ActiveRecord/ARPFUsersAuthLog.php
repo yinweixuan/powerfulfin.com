@@ -88,11 +88,21 @@ class ARPFUsersAuthLog extends Model
         }
         $ar->create_time = date('Y-m-d H:i:s');
         $ar->save();
-
-//        if (!$ar->save()) {
-//
-//        }
         return $ar->getAttributes();
+    }
+
+    public static function getInfoTrueByOrder($order = null)
+    {
+        if (empty($order)) {
+            return false;
+        }
+
+        $info = DB::table(self::TABLE_NAME)->select('*')
+            ->where('order', $order)
+            ->where('result_auth', self::RESULT_AUTH_TRUE)
+            ->first();
+
+        return $info;
     }
 
 }

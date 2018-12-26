@@ -9,9 +9,11 @@
 namespace App\Http\Controllers\App\V1;
 
 
+use App\Components\AliyunOSSUtil;
 use App\Components\OutputUtil;
 use App\Components\PFException;
 use App\Http\Controllers\App\AppController;
+use App\Models\ActiveRecord\ARPFUsersAuthLog;
 use App\Models\ActiveRecord\ARPFUsersPhonebook;
 use App\Models\DataBus;
 use App\Models\Server\BU\BUAppMobile;
@@ -165,5 +167,35 @@ class UserController extends AppController
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
+    }
+
+    public function idcardpic()
+    {
+        try {
+            $orderId = Input::get('order');
+            if (empty($orderId)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+            }
+            $img = [
+                'idcard_information_pic_url' => '',
+                'idcard_information_pic' => '',
+                'idcard_national_pic_url' => '',
+                'idcard_national_pic' => ''];
+            $data = ARPFUsersAuthLog::getInfoTrueByOrder($orderId);
+            if ($data['uid'] != DataBus::get('uid')) {
+                throw new PFException(ERR_UPLOAD_CONTENT . ":请求文件非当前用户所有", ERR_UPLOAD);
+            }
+            if ($data) {
+                $img['idcard_information_pic'] = $data['front_card'];
+                $img['idcard_information_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $data['front_card']);;
+                $img['idcard_national_pic'] = $data['back_card'];;
+                $img['idcard_national_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $data['back_card']);;
+            }
+
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $img);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode());
+        }
+
     }
 }

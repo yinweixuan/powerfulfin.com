@@ -77,8 +77,8 @@ class ARPFUsersReal extends Model
             $info['uid'] = $uid;
             self::addUserReal($info);
         } else {
-            $update['update_time'] = date('Y-m-d H:i:s');
-            return DB::table(self::TABLE_NAME)->where('uid', $uid)->update($update);
+            $info['update_time'] = date('Y-m-d H:i:s');
+            return DB::table(self::TABLE_NAME)->where('uid', $uid)->update($info);
         }
     }
 
