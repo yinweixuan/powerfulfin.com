@@ -47,7 +47,6 @@ class UdcreditController extends Controller
                 UdcreditNotify::ReplyNotify(false);
             }
         } catch (PFException $e) {
-            Log::error("Udcredit_Notify Error: " . $e->getMessage() . "\nresult: \n" . var_export($data, true));
             $respData = array('code' => '0', 'message' => $e->getMessage());
             echo json_encode($respData);
         }

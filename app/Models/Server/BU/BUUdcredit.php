@@ -36,7 +36,6 @@ class BUUdcredit
                 $data[$key] = '';
             }
         }
-
         return ARPFUsersAuthLog::_updateByOrder($data);
     }
 
@@ -53,18 +52,17 @@ class BUUdcredit
             $dir = 'simg' . DIRECTORY_SEPARATOR . date("Ym");
             $fileName = $uid . '_' . date('His') . '_' . intval(microtime(true)) . '_' . rand(1, 9999) . ".png";
             $filePath = $dir . DIRECTORY_SEPARATOR . $fileName;
-            $tmpPath = PATH_STORAGE . '/simg';
-            if (!file_exists($tmpPath)) {
-                mkdir($tmpPath, 777, true);
+            if (!file_exists(PATH_STORAGE . '/' . $dir)) {
+                mkdir(PATH_STORAGE . '/' . $dir);
             }
-            file_put_contents($tmpPath . '/' . $filePath, base64_decode($base64_image_content));
-            AliyunOSSUtil::upload(AliyunOSSUtil::getLoanBucket(), $filePath, $tmpPath . '/' . $filePath);
+            file_put_contents(PATH_STORAGE . '/' . $filePath, base64_decode($base64_image_content));
+            AliyunOSSUtil::upload(AliyunOSSUtil::getLoanBucket(), $filePath, PATH_STORAGE . '/' . $filePath);
             $tmp = [
                 'uid' => $uid,
                 'path' => $filePath,
                 'file_name' => $fileName,
                 'bucket' => 'simg',
-                'file_size' => filesize($tmpPath . '/' . $filePath),
+                'file_size' => filesize(PATH_STORAGE . '/' . $filePath),
                 'file_suffix' => 'png',
                 'file_type' => $file_type,
             ];
@@ -96,6 +94,14 @@ class BUUdcredit
         $validityDate = explode('-', $data['validity_period']);
         $data['idcard_start'] = str_replace('.', '-', $validityDate[0]);
         $data['idcard_expired'] = $validityDate[1] == '长期' ? '2099-01-01' : str_replace('.', '-', $validityDate[1]);
+        $data['birthday'] = str_replace('.', '-', $data['birthday']);
+
+        $params = ['creation_time', 'classify', 'oid_partner', 'sign', 'sign_field', 'risk_tag', 'validity_period', 'verify_status'];
+        foreach ($params as $param) {
+            if (array_key_exists($param, $data)) {
+                unset($data[$param]);
+            }
+        }
         return BUUdcredit::updateData($data);
     }
 }

@@ -81,13 +81,12 @@ class ARPFUsersAuthLog extends Model
 
         $ar = new self();
         $columns = Schema::getColumnListing(self::TABLE_NAME);
-        var_dump($columns);
         foreach ($columns as $key) {
             if (array_key_exists($key, $info)) {
                 $ar->$key = $info[$key];
-                var_dump($ar);
             }
         }
+        $ar->create_time = date('Y-m-d H:i:s');
         $ar->save();
 
 //        if (!$ar->save()) {
