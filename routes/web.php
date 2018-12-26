@@ -43,12 +43,12 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 登录接口
      */
     Route::match(['get', 'post'], APP_V1 . '/login/login', 'LoginController@login');
-    
+
     /**
      * 登出接口
      */
     Route::match(['get', 'post'], APP_V1 . '/logout', 'LoginController@logout');
-    
+
     /**
      * 获取短信验证码
      */
@@ -99,5 +99,10 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/loan/list', 'LoanController@loanList');  //获取订单列表
     Route::match(['get', 'post'], APP_V1 . '/loan/info', 'LoanController@loanInfo');  //获取订单信息
     Route::match(['get', 'post'], APP_V1 . '/loan/bill', 'LoanController@loanBill');  //获取还款计划表
+
+    /**
+     * 图片
+     */
+    Route::match(['get', 'post'], APP_V1 . '/pic/upload', 'PicController@upload');  //app图片上传
 });
 

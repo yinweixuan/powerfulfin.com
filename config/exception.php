@@ -90,6 +90,9 @@ define('ERR_LOAN_COLLECT_MOBILE_CONTENT', '获取用户通讯录失败');
 define('ERR_BANK_ACCOUNT', 19);
 define('ERR_BANK_ACCOUNT_CONTENT', '银行卡业务异常');
 
+define('ERR_UPLOAD', 20);
+define('ERR_UPLOAD_CONTENT', '文件系统异常');
+
 
 /**
  * 队列,2201~2299
