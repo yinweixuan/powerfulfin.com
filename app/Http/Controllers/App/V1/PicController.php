@@ -28,23 +28,19 @@ class PicController extends AppController
     public function upload()
     {
         try {
-            $fileInfos = PicUtil::uploadPic();
+            if (empty($_FILES)) {
+                throw new PFException(ERR_UPLOAD_CONTENT . ":无文件", ERR_UPLOAD);
+            }
+            $fileInfos = PicUtil::uploadSimgPic();
             $urls = [];
             foreach ($fileInfos as $fileInfo) {
-                AliyunOSSUtil::upload(AliyunOSSUtil::getLoanBucket(), 'simg' . $fileInfo['fullName'], $fileInfo['tmp_name']);
-                $simg = [
-                    'path' => $fileInfo['path'],
-                    'file_name' => $fileInfo['fileName'],
-                    'file_size' => $fileInfo['size'],
-                    'file_suffix' => $fileInfo['file_suffix'],
-                    'year_month' => $fileInfo['year_month'],
-                    'day' => $fileInfo['day'],
-                    'type' => $fileInfo['type'],
-                    'uid' => DataBus::get('uid'),
-                ];
-                ARPFSimg::addSimg($simg);
-                $url = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), 'simg' . $fileInfo['fullName']);
-                $urls[] = $url;
+                AliyunOSSUtil::upload(AliyunOSSUtil::getLoanBucket(), $fileInfo['path'], $fileInfo['tmp_name']);
+                $fileInfo['uid'] = DataBus::get('uid');
+                $fileInfo['bucket'] = 'simg';
+                unset($fileInfo['tmp_name']);
+                ARPFSimg::addSimg($fileInfo);
+                $url = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $fileInfo['path']);
+                $urls[] = ['url' => $url, 'path' => $fileInfo['path'], 'type' => $fileInfo['file_type']];
             }
 
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $urls);

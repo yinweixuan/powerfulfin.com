@@ -35,7 +35,7 @@ class UdcreditController extends Controller
             if (!is_array($params)) {
                 throw new PFException('数据格式异常');
             }
-            $data = UdcreditNotify::Init($params); //为了测试所以不效验签名
+            $data = UdcreditNotify::Init($params);
             // 记录微信通知日志
             Log::info("UdcreditNotify_Afert: \n" . var_export($data, true));
 

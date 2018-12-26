@@ -46,11 +46,10 @@ class PicUtil
 
     /**
      * 上传图片到服务器
-     * @param array $fileInfo
      * @return array
      * @throws PFException
      */
-    public static function uploadPic()
+    public static function uploadSimgPic()
     {
         $ret = array();
         if (empty($_FILES)) {
@@ -124,24 +123,18 @@ class PicUtil
             $suffix = self::$picType[$file['type']];
             //计算保存路径
             $year_month = date("Ym");
-            $day = date("d");
-            $dir = DIRECTORY_SEPARATOR . $year_month . DIRECTORY_SEPARATOR . $day;
+            $dir = 'simg' . DIRECTORY_SEPARATOR . $year_month;
             do {
-
                 $fileName = date('His') . '_' . intval(microtime(true)) . '_' . rand(self::RAND_BEGIN, self::RAND_END) . ".{$suffix}";
                 $path = DIRECTORY_SEPARATOR . $fileName;
             } while (file_exists($dir . $path));
             $tmp = [
                 'path' => $dir . $path,
-                'fileName' => $fileName,
-                'fullName' => $dir . $path,
-                'size' => $file['size'],
+                'file_name' => $fileName,
+                'file_size' => $file['size'],
                 'file_suffix' => $suffix,
                 'tmp_name' => $file['tmp_name'],
-                'year_month' => $year_month,
-                'day' => $day,
-                'type' => $key,
-
+                'file_type' => $key,
             ];
             $fileInfo[] = $tmp;
         }
