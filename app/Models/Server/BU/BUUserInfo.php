@@ -176,7 +176,7 @@ class BUUserInfo
             throw new PFException("该身份信息已经绑定其他账户，请更换登录账户", ERR_SYS_PARAM);
         }
 
-        $data['gender'] = CheckUtil::getSexByIDCard($data['idcard']);
+        $data['gender'] = CheckUtil::getSexByIDCard($data['identity_number']);
         ARPFUsersReal::updateInfo($user['id'], $data);
 
         if (!empty($data['udcredit_order'])) {
@@ -196,7 +196,23 @@ class BUUserInfo
             }
             if (empty($userAuth)) {
                 throw new PFException('授信结果查询为空，请稍后再试', ERR_SYS_PARAM);
+            } else {
+                $update = [
+                    'face_recognition' => $userAuth['result_auth'] == ARPFUsersAuthLog::RESULT_AUTH_TRUE ? STATUS_SUCCESS : STATUS_FAIL,
+                    'face_similarity' => $userAuth['be_idcard'],
+                    'face_fail_reason' => $userAuth['fail_reason'],
+                    'face_living_pic' => $userAuth['photo_living'],
+                    'face_idcard_portrait_pic' => $userAuth['photo_grid'],
+                ];
+                $userReal = ARPFUsersReal::getInfo($user['id']);
+                if ($userReal['face_recognition'] == STATUS_SUCCESS && $update['face_recognition'] == STATUS_FAIL) {
+                    return true;
+                } else {
+                    $result = ARPFUsersReal::updateInfo($user['id'], $update);
+                    return $result;
+                }
             }
+        } else {
             return true;
         }
     }

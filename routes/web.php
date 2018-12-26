@@ -23,7 +23,7 @@ Route::group(['namespace' => 'Inner'], function () {
     /**
      * 有盾回调接口
      */
-    Route::match(['post'], '/udcredit/notify', 'UdcreditController@notify');
+    Route::match(['get', 'post'], '/inner/udcredit/notify', 'UdcreditController@notify');
 });
 
 
@@ -67,6 +67,7 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/user/userwork', 'UserController@userWork');    //用户工作&学历信息接口
     Route::match(['get', 'post'], APP_V1 . '/user/userlocation', 'UserController@userLocation');    //用户设备授权接口
     Route::match(['get', 'post'], APP_V1 . '/user/phonebook', 'UserController@phonebook');    //提交通讯录
+    Route::match(['get', 'post'], APP_V1 . '/user/idcardpic', 'UserController@idcardpic');    //根据云慧眼认证成功的order拉取身份证图片
 
     /**
      * 地址选择器
@@ -104,5 +105,6 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 图片
      */
     Route::match(['get', 'post'], APP_V1 . '/pic/upload', 'PicController@upload');  //app图片上传
+    Route::match(['get', 'post'], APP_V1 . '/test/index', 'TestController@index');  //app图片上传
 });
 
