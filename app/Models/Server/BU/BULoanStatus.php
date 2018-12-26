@@ -11,6 +11,11 @@ namespace App\Models\Server\BU;
 
 class BULoanStatus
 {
+    /**
+     * 找不到状态的默认展示
+     */
+    const NOT_FOUND = "未知";
+
     public static function getStatusDescriptionForC($status)
     {
         $info = [
@@ -55,7 +60,7 @@ class BULoanStatus
         if (array_key_exists($status, $info)) {
             return $info[$status];
         } else {
-            return "未知";
+            return self::NOT_FOUND;
         }
     }
 
@@ -103,7 +108,7 @@ class BULoanStatus
         if (array_key_exists($status, $info)) {
             return $info[$status];
         } else {
-            return "未知";
+            return self::NOT_FOUND;
         }
 
     }
@@ -152,7 +157,7 @@ class BULoanStatus
         if (array_key_exists($status, $info)) {
             return $info[$status];
         } else {
-            return "未知";
+            return self::NOT_FOUND;
         }
     }
 }

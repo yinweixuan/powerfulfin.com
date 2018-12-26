@@ -56,7 +56,7 @@
             </div>
             <div class="panel-footer">
                 <input type="hidden" name="query" value="1" />
-                <button class="btn btn-default btn-sm">查询</button>
+                <button class="btn btn-default btn-lg">查询</button>
             </div>
         </form>
     </div>
@@ -92,7 +92,7 @@
                             <td>
                                 <button type="button" class="btn btn-sm btn-success" onclick="classLoan({{$list['lid']}},1)">确认</button>
                                 <button type="button" class="btn btn-sm btn-danger" style="margin-left: 20px;" onclick="classLoan({{$list['lid']}},2)">拒绝</button>
-                                <button href="/order/detail?lid={{$list['lid']}}" style="margin-left: 20px;" class="btn btn-sm btn-default">详情</button>
+                                <a href="/order/detail?lid={{$list['lid']}}" style="margin-left: 20px;" class="btn btn-sm btn-default">详情</a>
                             </td>
                         </tr>
                         <?php } ?>
@@ -131,18 +131,19 @@
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel">
-                        确认上课
+                        确认报名
                     </h4>
                 </div>
                 <div class="modal-body">
                     <div class="row" align="center">
-                        成功放款后，每月15日为固定还款日（节假日顺延至工作日）
+                        请确认该学员已知晓借款所有事项及风险.<br />
+                        如审核中发现异常情况,将对您和您的机构进行相关处理
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button type="button" id="sub_confirm" class="btn btn-primary php_submit" data-id="" value=""
-                            onclick="sub_query();">提交
+                            onclick="booking_confirm();">提交
                     </button>
                 </div>
             </div><!-- /.modal-content -->
@@ -230,19 +231,22 @@
         }
     }
 
-    function sub_query() {
+    /**
+     * 确认上课
+     */
+    function booking_confirm() {
         $('#loading').modal('show');
         $('#class_do').modal('hide');
         var lid = $("#sub_confirm").val();
         $.ajax({
             type: "POST",
-            url: "/organize/sure/class_do",
-            data: {lid: lid, type: 1},
+            url: "/order/operate",
+            data: {lid: lid, period:'booking', op: 'pass'},
             dataType: "json",
             success: function (responseData) {
                 $('#loading').modal('hide');
                 if (responseData.code == 0) {
-                    alert("已确认上课,等待金融机构放款", "提示", function () {
+                    alert("已确认报名,等待审核", "提示", function () {
                         history.go(0);
                     });
                 } else {
@@ -273,13 +277,13 @@
         var lid = $("#sub_refuse").val();
         $.ajax({
             type: "POST",
-            url: "/organize/sure/class_refuse",
-            data: {lid: lid, type: 2, remark: remark},
+            url: "/order/operate",
+            data: {lid: lid, period:'booking', op: 'refuse', remark:remark},
             dataType: "json",
             success: function (responseData) {
                 $('#loading').modal('hide');
                 if (responseData.code == 0) {
-                    alert("已拒绝上课", "提示", function () {
+                    alert("已拒绝报名", "提示", function () {
                         history.go(0);
                     });
                 } else {
@@ -288,17 +292,6 @@
                     });
                 }
             },
-        });
-    }
-
-    function goUrl(page) {
-        var page = "page_" + page;
-        var url = $("#" + page + "").data();
-        console.log(url);
-        $.pjax({
-            url: url['url'],
-            container: '#pjax-content',
-            timeout: 10000,
         });
     }
 </script>

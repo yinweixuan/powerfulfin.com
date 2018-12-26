@@ -9,12 +9,16 @@ namespace App\Http\Controllers\Org;
 
 use App\Components\ArrayUtil;
 use App\Components\CookieUtil;
+use App\Components\OutputUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\Org\OrgBaseController;
 use App\Models\Org\OrgDataBus;
 use App\Models\Org\OrgDataHelper;
+use App\Models\Server\BU\BULoanApply;
+use App\Models\Server\BU\BULoanUpdate;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -39,7 +43,7 @@ class OrderController extends OrgBaseController
         $lid = Input::get('lid');
         $fullName = Input::get('full_name');
         $identityNumber = Input::get('identity_number');
-        $p = Input::get('p', 1);
+        $p = Input::get('page', 1);
         $ps = 15;
         $data = ['page' => ''];
         $data['form'] = ['lid' => $lid, 'full_name' => $fullName, 'identity_number' => $identityNumber, 'p' => $p, 'ps' => $ps,];
@@ -68,8 +72,10 @@ class OrderController extends OrgBaseController
                 //获取分期列表
                 $result = OrgDataHelper::getLoanByIds($resultIds);
                 $data['lists'] = $result;
+                $page = new LengthAwarePaginator($ids, count($ids), $ps);
+                $page->setPath("/" . Request::path() . "?query=1&lid={$lid}&full_name={$fullName}&identity_number={$identityNumber}");
+                $data['page'] = $page->render();
             }
-            $data['page'] = '';
         } catch (\Exception $e) {
             $data['errmsg'] = $e->getMessage();
         }
@@ -92,5 +98,47 @@ class OrderController extends OrgBaseController
     {
         $data = [];
         return $this->view('org.order.detail', $data);
+    }
+
+    /**
+     * 对订单进行审核操作
+     */
+    public function operate()
+    {
+        $lid = Input::get('lid');
+        $period = Input::get('period');
+        $op = Input::get('op');
+        $remark = Input::get('remark');
+        //检查参数
+        if (empty($lid) || !is_numeric($lid)) {
+            OutputUtil::err("订单号格式错误", ERR_SYS_PARAM);
+        }
+        if (!in_array($period, ['booking', 'confirm',])) {
+            OutputUtil::err("阶段错误", ERR_SYS_PARAM);
+        }
+        if (!in_array($op, ['pass', 'refuse',])) {
+            OutputUtil::err("操作类型错误", ERR_SYS_PARAM);
+        }
+        $auditMap = [
+            'booking' => [LOAN_1100_CREATE_ACCOUNT =>['pass' => LOAN_2000_SCHOOL_CONFIRM, 'refuse' => LOAN_2100_SCHOOL_REFUSE,]],
+            'confirm' => [LOAN_4000_P2P_CONFIRM => ['pass' => LOAN_5000_SCHOOL_BEGIN, 'refuse' => LOAN_5100_SCHOOL_REFUSE,]]
+            ];
+        //获取订单详情
+        try {
+            $loan = ARPFLoan::getLoanById($lid);
+            if (empty($loan)) {
+                throw new PFException("订单不存在", ERR_SYS_PARAM);
+            }
+            if (!array_key_exists('oid', $loan) || $loan['oid'] != OrgDataBus::get('org_id')) {
+                throw new PFException("订单非本机构订单,不能进行操作", ERR_SYS_PARAM);
+            }
+            if (!array_key_exists('status', $loan) || !array_key_exists($loan['status'], $auditMap[$period])) {
+                throw new PFException("订单{$lid}在当前阶段拒绝该操作", ERR_SYS_UNKNOWN);
+            }
+            $newStatus = BULoanUpdate::changeStatus($lid, ['status' => $auditMap[$period][$loan['status']][$op], 'audit_opinion' => $remark,]);
+            OutputUtil::info();
+        } catch (\Exception $e) {
+            OutputUtil::err($e->getMessage(), ERR_SYS_UNKNOWN);
+        }
     }
 }

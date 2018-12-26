@@ -38,4 +38,27 @@ class BULoanUpdate
         }
         return $loan;
     }
+
+    /**
+     * 处理订单状态的变更,并记录日志
+     * @param $lid      订单号
+     * @param $new     修改后属性
+     * @param string $remark    备注
+     */
+    public static function changeStatus($lid, $new, $remark = '')
+    {
+        //检查属性中是否有status,如果status不变,也可以变更.
+        if (!array_key_exists('status', $new)
+            || BULoanStatus::getStatusDescriptionForAdmin($new['status']) == BULoanStatus::NOT_FOUND
+        ) {
+            throw new PFException("订单状态修改参数错误", ERR_SYS_PARAM);
+        }
+        $loan = ARPFLoan::getLoanById($lid);
+        if (empty($loan)) {
+            throw new PFException("订单号不存在", ERR_SYS_PARAM);
+        }
+        ARPFLoan::_update($lid, $new);
+        ARPFLoanLog::insertLog($loan, $new['status'], $remark);
+        return $new['status'];
+    }
 }

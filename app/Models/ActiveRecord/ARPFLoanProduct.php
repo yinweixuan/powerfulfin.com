@@ -54,16 +54,6 @@ class ARPFLoanProduct extends Model
         RESOURCE_FCS_SC => RESOURCE_FCS_SC_COMPANY_SIMPLE,
     ];
 
-    /**
-     * 资金方ID对照资金方简称
-     * @var array
-     */
-    public static $resourceCompanySimple = [
-        RESOURCE_JCFC => RESOURCE_JCFC_COMPANY_SIMPLE,
-        RESOURCE_FCS => RESOURCE_FCS_COMPANY_SIMPLE,
-        RESOURCE_FCS_SC => RESOURCE_FCS_SC_COMPANY_SIMPLE,
-    ];
-
     public static function getLoanProductByProduct($loan_product)
     {
         if (empty($loan_product)) {

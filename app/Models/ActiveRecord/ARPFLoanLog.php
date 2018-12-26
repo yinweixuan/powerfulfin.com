@@ -21,7 +21,7 @@ class ARPFLoanLog extends Model
 
     public $timestamps = false;
 
-    public static function insertLog($loanInfo, $status = '', $reason = '')
+    public static function insertLog($loanInfo, $status = '', $remark = '')
     {
         if (empty($loanInfo)) {
             return false;
@@ -30,14 +30,9 @@ class ARPFLoanLog extends Model
             'lid' => $loanInfo['id'],
             'status_before' => $loanInfo['status'],
             'status_after' => $status,
-            'op' => $status,
-            'reason' => $reason,
-            'repayday' => date('Ym'),
+            'remark' => $remark,
             'uid_op' => DataBus::get('uid'),
-            'money' => $loanInfo['money_school'],
-            'money_before' => $loanInfo['money_school'],
-            'money_after' => 0,
-            'ctime' => date('Y-m-d H:i:s'),
+            'create_time' => date('Y-m-d H:i:s'),
         );
         return DB::table(self::TABLE_NAME)->insertGetId($logData);
     }

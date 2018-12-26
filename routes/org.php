@@ -25,6 +25,7 @@ Route::group(['namespace' => 'Org'], function () {
     //订单相关
     Route::match(['get', 'post'], '/order/bookinglist', 'OrderController@bookinglist');       //报名列表
     Route::match(['get', 'post'], '/order/confirmlist', 'OrderController@confirmlist');       //确认上课列表
+    Route::match(['get', 'post'], '/order/operate', 'OrderController@operate');       //订单审核
 
     //统计相关
     Route::match(['get', 'post'], '/stat/list', 'StatController@list');       //订单查询
