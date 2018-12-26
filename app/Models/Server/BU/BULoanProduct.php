@@ -82,6 +82,25 @@ class BULoanProduct
         return $config;
     }
 
+    /**
+     * 获取资金方描述
+     * @param $resource
+     * @param $isSimple 简称
+     */
+    public static function getResourceCompany($resource, $isSimple = false)
+    {
+        if ($isSimple) {
+            $arr = ARPFLoanProduct::$resourceCompanySimple;
+        } else {
+            $arr = ARPFLoanProduct::$resourceCompany;
+        }
+        if (array_key_exists($resource, $arr)) {
+            return $arr[$resource];
+        } else {
+            return '未知';
+        }
+    }
+
     private static function getLoanTypeNameAndDesp($tmp = array())
     {
         $data = array();

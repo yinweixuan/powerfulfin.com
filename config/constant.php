@@ -49,9 +49,12 @@ define('PHONE_TYPE_IOS', 'IOS');
  */
 define('RESOURCE_JCFC', 1);
 define('RESOURCE_JCFC_COMPANY', '晋商消费金融股份有限公司');
+define('RESOURCE_JCFC_COMPANY_SIMPLE', '晋商');
 define('RESOURCE_FCS', 2);
 define('RESOURCE_FCS_COMPANY', '富登小额贷款（重庆）有限公司');
+define('RESOURCE_FCS_COMPANY_SIMPLE', '富登重庆');
 define('RESOURCE_FCS_SC', 3);
 define('RESOURCE_FCS_SC_COMPANY', '富登小额贷款(四川)有限公司');
+define('RESOURCE_FCS_SC_COMPANY_SIMPLE', '富登四川');
 
 define('FN_REPAY_DAY', 15);
