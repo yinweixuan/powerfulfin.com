@@ -44,9 +44,10 @@ class PicController extends AppController
                 ];
                 ARPFSimg::addSimg($simg);
                 $url = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), 'simg' . $fileInfo['fullName']);
-                $urls[$fileInfo['type']] = $url;
+                $urls[] = $url;
             }
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK_CONTENT, $urls);
+
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $urls);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
