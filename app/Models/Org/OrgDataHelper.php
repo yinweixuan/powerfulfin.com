@@ -8,6 +8,8 @@
 
 namespace App\Models\Org;
 
+use App\Components\ArrayUtil;
+use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\Server\BU\BULoanProduct;
 use Illuminate\Support\Facades\DB;
 
@@ -23,17 +25,24 @@ class OrgDataHelper
         if (empty($ids)) {
             return $ret;
         }
-        $sql = "SELECT l.id id,l.id lid,ur.full_name full_name,ur.identity_number identity_number,oc.class_name class_name,oc.class_price class_price,l.borrow_money borrow_money,l.create_time create_time,l.resource resource, l.status status,l.loan_product loan_product FROM pf_loan l, pf_org_class oc, pf_users_real ur where l.id in ( :ids ) and l.class = oc.cid and l.uid = ur.uid";
-        $ret = DB::select($sql, [':ids' => implode(',', $ids)]);
-        //调整下各种展示,产品类型,资金方
+        $sql = "SELECT l.id id,l.id lid,ur.full_name full_name,ur.identity_number identity_number,oc.class_name class_name,oc.class_price class_price,l.borrow_money borrow_money,l.create_time create_time,l.resource resource, l.status status,l.loan_product loan_product FROM pf_loan l left join pf_org_class oc on l.class = oc.cid left join pf_users_real ur on l.uid = ur.uid where l.id in (" . implode(',', $ids) . ")";
+        $result = DB::select($sql);
+        $result = ArrayUtil::addKeyToArray($result, 'id');
+        $ret = [];
+        //调整下各种展示,产品类型,资金方,并且按照id传入顺序重整数据
         $loanTypes = BULoanProduct::getAllLoanType();
-        foreach ($ret as $k => $v) {
-            if (array_key_exists($v['loan_product'], $loanTypes)) {
-                $ret[$k]['loan_product_desc'] = $loanTypes[$v['loan_product']];
-            } else {
-                $ret[$k]['loan_product_desc'] = '分期产品测试';
+        foreach ($ids as $id) {
+            if (!array_key_exists($id, $result)) {
+                continue;
             }
-            $ret[$k]['resource_desc'] = '资方';
+            $tmp = $result[$id];
+            if (array_key_exists($tmp['loan_product'], $loanTypes)) {
+                $tmp['loan_product_desc'] = $loanTypes[$v['loan_product']];
+            } else {
+                $tmp['loan_product_desc'] = '未知产品';
+            }
+            $tmp['resource_desc'] = BULoanProduct::getResourceCompany($tmp['resource'], true);
+            $ret[$id] = $tmp;
         }
         return $ret;
     }

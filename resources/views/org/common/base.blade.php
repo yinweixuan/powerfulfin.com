@@ -27,12 +27,11 @@
     <script src="{{ admin_asset("/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js")}}"></script>
     <script src="{{ admin_asset("/js/jquery-migrate-1.2.1.min.js")}}"></script>
     <script src="{{ admin_asset("/js/jquery-ui-1.9.2.custom.min.js")}}"></script>
+    <script src="{{ admin_asset("/js/jquery.pjax.js") }}"></script>
     <script src="{{ admin_asset("/js/jquery.nicescroll.js")}}"></script>
     <script src="{{ admin_asset("/js/bootstrap-datepicker.js") }}"></script>
-    <script src="{{ admin_asset("/js/jquery.pjax.js") }}"></script>
-    <script src="{{ admin_asset("/js/modernizr.min.js")}}"></script>
     <script src="{{ admin_asset("/js/respond.min.js")}}"></script>
-    <script src="{{ admin_asset("/org/js/common.js")}}"></script>
+    <script src="{{ admin_asset("/js/modernizr.min.js")}}"></script>
     <!--[if lt IE 9]>
     <script src="{{ admin_asset("/js/html5shiv.min.js") }}"></script>
     <script src="{{ admin_asset("/js/respond.min.js") }}"></script>
@@ -51,5 +50,7 @@
 {{-- 包含页脚 --}}
 @include('org.common.footer')
 </div>
+
+<script src="{{ admin_asset("/org/js/common.js")}}"></script>
 </body>
 </html>

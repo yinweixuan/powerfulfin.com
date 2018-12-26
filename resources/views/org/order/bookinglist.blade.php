@@ -69,23 +69,19 @@
                     <table class="table table-bordered table-hover general-table">
                         <thead>
                         <tr>
-                            <th>详情</th>
-                            <th>订单号</th>
+                            <th>单号</th>
                             <th>姓名</th>
                             <th>身份证号</th>
                             <th>课程</th>
                             <th>分期金额</th>
                             <th>申请时间</th>
                             <th>资金方</th>
-                            <th>确认</th>
-                            <th>拒绝</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php foreach ($lists as $list) { ?>
                         <tr>
-                            <td><a href="/order/detail?lid={{$list['lid']}}"
-                                   class="btn btn-sm btn-default">详情</a></td>
                             <td>{{$list['lid']}}</td>
                             <td>{{$list['full_name']}}</td>
                             <td>{{$list['identity_number']}}</td>
@@ -94,14 +90,9 @@
                             <td>{{$list['create_time']}}</td>
                             <td>{{$list['resource_desc']}}</td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-success"
-                                        onclick="classLoan({{$list['lid']}},1)">确认
-                                </button>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-danger"
-                                        onclick="classLoan({{$list['lid']}},2)">拒绝
-                                </button>
+                                <button type="button" class="btn btn-sm btn-success" onclick="classLoan({{$list['lid']}},1)">确认</button>
+                                <button type="button" class="btn btn-sm btn-danger" style="margin-left: 20px;" onclick="classLoan({{$list['lid']}},2)">拒绝</button>
+                                <button href="/order/detail?lid={{$list['lid']}}" style="margin-left: 20px;" class="btn btn-sm btn-default">详情</button>
                             </td>
                         </tr>
                         <?php } ?>

@@ -37,17 +37,8 @@ class OrgDataBus extends DataBus
         self::$data['phone'] = $checkCookie['username'];
         self::$data['username'] = $checkCookie['username'];
         self::$data['user'] = self::getUserInfo();
-
-        //获取对应的机构
-        self::$data['org_id'] = self::$data['user']['org_id'];
-        $org = ARPFOrg::getOrgById(self::$data['org_id']);
-        if ($org && $org['status'] == STATUS_SUCCESS) {
-            self::$data['org'] = $org;
-        } else {
-            throw new PFException("校区信息不存在");
-        }
-
         self::$data['isLogin'] = self::isLogin();
+
         $detect = new \Mobile_Detect();
         if ($detect->isAndroidOS()) {
             self::$data['plat'] = 2;
@@ -63,6 +54,19 @@ class OrgDataBus extends DataBus
         }
         self::$data['cookie'] = $_COOKIE;
         self::$data['isMobile'] = $detect->isMobile();
+
+        //获取对应的机构
+        self::$data['org_id'] = self::$data['user']['org_id'];
+        if (empty(self::$data['org_id'])) {
+            self::$data['org'] = [];
+        } else {
+            $org = ARPFOrg::getOrgById(self::$data['org_id']);
+            if ($org && $org['status'] == STATUS_SUCCESS) {
+                self::$data['org'] = $org;
+            } else {
+                throw new PFException("校区信息不存在");
+            }
+        }
     }
 
     public static function get($key = null)
