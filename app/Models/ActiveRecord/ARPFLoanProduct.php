@@ -18,6 +18,8 @@ class ARPFLoanProduct extends Model
     protected $table = 'pf_loan_product';
     const TABLE_NAME = 'pf_loan_product';
 
+    public $timestamps = false;
+
     /**
      * X+Y模式的费率模板
      */

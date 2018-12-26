@@ -18,6 +18,8 @@ class ARPFMobileModel extends Model
     protected $table = 'pf_mobile_model';
     const TABLE_NAME = 'pf_mobile_model';
 
+    public $timestamps = false;
+
     public static function addInfo($info = [])
     {
         $info = ArrayUtil::trimArray($info);

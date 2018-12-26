@@ -17,6 +17,8 @@ class ARPFOrgClass extends Model
     protected $table = 'pf_org_class';
     const TABLE_NAME = 'pf_org_class';
 
+    public $timestamps = false;
+
     public static function getClassByOidWhichCanLoan($oid)
     {
         return DB::table(self::TABLE_NAME)->select("*")

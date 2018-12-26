@@ -23,6 +23,7 @@ class ARPFMsgTemplate extends Model
     const SCENES_EMAIL = 3;
     const SCENES_LETTER = 4;
 
+    public $timestamps = false;
 
     public static function getMsgTemplateByScenesAndKey($scenes = null, $key = null)
     {

@@ -18,6 +18,8 @@ class ARPFUsersLogin extends Model {
 
     const TABLE_NAME = 'pf_users_login';
 
+    public $timestamps = false;
+
     public static function add($data) {
         $data['create_time'] = date('Y-m-d H:i:s');
         $r = DB::table(self::TABLE_NAME)->insert($data);

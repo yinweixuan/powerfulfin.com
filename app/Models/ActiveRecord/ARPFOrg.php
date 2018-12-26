@@ -17,6 +17,8 @@ class ARPFOrg extends Model
     protected $table = 'pf_org';
     const TABLE_NAME = 'pf_org';
 
+    public $timestamps = false;
+
     public static function getOrgById($id)
     {
         if (is_null($id) || !is_numeric($id)) {

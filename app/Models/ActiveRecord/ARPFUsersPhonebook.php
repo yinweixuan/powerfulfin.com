@@ -18,6 +18,8 @@ class ARPFUsersPhonebook extends Model
     protected $table = 'pf_users_phonebook';
     const TABLE_NAME = 'pf_users_phonebook';
 
+    public $timestamps = false;
+
     public static function addUserPhoneBook($info = array())
     {
         $info = ArrayUtil::trimArray($info);

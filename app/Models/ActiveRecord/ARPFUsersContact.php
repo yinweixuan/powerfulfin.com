@@ -19,6 +19,7 @@ class ARPFUsersContact extends Model
 {
     protected $table = 'pf_users_contact';
     const TABLE_NAME = 'pf_users_contact';
+    public $timestamps = false;
 
     public static function updateInfo($uid, array $info)
     {

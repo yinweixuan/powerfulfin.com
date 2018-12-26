@@ -17,6 +17,8 @@ class ARPFOrgHead extends Model
     protected $table = 'pf_org_head';
     const TABLE_NAME = 'pf_org_head';
 
+    public $timestamps = false;
+
     public static function getInfo($hid)
     {
         if (is_null($hid) || !is_numeric($hid) || $hid < 0) {

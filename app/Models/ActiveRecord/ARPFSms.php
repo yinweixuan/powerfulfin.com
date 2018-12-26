@@ -18,6 +18,8 @@ class ARPFSms extends Model
     protected $table = 'pf_sms';
     const TABLE_NAME = 'pf_sms';
 
+    public $timestamps = false;
+
     /**
      * 新增短信记录
      * @param $uid

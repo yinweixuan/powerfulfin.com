@@ -17,6 +17,7 @@ class ARPFUsersBank extends Model
 {
     protected $table = 'pf_users_bank';
     const TABLE_NAME = 'pf_users_bank';
+    public $timestamps = false;
 
     public static function addUserBank($info = array())
     {

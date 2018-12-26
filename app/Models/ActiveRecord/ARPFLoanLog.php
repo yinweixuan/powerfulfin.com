@@ -19,6 +19,8 @@ class ARPFLoanLog extends Model
 
     const TABLE_NAME = 'pf_loan_log';
 
+    public $timestamps = false;
+
     public static function insertLog($loanInfo, $status = '', $reason = '')
     {
         if (empty($loanInfo)) {

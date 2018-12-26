@@ -20,7 +20,10 @@ class ARPfUsers extends Model
     /**
      * 数据表
      */
+    protected $table = 'pf_users';
     const  TABLE_NAME = 'pf_users';
+
+    public $timestamps = false;
 
     /**
      * 根据用户ID获取用户信息

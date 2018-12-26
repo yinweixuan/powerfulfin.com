@@ -17,6 +17,8 @@ class ARPFLoanBill extends Model
     protected $table = "pf_loan_bill";
     const TABLE_NAME = 'pf_loan_bill';
 
+    public $timestamps = false;
+
     public static function getLoanBillByLidAndUid($lid, $uid)
     {
         $lists = DB::table(self::TABLE_NAME)->select('*')

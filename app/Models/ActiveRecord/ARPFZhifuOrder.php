@@ -10,6 +10,8 @@ class ARPFZhifuOrder extends Model
     protected $table = 'pf_zhifu_order';
     const TABLE_NAME = 'pf_zhifu_order';
 
+    public $timestamps = false;
+
     public static function updateByOrderid($order_id, $data)
     {
         $data['utime'] = date('Y-m-d H:i:s');

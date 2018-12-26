@@ -19,6 +19,8 @@ class ARPFLoan extends Model
 
     const TABLE_NAME = 'pf_loan';
 
+    public $timestamps = false;
+
     public static function getLoanById($id)
     {
         if (is_null($id) || !is_numeric($id)) {

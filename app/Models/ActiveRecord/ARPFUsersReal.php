@@ -20,6 +20,8 @@ class ARPFUsersReal extends Model
     protected $table = 'pf_users_real';
     const TABLE_NAME = 'pf_users_real';
 
+    public $timestamps = false;
+
     public static function getInfo($uid)
     {
         if (is_null($uid) || !is_numeric($uid) || $uid < 0) {

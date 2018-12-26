@@ -17,6 +17,7 @@ class ARPFUsersLocation extends Model
 {
     protected $table = 'pf_users_location';
     const TABLE_NAME = 'pf_users_location';
+    public $timestamps = false;
 
     public static function addUserLocation(array $info)
     {

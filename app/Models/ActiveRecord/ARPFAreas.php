@@ -16,6 +16,7 @@ class ARPFAreas extends Model
 {
     protected $table = "pf_areas";
     const TABLE_NAME = 'pf_areas';
+    public $timestamps = false;
 
     public static function getAreas($parent_id = -1, $id = 0)
     {
