@@ -46,10 +46,11 @@ class PicUtil
 
     /**
      * 上传图片到服务器
+     * @param $uid
      * @return array
      * @throws PFException
      */
-    public static function uploadSimgPic()
+    public static function uploadSimgPic($uid)
     {
         $ret = array();
         if (empty($_FILES)) {
@@ -125,7 +126,7 @@ class PicUtil
             $year_month = date("Ym");
             $dir = 'simg' . DIRECTORY_SEPARATOR . $year_month;
             do {
-                $fileName = date('His') . '_' . intval(microtime(true)) . '_' . rand(self::RAND_BEGIN, self::RAND_END) . ".{$suffix}";
+                $fileName = $uid . '_' . date('His') . '_' . intval(microtime(true)) . '_' . rand(self::RAND_BEGIN, self::RAND_END) . ".{$suffix}";
                 $path = DIRECTORY_SEPARATOR . $fileName;
             } while (file_exists($dir . $path));
             $tmp = [

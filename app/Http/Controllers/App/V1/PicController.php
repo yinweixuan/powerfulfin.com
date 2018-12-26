@@ -31,7 +31,7 @@ class PicController extends AppController
             if (empty($_FILES)) {
                 throw new PFException(ERR_UPLOAD_CONTENT . ":无文件", ERR_UPLOAD);
             }
-            $fileInfos = PicUtil::uploadSimgPic();
+            $fileInfos = PicUtil::uploadSimgPic(DataBus::get('uid'));
             $urls = [];
             foreach ($fileInfos as $fileInfo) {
                 AliyunOSSUtil::upload(AliyunOSSUtil::getLoanBucket(), $fileInfo['path'], $fileInfo['tmp_name']);

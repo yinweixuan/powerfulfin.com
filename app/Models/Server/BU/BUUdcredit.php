@@ -9,6 +9,8 @@
 namespace App\Models\Server\BU;
 
 
+use App\Models\ActiveRecord\ARPFUsersAuthLog;
+
 class BUUdcredit
 {
     /**
@@ -89,21 +91,21 @@ class BUUdcredit
      */
     public static function NotifyHandle($data)
     {
-//        if ($data['result_auth'] === 'T') {
-//            $data['result_auth'] = ARPayUserAuth::RESULT_AUTH_TRUE;
-//        } else {
-//            $data['result_auth'] = ARPayUserAuth::RESULT_AUTH_FALSE;
-//        }
-//        $data['order'] = $data['no_order'];
-//        list($data['uid'], $data['cid'], $data['sid'], $order) = explode('|', $data['no_order']);
-//        unset($data['no_order']);
-//        $data['id_card'] = $data['id_no'];
-//        unset($data['id_no']);
-//        $data['sex'] = $data['gender'] == '女' ? 2 : 1;
-//        unset($data['gender']);
-//        $validityDate = explode('-', $data['validity_period']);
-//        $data['idcard_start'] = str_replace('.', '-', $validityDate[0]);
-//        $data['idcard_expired'] = $validityDate[1] == '长期' ? '2099-01-01' : str_replace('.', '-', $validityDate[1]);
+        if ($data['result_auth'] === 'T') {
+            $data['result_auth'] = ARPFUsersAuthLog::RESULT_AUTH_TRUE;
+        } else {
+            $data['result_auth'] = ARPFUsersAuthLog::RESULT_AUTH_FALSE;
+        }
+        $data['order'] = $data['no_order'];
+        list($data['uid'], $data['cid'], $data['sid'], $order) = explode('|', $data['no_order']);
+        unset($data['no_order']);
+        $data['id_card'] = $data['id_no'];
+        unset($data['id_no']);
+        $data['sex'] = $data['gender'] == '女' ? 2 : 1;
+        unset($data['gender']);
+        $validityDate = explode('-', $data['validity_period']);
+        $data['idcard_start'] = str_replace('.', '-', $validityDate[0]);
+        $data['idcard_expired'] = $validityDate[1] == '长期' ? '2099-01-01' : str_replace('.', '-', $validityDate[1]);
 //        return BUUdcredit::updateData($data);
     }
 
