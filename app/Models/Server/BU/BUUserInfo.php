@@ -542,6 +542,13 @@ class BUUserInfo
             }
             return $userWork;
         }
+
     }
+
+    public static function getUserStatus()
+    {
+
+    }
+
 
 }
