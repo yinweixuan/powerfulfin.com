@@ -25,7 +25,7 @@
 <body class="hold-transition login-page" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif>
 <div class="login-box">
   <div class="login-logo">
-    <a href="{{ admin_base_path('/') }}"><b>{{config('admin.name')}}</b></a>
+    <a href="{{ admin_base_path('/') }}"><b>{{config('admin.name')}}</b>管理平台</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -69,7 +69,14 @@
   <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
-
+<!-- Main Footer -->
+<footer>
+    <div class="row" align="center">
+        <div class="col-md-12">
+           <p>© 2018 powerfulfin.com {{ config('app.company_name') }} {{ config('app.website_filing') }}</p>
+        </div>
+    </div>
+</footer>
 <!-- jQuery 2.1.4 -->
 <script src="{{ admin_asset("/vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js")}} "></script>
 <!-- Bootstrap 3.3.5 -->

@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<img src="http://127.0.0.1:8000/web/img/logo.png" alt="Admin logo">',
+    'logo' => '<img src="/web/img/logo.png" alt="Admin logo">',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<img src="http://127.0.0.1:8000/web/img/logo.png" alt="Admin logo">',
+    'logo-mini' => '<img src="/web/img/logo.png" alt="Admin logo">',
 
     /*
     |--------------------------------------------------------------------------
@@ -172,7 +172,7 @@ return [
         'user_permissions_table' => 'pf_admin_user_permissions',
         'role_users_table' => 'pf_admin_role_users',
         'role_permissions_table' => 'pf_admin_role_permissions',
-        'role_menu_table' => 'apf_dmin_role_menu',
+        'role_menu_table' => 'pf_admin_role_menu',
     ],
 
     /*

@@ -14,5 +14,5 @@
 
     </div>
     <!-- Default to the left -->
-    <strong>{{ config('app.company_name') }}</strong>
+    <strong>{{ config('app.company_name') }} {{ config('app.website_filing') }}</strong>
 </footer>
