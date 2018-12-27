@@ -223,6 +223,5 @@ class UserController extends AppController
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
-
     }
 }

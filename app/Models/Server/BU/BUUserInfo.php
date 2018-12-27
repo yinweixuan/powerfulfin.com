@@ -397,7 +397,7 @@ class BUUserInfo
             'create_time' => date('Y-m-d H:i:s'),
             'location' => $lng . ',' . $lat,
             'distance' => '0.00',
-            'uid' => $uid,
+            'uid' => (string)$uid,
         ];
         try {
             $gps = MapUtil::getPosInfo($lng, $lat);
@@ -454,7 +454,7 @@ class BUUserInfo
                 'issuing_authority' => '',
                 'idcard_information_pic' => '',
                 'idcard_national_pic' => '',
-                'uid' => $uid,
+                'uid' => (string)$uid,
                 'idcard_information_pic_url' => '',
                 'idcard_national_pic_url' => ''
             ];
@@ -493,7 +493,7 @@ class BUUserInfo
                 'contact_person_phone' => '',
                 'wechat' => '',
                 'qq' => '',
-                'uid' => $uid,
+                'uid' => (string)$uid,
             ];
             return $params;
         } else {
@@ -507,7 +507,7 @@ class BUUserInfo
         $userWork = ARPFUsersWork::getUserWork($uid);
         if (empty($userWork)) {
             $params = [
-                'uid' => $uid,
+                'uid' => (string)$uid,
                 'highest_education' => '',
                 'profession' => '',
                 'working_status' => '',
