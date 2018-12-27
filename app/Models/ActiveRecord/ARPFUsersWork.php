@@ -53,6 +53,12 @@ class ARPFUsersWork extends Model
         return $ar->getAttributes();
     }
 
+    /**
+     * @param $uid
+     * @param array $info
+     * @return array|int
+     * @throws PFException
+     */
     public static function updateInfo($uid, array $info)
     {
         if (is_null($uid) || !is_numeric($uid)) {
@@ -69,8 +75,19 @@ class ARPFUsersWork extends Model
             $info['uid'] = $uid;
             return self::addUserWork($info);
         } else {
+            $columns = Schema::getColumnListing(self::TABLE_NAME);
+
+            $update = [];
+            foreach ($info as $key => $value) {
+                if (array_key_exists($key, $columns)) {
+                    $update[$key] = $value;
+                }
+            }
+            if (empty($update)) {
+                return [];
+            }
             return DB::table(self::TABLE_NAME)->where('uid', $uid)
-                ->update($info);
+                ->update($update);
         }
     }
 

@@ -12,6 +12,7 @@ namespace App\Models\ActiveRecord;
 use App\Components\ArrayUtil;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ARPFUsersBank extends Model
 {
@@ -49,9 +50,20 @@ class ARPFUsersBank extends Model
         return $info;
     }
 
-    public static function updateBankInfo($id, $update = [])
+    public static function updateBankInfo($id, $info = [])
     {
-        $update = ArrayUtil::trimArray($update);
+        $info = ArrayUtil::trimArray($info);
+        $columns = Schema::getColumnListing(self::TABLE_NAME);
+
+        $update = [];
+        foreach ($info as $key => $value) {
+            if (array_key_exists($key, $columns)) {
+                $update[$key] = $value;
+            }
+        }
+        if (empty($update)) {
+            return [];
+        }
 
         return DB::table(self::TABLE_NAME)->where('id', $id)->update($update);
     }
