@@ -224,4 +224,14 @@ class UserController extends AppController
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
     }
+
+    public function userstatus()
+    {
+        try {
+            $info = BUUserInfo::getUserStatus(DataBus::get('uid'));
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $info);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode());
+        }
+    }
 }

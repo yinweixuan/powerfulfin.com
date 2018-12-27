@@ -18,6 +18,7 @@ use App\Models\ActiveRecord\ARPFUsersAuthLog;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersContact;
 use App\Models\ActiveRecord\ARPFUsersLocation;
+use App\Models\ActiveRecord\ARPFUsersPhonebook;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\ActiveRecord\ARPFUsersWork;
 use App\Models\DataBus;
@@ -456,7 +457,8 @@ class BUUserInfo
                 'idcard_national_pic' => '',
                 'uid' => (string)$uid,
                 'idcard_information_pic_url' => '',
-                'idcard_national_pic_url' => ''
+                'idcard_national_pic_url' => '',
+                'user_real' => self::checkUserReal($uid),
             ];
             return $params;
         } else {
@@ -471,7 +473,7 @@ class BUUserInfo
             } else {
                 $userReal['idcard_national_pic_url'] = '';
             }
-
+            $userReal['user_real'] = self::checkUserReal($uid);
             return $userReal;
         }
     }
@@ -545,9 +547,156 @@ class BUUserInfo
 
     }
 
-    public static function getUserStatus()
-    {
+    const USER_STATUS_PENDING_CREDIT = 1;
+    const USER_STATUS_CREDIT_SUCCESS = 2;
+    const USER_STATUS_CREDIT_FAIL = 3;
 
+    /**
+     * @param $uid
+     * @return array
+     * @throws PFException
+     */
+    public static function getUserStatus($uid)
+    {
+        $info = [
+            'user_real' => self::checkUserReal($uid),
+            'user_bank' => self::checkUserBank($uid),
+            'user_contact' => self::checkUserContact($uid),
+            'user_work' => self::checkUserWork($uid),
+            'user_phonebook' => self::checkUserPhoneBook($uid),
+        ];
+
+        return $info;
+    }
+
+    /**
+     * @param $uid
+     * @return int
+     * @throws PFException
+     */
+    private static function checkUserReal($uid)
+    {
+        $userAuthLog = ARPFUsersAuthLog::getInfoByUid($uid);
+        if (empty($userAuthLog)) {
+            return self::USER_STATUS_PENDING_CREDIT;
+        }
+        $result_auth_false = 0;
+        $result_auth_true = 0;
+        foreach ($userAuthLog as $item) {
+            if ($item['result_auth'] == ARPFUsersAuthLog::RESULT_AUTH_FALSE) {
+                $result_auth_false++;
+            } else {
+                $result_auth_true++;
+            }
+        }
+
+        $count = count($userAuthLog);
+        if ($result_auth_false == $count) {
+            return self::USER_STATUS_CREDIT_FAIL;
+        }
+
+        return self::USER_STATUS_CREDIT_SUCCESS;
+    }
+
+    /**
+     * @param $uid
+     * @return int
+     */
+    private static function checkUserBank($uid)
+    {
+        $userBank = ARPFUsersBank::getUserRepayBankByUid($uid);
+        if (empty($userBank)) {
+            return self::USER_STATUS_PENDING_CREDIT;
+        }
+        if (empty($userBank['protocol_no'])) {
+            return self::USER_STATUS_CREDIT_FAIL;
+        }
+        return self::USER_STATUS_CREDIT_SUCCESS;
+    }
+
+    /**
+     * @param $uid
+     * @return int
+     */
+    private static function checkUserContact($uid)
+    {
+        $userContact = ARPFUsersContact::getContractInfo($uid);
+        if (empty($userContact)) {
+            return self::USER_STATUS_PENDING_CREDIT;
+        }
+
+        $params = ['email', 'home_province', 'home_city', 'home_area', 'home_address', 'housing_situation', 'marital_status', 'contact_person', 'contact_person_relation', 'contact_person_phone'];
+        $need = false;
+        foreach ($params as $param) {
+            if (empty($userContact[$param]) || !array_key_exists($param, $userContact)) {
+                $need = true;
+                break;
+            }
+        }
+        if ($need) {
+            return self::USER_STATUS_PENDING_CREDIT;
+        }
+
+        return self::USER_STATUS_CREDIT_SUCCESS;
+    }
+
+    /**
+     * @param $uid
+     * @return int
+     */
+    private static function checkUserWork($uid)
+    {
+        $userWork = ARPFUsersWork::getUserWork($uid);
+        if (empty($userWork)) {
+            return self::USER_STATUS_PENDING_CREDIT;
+        }
+
+        $need = false;
+        switch ($userWork['working_status']) {
+            case ARPFUsersWork::WORKING_CONDITION_WORKING:
+                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'edu_pic', 'work_name', 'work_province', 'work_city', 'work_area', 'work_address', 'work_entry_time', 'work_profession', 'work_contact'];
+                break;
+            case ARPFUsersWork::WORKING_CONDITION_READING:
+                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'edu_pic', 'school_name', 'school_province', 'school_city', 'school_area', 'school_address', 'school_contact', 'school_major', 'education_system', 'entrance_time'];
+                break;
+            case ARPFUsersWork::WORKING_CONDITION_UNEMPLOYED:
+                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'train_contact'];
+                break;
+            default:
+                $need = true;
+                break;
+        }
+        if ($need) {
+            return self::USER_STATUS_PENDING_CREDIT;
+        } else {
+            foreach ($params as $param) {
+                if (empty($userWork[$param]) || !array_key_exists($param, $userWork)) {
+                    $need = true;
+                    break;
+                }
+            }
+            if ($need) {
+                return self::USER_STATUS_PENDING_CREDIT;
+            }
+        }
+
+        return self::USER_STATUS_CREDIT_SUCCESS;
+    }
+
+    /**
+     * @param $uid
+     * @return int
+     */
+    private static function checkUserPhoneBook($uid)
+    {
+        $userPhoneBook = ARPFUsersPhonebook::getPhoneBookLastOneByUid($uid);
+        if (empty($userPhoneBook)) {
+            return self::USER_STATUS_PENDING_CREDIT;
+        }
+        if ($userPhoneBook['phonebook_count'] < 15) {
+            return self::USER_STATUS_CREDIT_FAIL;
+        }
+        return self::USER_STATUS_CREDIT_SUCCESS;
     }
 
 

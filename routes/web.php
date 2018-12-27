@@ -68,9 +68,10 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/user/userlocation', 'UserController@userLocation');    //用户设备授权接口
     Route::match(['get', 'post'], APP_V1 . '/user/phonebook', 'UserController@phonebook');    //提交通讯录
     Route::match(['get', 'post'], APP_V1 . '/user/idcardpic', 'UserController@idcardpic');    //根据云慧眼认证成功的order拉取身份证图片
-    Route::match(['get', 'post'], APP_V1 . '/user/getuserrealinfo', 'UserController@getUserRealInfo');    //根据云慧眼认证成功的order拉取身份证图片
-    Route::match(['get', 'post'], APP_V1 . '/user/getusercontact', 'UserController@getUserContact');    //根据云慧眼认证成功的order拉取身份证图片
-    Route::match(['get', 'post'], APP_V1 . '/user/getuserwork', 'UserController@getUserWork');    //根据云慧眼认证成功的order拉取身份证图片
+    Route::match(['get', 'post'], APP_V1 . '/user/getuserrealinfo', 'UserController@getUserRealInfo');    //用户实名信息数据
+    Route::match(['get', 'post'], APP_V1 . '/user/getusercontact', 'UserController@getUserContact');    //用户联系人数据
+    Route::match(['get', 'post'], APP_V1 . '/user/getuserwork', 'UserController@getUserWork');    //用户工作信息数据
+    Route::match(['get', 'post'], APP_V1 . '/user/userstatus', 'UserController@userstatus');    //各项认证状态
 
 
     /**
@@ -109,6 +110,5 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 图片
      */
     Route::match(['get', 'post'], APP_V1 . '/pic/upload', 'PicController@upload');  //app图片上传
-    Route::match(['get', 'post'], APP_V1 . '/test/index', 'TestController@index');  //app图片上传
 });
 

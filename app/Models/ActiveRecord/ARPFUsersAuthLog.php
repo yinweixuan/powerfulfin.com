@@ -105,4 +105,15 @@ class ARPFUsersAuthLog extends Model
         return $info;
     }
 
+    public static function getInfoByUid($uid)
+    {
+        if (is_null($uid) || !is_numeric($uid)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->get()->toArray();
+    }
+
 }

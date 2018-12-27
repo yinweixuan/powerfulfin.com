@@ -78,7 +78,18 @@ class ARPFUsersReal extends Model
             self::addUserReal($info);
         } else {
             $info['update_time'] = date('Y-m-d H:i:s');
-            return DB::table(self::TABLE_NAME)->where('uid', $uid)->update($info);
+            $columns = Schema::getColumnListing(self::TABLE_NAME);
+
+            $update = [];
+            foreach ($info as $key => $value) {
+                if (array_key_exists($key, $columns)) {
+                    $update[$key] = $value;
+                }
+            }
+            if (empty($update)) {
+                return [];
+            }
+            return DB::table(self::TABLE_NAME)->where('uid', $uid)->update($update);
         }
     }
 
