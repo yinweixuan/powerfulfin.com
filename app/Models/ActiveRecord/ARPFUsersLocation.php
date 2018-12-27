@@ -9,9 +9,10 @@
 namespace App\Models\ActiveRecord;
 
 
+use App\Components\ArrayUtil;
 use App\Components\PFException;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ARPFUsersLocation extends Model
 {
@@ -25,6 +26,22 @@ class ARPFUsersLocation extends Model
             throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
 
-        return DB::table(self::TABLE_NAME)->insertGetId($info);
+        if (empty($info['uid'])) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+
+        $info = ArrayUtil::trimArray($info);
+
+        $ar = new self();
+
+        $columns = Schema::getColumnListing(self::TABLE_NAME);
+        foreach ($columns as $key) {
+            if (array_key_exists($key, $info)) {
+                $ar->$key = $info[$key];
+            }
+        }
+        $ar->create_time = date('Y-m-d H:i:s');
+        $ar->save();
+        return $ar->getAttributes();
     }
 }

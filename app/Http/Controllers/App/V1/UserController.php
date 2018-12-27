@@ -98,9 +98,14 @@ class UserController extends AppController
     public function userLocation()
     {
         try {
-            $data = Input::get();
-            BUUserInfo::userLocation($data, self::$user);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
+            $lat = Input::get('lat');
+            $lng = Input::get('lng');
+            $oid = Input::get('oid');
+            if (empty($lat) || empty($lng)) {
+                throw new PFException(ERR_GPS_CONTENT, ERR_GPS);
+            }
+            $result = BUUserInfo::userLocation(DataBus::get('uid'), $lng, $lat, $oid);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }
@@ -160,14 +165,36 @@ class UserController extends AppController
         }
     }
 
-    public function getUserInfo()
+    public function getUserRealInfo()
     {
         try {
-
+            $result = BUUserInfo::getUserRealInfo(DataBus::get('uid'));
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
     }
+
+    public function getUserContact()
+    {
+        try {
+            $result = BUUserInfo::getUserContact(DataBus::get('uid'));
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function getUserWork()
+    {
+        try {
+            $result = BUUserInfo::getUserWork(DataBus::get('uid'));
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode());
+        }
+    }
+
 
     public function idcardpic()
     {

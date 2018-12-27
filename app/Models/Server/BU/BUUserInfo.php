@@ -9,9 +9,11 @@
 namespace App\Models\Server\BU;
 
 
+use App\Components\AliyunOSSUtil;
 use App\Components\CheckUtil;
 use App\Components\MapUtil;
 use App\Components\PFException;
+use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFUsersAuthLog;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersContact;
@@ -148,7 +150,6 @@ class BUUserInfo
             'identity_number' => '身份证号码',
             'start_date' => '身份证有效期起始日',
             'end_date' => '身份证有效期失效日期',
-            'birthday' => '生日',
             'address' => '身份证地址',
             'idcard_information_pic' => '身份证正面照片',
             'idcard_national_pic' => '身份证背面照片',
@@ -203,6 +204,7 @@ class BUUserInfo
                     'face_fail_reason' => $userAuth['fail_reason'],
                     'face_living_pic' => $userAuth['photo_living'],
                     'face_idcard_portrait_pic' => $userAuth['photo_grid'],
+                    'birthday' => $userAuth['birthday']
                 ];
                 $userReal = ARPFUsersReal::getInfo($user['id']);
                 if ($userReal['face_recognition'] == STATUS_SUCCESS && $update['face_recognition'] == STATUS_FAIL) {
@@ -374,31 +376,53 @@ class BUUserInfo
 
     /**
      * 设备定位信息
-     * @param $data
-     * @param $user
-     * @return int
+     * @param $uid
+     * @param $lng
+     * @param $lat
+     * @param string $oid
+     * @return array
      * @throws PFException
      */
-    public static function userLocation($data, $user)
+    public static function userLocation($uid, $lng, $lat, $oid = '')
     {
-        if (empty($data) || empty($user)) {
-            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        if (empty($uid)) {
+            throw new PFException(ERR_NOLOGIN_CONTENT, ERR_NOLOGIN);
+        }
+
+        if (empty($lat) || empty($lng)) {
+            throw new PFException(ERR_GPS_CONTENT, ERR_GPS);
         }
         $info = [
             'ip_address' => DataBus::get('ip'),
             'create_time' => date('Y-m-d H:i:s'),
-            'uid' => $user['id'],
+            'location' => $lng . ',' . $lat,
+            'distance' => '0.00',
+            'uid' => $uid,
         ];
-        if (empty($data['lat']) || empty($data['lng'])) {
-            $info['location'] = '0,0';
-            $info['address'] = MapUtil::getPosByIp($info['ip_address']);
-            $info['channel'] = 'IP';
-        } else {
-            $info['location'] = $data['lng'] . ',' . $data['lat'];
-            $info['address'] = MapUtil::getPosInfo($data['lng'], $data['lat']);
-            $info['channel'] = 'GPS';
+        try {
+            $gps = MapUtil::getPosInfo($lng, $lat);
+            if ($gps['formatted_address']) {
+                $info['address'] = $gps['formatted_address'];
+                $info['channel'] = 'GPS';
+            } else {
+                $ip = MapUtil::getPosByIp($info['ip_address']);
+                $gps = MapUtil::getPosInfo($ip['lng'], $ip['lat']);
+                $info['address'] = $gps['formatted_address'];
+                $info['channel'] = 'IP';
+            }
+        } catch (PFException $exception) {
+            $info['address'] = '';
         }
-        return ARPFUsersLocation::addUserLocation($info);
+
+        if ($oid) {
+            $org = ARPFOrg::getOrgById($oid);
+            if ($org) {
+                //TODO
+            }
+        }
+
+        ARPFUsersLocation::addUserLocation($info);
+        return $info;
     }
 
     /**
@@ -419,76 +443,103 @@ class BUUserInfo
     public static function getUserRealInfo($uid)
     {
         $userReal = ARPFUsersReal::getInfo($uid);
-
-        $params = ['full_name', 'identity_number', 'nationality', 'start_date', 'end_date', 'address', 'issuing_authority', 'idcard_information_pic', 'idcard_national_pic'];
-        $need = false;
-        foreach ($params as $param) {
-            if (empty($userReal[$param]) || !array_key_exists($param, $userReal)) {
-                $need = true;
-                break;
-            }
-        }
-
-        $userReal['need'] = $need;
-        return $userReal;
-    }
-
-    public static function getUserBankInfo($uid)
-    {
-        $userBank = ARPFUsersBank::getUserRepayBankByUid($uid);
-        if (empty($userBank)) {
-            $userBank['need'] = true;
+        if (empty($userReal)) {
+            $params = [
+                'full_name' => '',
+                'identity_number' => '',
+                'nationality' => '',
+                'start_date' => '',
+                'end_date' => '',
+                'address' => '',
+                'issuing_authority' => '',
+                'idcard_information_pic' => '',
+                'idcard_national_pic' => '',
+                'uid' => $uid,
+                'idcard_information_pic_url' => '',
+                'idcard_national_pic_url' => ''
+            ];
+            return $params;
         } else {
-            $userBank['need'] = false;
+            if (!empty($userReal['idcard_information_pic'])) {
+                $userReal['idcard_information_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userReal['idcard_information_pic']);
+            } else {
+                $userReal['idcard_information_pic_url'] = '';
+            }
+
+            if (!empty($userReal['idcard_national_pic'])) {
+                $userReal['idcard_national_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userReal['idcard_national_pic']);
+            } else {
+                $userReal['idcard_national_pic_url'] = '';
+            }
+
+            return $userReal;
         }
-        return $userBank;
     }
 
     public static function getUserContact($uid)
     {
         $userContact = ARPFUsersContact::getContractInfo($uid);
-
-        $params = ['email', 'home_province', 'home_city', 'home_area', 'home_address', 'housing_situation', 'marital_status', 'contact_person', 'contact_person_relation', 'contact_person_phone'];
-        $need = false;
-        foreach ($params as $param) {
-            if (empty($userContact[$param]) || !array_key_exists($param, $userContact)) {
-                $need = true;
-                break;
-            }
+        if (empty($userContact)) {
+            $params = [
+                'email' => '',
+                'home_province' => '',
+                'home_city' => '',
+                'home_area' => '',
+                'home_address' => '',
+                'housing_situation' => '',
+                'marital_status' => '',
+                'contact_person' => '',
+                'contact_person_relation' => '',
+                'contact_person_phone' => '',
+                'wechat' => '',
+                'qq' => '',
+                'uid' => $uid,
+            ];
+            return $params;
+        } else {
+            return $userContact;
         }
-        $userContact['need'] = $need;
-        return $userContact;
+
     }
 
     public static function getUserWork($uid)
     {
         $userWork = ARPFUsersWork::getUserWork($uid);
-        $need = false;
-        switch ($userWork['working_status']) {
-            case ARPFUsersWork::WORKING_CONDITION_WORKING:
-                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'edu_pic', 'work_name', 'work_province', 'work_city', 'work_area', 'work_address', 'work_entry_time', 'work_profession', 'work_contact'];
-                break;
-            case ARPFUsersWork::WORKING_CONDITION_READING:
-                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'edu_pic', 'school_name', 'school_province', 'school_city', 'school_area', 'school_address', 'school_contact', 'school_major', 'education_system', 'entrance_time'];
-                break;
-            case ARPFUsersWork::WORKING_CONDITION_UNEMPLOYED:
-                $params = ['highest_education', 'profession', 'working_status', 'monthly_income', 'train_contact'];
-                break;
-            default:
-                $need = true;
-                break;
-        }
-        if ($need) {
-            $userWork['need'] = $need;
-            return $userWork;
+        if (empty($userWork)) {
+            $params = [
+                'uid' => $uid,
+                'highest_education' => '',
+                'profession' => '',
+                'working_status' => '',
+                'monthly_income' => '',
+                'edu_pic' => '',
+                'edu_pic_url' => '',
+                'work_name' => '',
+                'work_province' => '',
+                'work_city' => '',
+                'work_area' => '',
+                'work_address' => '',
+                'work_entry_time' => '',
+                'work_profession' => '',
+                'work_contact' => '',
+                'school_name' => '',
+                'school_province' => '',
+                'school_city' => '',
+                'school_area' => '',
+                'school_address' => '',
+                'school_contact' => '',
+                'school_major' => '',
+                'education_system' => '',
+                'entrance_time' => '',
+                'train_contact' => '',
+            ];
+            return $params;
         } else {
-            foreach ($params as $param) {
-                if (empty($userWork[$param]) || !array_key_exists($param, $userWork)) {
-                    $need = true;
-                    break;
-                }
+            if (empty($userWork['edu_pic'])) {
+                $userWork['edu_pic_url'] = '';
+            } else {
+                $userWork['edu_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userWork['edu_pic']);
             }
-            $userWork['need'] = $need;
             return $userWork;
         }
     }

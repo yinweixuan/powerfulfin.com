@@ -93,6 +93,8 @@ define('ERR_BANK_ACCOUNT_CONTENT', '银行卡业务异常');
 define('ERR_UPLOAD', 20);
 define('ERR_UPLOAD_CONTENT', '文件系统异常');
 
+define('ERR_GPS', 21);
+define('ERR_GPS_CONTENT', 'GPS定位获取异常');
 
 /**
  * 队列,2201~2299

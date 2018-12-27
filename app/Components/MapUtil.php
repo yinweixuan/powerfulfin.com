@@ -28,7 +28,7 @@ class MapUtil
      */
     public static function getPosInfo($lng, $lat)
     {
-        $url = self::URL_POS_INFO . "&ak=" . self::getAccessKey . "&location={$lat},{$lng}";
+        $url = self::URL_POS_INFO . "&ak=" . self::getAccessKey() . "&location={$lat},{$lng}";
         $res = HttpUtil::doGet($url);
         $res = OutputUtil::json_decode($res);
         if (!isset($res['status']) || $res['status'] != 0 || !isset($res['result'])) {

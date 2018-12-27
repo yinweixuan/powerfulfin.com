@@ -68,6 +68,10 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/user/userlocation', 'UserController@userLocation');    //用户设备授权接口
     Route::match(['get', 'post'], APP_V1 . '/user/phonebook', 'UserController@phonebook');    //提交通讯录
     Route::match(['get', 'post'], APP_V1 . '/user/idcardpic', 'UserController@idcardpic');    //根据云慧眼认证成功的order拉取身份证图片
+    Route::match(['get', 'post'], APP_V1 . '/user/getuserrealinfo', 'UserController@getUserRealInfo');    //根据云慧眼认证成功的order拉取身份证图片
+    Route::match(['get', 'post'], APP_V1 . '/user/getusercontact', 'UserController@getUserContact');    //根据云慧眼认证成功的order拉取身份证图片
+    Route::match(['get', 'post'], APP_V1 . '/user/getuserwork', 'UserController@getUserWork');    //根据云慧眼认证成功的order拉取身份证图片
+
 
     /**
      * 地址选择器
