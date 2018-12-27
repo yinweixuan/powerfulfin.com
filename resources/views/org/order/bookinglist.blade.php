@@ -170,19 +170,19 @@
                             <div class="col-lg-10">
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" value="1">
+                                        <input type="radio" name="optionsRadios" value="非报名学员">
                                         非报名学员
                                     </label>
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" value="2">
+                                        <input type="radio" name="optionsRadios" value="申请课程错误">
                                         申请课程错误
                                     </label>
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" value="3">
+                                        <input type="radio" name="optionsRadios" value="申请金额错误">
                                         申请金额错误
                                     </label>
                                 </div>

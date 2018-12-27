@@ -39,6 +39,24 @@ class OrderController extends OrgBaseController
      */
     public function bookinglist()
     {
+        return $this->list(LOAN_1100_CREATE_ACCOUNT, 'org.order.bookinglist');
+    }
+
+    /**
+     * 确认上课放款列表
+     */
+    public function confirmlist()
+    {
+        return $this->list(LOAN_4000_P2P_CONFIRM, 'org.order.confirmlist');
+    }
+
+    /**
+     * 整合报名确认和上课放款两个列表,逻辑基本相同.
+     * @param $status
+     * @param $view
+     */
+    private function list($status, $view)
+    {
         //获取待报名的列表
         $lid = Input::get('lid');
         $fullName = Input::get('full_name');
@@ -54,7 +72,7 @@ class OrderController extends OrgBaseController
                 $query = DB::table(ARPFLoan::TABLE_NAME)
                     ->join(ARPFUsersReal::TABLE_NAME, ARPFUsersReal::TABLE_NAME .'.uid', '=', ARPFLoan::TABLE_NAME . '.uid')
                     ->where(ARPFLoan::TABLE_NAME . '.oid', '=', OrgDataBus::get('org_id'))
-                    ->where(ARPFLoan::TABLE_NAME . '.status', '=', LOAN_1100_CREATE_ACCOUNT);
+                    ->where(ARPFLoan::TABLE_NAME . '.status', '=', $status);
                 if ($lid) {
                     $query->where(ARPFLoan::TABLE_NAME . '.id', '=', $lid);
                 }
@@ -79,16 +97,7 @@ class OrderController extends OrgBaseController
         } catch (\Exception $e) {
             $data['errmsg'] = $e->getMessage();
         }
-        return $this->view('org.order.bookinglist', $data);
-    }
-
-    /**
-     * 确认上课放款列表
-     */
-    public function confirmlist()
-    {
-        $data = [];
-        return $this->view('org.order.confirmlist', $data);
+        return $this->view($view, $data);
     }
 
     /**
