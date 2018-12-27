@@ -146,6 +146,12 @@ class BUUserInfo
         if (empty($data) || empty($user)) {
             throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
+        try {
+            BULoanApply::checkDoingLoan($user['id']);
+        } catch (PFException $exception) {
+            throw new PFException("存在贷中订单，请不要更改个人信息，谢谢！", ERR_SYS_PARAM);
+        }
+
         $params = array(
             'full_name' => '姓名',
             'identity_number' => '身份证号码',
@@ -233,6 +239,11 @@ class BUUserInfo
         if (empty($data) || empty($user)) {
             throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
+        try {
+            BULoanApply::checkDoingLoan($user['id']);
+        } catch (PFException $exception) {
+            throw new PFException("存在贷中订单，请不要更改个人信息，谢谢！", ERR_SYS_PARAM);
+        }
         $params = [
             'house_status' => '住房性质',
             'home_province' => '现居地所在省',
@@ -308,7 +319,11 @@ class BUUserInfo
         if (empty($data) || empty($user)) {
             throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
-
+        try {
+            BULoanApply::checkDoingLoan($user['id']);
+        } catch (PFException $exception) {
+            throw new PFException("存在贷中订单，请不要更改个人信息，谢谢！", ERR_SYS_PARAM);
+        }
         $params = array('highest_education' => '学历', 'profession' => '工作描述', 'working_status' => '工作状态');
         self::supplyUserStepCheckParams($params, $data);
         switch ($data['working_status']) {
@@ -392,6 +407,11 @@ class BUUserInfo
 
         if (empty($lat) || empty($lng)) {
             throw new PFException(ERR_GPS_CONTENT, ERR_GPS);
+        }
+        try {
+            BULoanApply::checkDoingLoan($user['id']);
+        } catch (PFException $exception) {
+            throw new PFException("存在贷中订单，请不要更改个人信息，谢谢！", ERR_SYS_PARAM);
         }
         $info = [
             'ip_address' => DataBus::get('ip'),

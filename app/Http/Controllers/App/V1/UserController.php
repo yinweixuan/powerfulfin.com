@@ -17,8 +17,10 @@ use App\Models\ActiveRecord\ARPFUsersAuthLog;
 use App\Models\ActiveRecord\ARPFUsersPhonebook;
 use App\Models\DataBus;
 use App\Models\Server\BU\BUAppMobile;
+use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BUUserInfo;
 use Illuminate\Support\Facades\Input;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class UserController extends AppController
 {
@@ -117,6 +119,11 @@ class UserController extends AppController
      */
     public function phonebook()
     {
+        try {
+            BULoanApply::checkDoingLoan(DataBus::get('uid'));
+        } catch (PFException $exception) {
+            OutputUtil::err("存在贷中订单，请不要更改个人信息，谢谢！", ERR_SYS_PARAM);
+        }
         try {
             $mobiles = Input::get('phonebook');
             $res = OutputUtil::json_decode($mobiles);

@@ -138,6 +138,12 @@ class BULoanApply
         return array_merge($data, $info);
     }
 
+    /**
+     * 检查是否存在贷中订单
+     * @param $uid
+     * @param array $status
+     * @throws PFException
+     */
     static public function checkDoingLoan($uid, array $status)
     {
         if (is_null($uid) || !is_numeric($uid)) {
