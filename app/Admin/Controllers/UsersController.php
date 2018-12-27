@@ -9,15 +9,16 @@
 namespace App\Admin\Controllers;
 
 
-use App\Http\Controllers\Controller;
+use App\Admin\AdminController;
 use App\Models\ActiveRecord\ARPfUsers;
+use App\Models\ActiveRecord\ARPFUsersReal;
 use Encore\Admin\Controllers\HasResourceActions;
-use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\DB;
 
-class UsersController extends Controller
+class UsersController extends AdminController
 {
     use HasResourceActions;
 
@@ -91,9 +92,9 @@ class UsersController extends Controller
     {
         $grid = new Grid(new ARPfUsers());
 
-        $grid->id('ID');
-        $grid->name('用户名');
-        $grid->email('Email');
+        $grid->id('用户UID');
+        $grid->username('用户名');
+        $grid->phone('手机号');
         $grid->created_at('注册时间');
         $grid->updated_at('更新时间');
 
@@ -110,9 +111,9 @@ class UsersController extends Controller
     {
         $show = new Show(ARPfUsers::findOrFail($id));
 
-        $show->id('Id');
-        $show->name('Name');
-        $show->email('Email');
+        $show->id('用户UID');
+        $show->username('用户名');
+        $show->phone('手机号');
         $show->email_verified_at('Email verified at');
         $show->password('Password');
         $show->remember_token('Remember token');
@@ -122,21 +123,4 @@ class UsersController extends Controller
         return $show;
     }
 
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        $form = new Form(new User);
-
-        $form->text('用户名', '用户名');
-        $form->email('Email', 'Email');
-        $form->datetime('email_verified_at', 'Email verified at')->default(date('Y-m-d H:i:s'));
-        $form->password('密码', '密码');
-        $form->text('remember_token', 'Remember token');
-
-        return $form;
-    }
 }
