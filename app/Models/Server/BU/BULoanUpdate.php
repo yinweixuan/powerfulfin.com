@@ -43,7 +43,9 @@ class BULoanUpdate
      * 处理订单状态的变更,并记录日志
      * @param $lid      订单号
      * @param $new     修改后属性
-     * @param string $remark    备注
+     * @param string $remark 备注
+     * @return
+     * @throws PFException
      */
     public static function changeStatus($lid, $new, $remark = '')
     {
