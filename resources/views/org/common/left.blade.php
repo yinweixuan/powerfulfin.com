@@ -23,7 +23,7 @@ $menus = [
     <!--logo and iconic logo start-->
     <div class="logo">
         <a href="/" style="position: fixed;left: 34px;top: 9px;">
-            <img style="height: 25px;" src="{{ admin_asset('web/img/logo.png') }}" alt="">
+            <img style="height: 25px;" src="{{ admin_asset('org/images/org-logo.png') }}" alt="">
         </a>
     </div>
 

@@ -16,11 +16,11 @@ class BULoanStatus
      */
     const NOT_FOUND = "未知";
 
-    public static function getStatusDescriptionForC($status)
+    public static function getStatusDescriptionForC($status = null)
     {
         $info = [
-            LOAN_1000_CREATE => '创建贷款申请成功',
-            LOAN_1100_CREATE_ACCOUNT => '创建账号成功',
+            LOAN_1000_CREATE => '创建账号成功',
+            LOAN_1100_CREATE_ACCOUNT => '创建申请成功',
             LOAN_1200_SURE_FILE => '确认合同',
             LOAN_2000_SCHOOL_CONFIRM => '机构确认',
             LOAN_2100_SCHOOL_REFUSE => '机构拒绝',
@@ -57,20 +57,22 @@ class BULoanStatus
             LOAN_13000_EARLY_FINISH => '提前还款',
             LOAN_14000_FOREVER_REFUSE => '永久拒绝',
         ];
-        if (array_key_exists($status, $info)) {
+        if ($status === null) {
+            return $info;
+        } else if (array_key_exists($status, $info)) {
             return $info[$status];
         } else {
             return self::NOT_FOUND;
         }
     }
 
-    public static function getStatusDescriptionForB($status)
+    public static function getStatusDescriptionForB($status = null)
     {
         $info = [
-            LOAN_1000_CREATE => '创建贷款申请成功',
-            LOAN_1100_CREATE_ACCOUNT => '创建账号成功',
+            LOAN_1000_CREATE => '创建账号成功',
+            LOAN_1100_CREATE_ACCOUNT => '申请成功,机构审核',
             LOAN_1200_SURE_FILE => '确认合同',
-            LOAN_2000_SCHOOL_CONFIRM => '机构确认',
+            LOAN_2000_SCHOOL_CONFIRM => '机构确认,金融审核',
             LOAN_2100_SCHOOL_REFUSE => '机构拒绝',
             LOAN_3000_KZ_CONFIRM => '课栈已通过',
             LOAN_3100_KZ_REFUSE => '课栈已拒绝',
@@ -105,7 +107,9 @@ class BULoanStatus
             LOAN_13000_EARLY_FINISH => '提前还款',
             LOAN_14000_FOREVER_REFUSE => '永久拒绝',
         ];
-        if (array_key_exists($status, $info)) {
+        if ($status === null) {
+            return $info;
+        } else if (array_key_exists($status, $info)) {
             return $info[$status];
         } else {
             return self::NOT_FOUND;
@@ -113,11 +117,11 @@ class BULoanStatus
 
     }
 
-    public static function getStatusDescriptionForAdmin($status)
+    public static function getStatusDescriptionForAdmin($status = null)
     {
         $info = [
-            LOAN_1000_CREATE => '创建贷款申请成功',
-            LOAN_1100_CREATE_ACCOUNT => '创建账号成功',
+            LOAN_1000_CREATE => '创建账号成功',
+            LOAN_1100_CREATE_ACCOUNT => '创建申请成功',
             LOAN_1200_SURE_FILE => '确认合同',
             LOAN_2000_SCHOOL_CONFIRM => '机构确认',
             LOAN_2100_SCHOOL_REFUSE => '机构拒绝',
@@ -154,7 +158,9 @@ class BULoanStatus
             LOAN_13000_EARLY_FINISH => '提前还款',
             LOAN_14000_FOREVER_REFUSE => '永久拒绝',
         ];
-        if (array_key_exists($status, $info)) {
+        if ($status === null) {
+            return $info;
+        } else if (array_key_exists($status, $info)) {
             return $info[$status];
         } else {
             return self::NOT_FOUND;

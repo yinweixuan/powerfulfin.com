@@ -56,7 +56,7 @@
             </div>
             <div class="panel-footer">
                 <input type="hidden" name="query" value="1" />
-                <button class="btn btn-default btn-lg">查询</button>
+                <button class="btn btn-default">查询</button>
             </div>
         </form>
     </div>

@@ -57,7 +57,6 @@ class OrderController extends OrgBaseController
      */
     private function list($status, $view)
     {
-        //获取待报名的列表
         $lid = Input::get('lid');
         $fullName = Input::get('full_name');
         $identityNumber = Input::get('identity_number');

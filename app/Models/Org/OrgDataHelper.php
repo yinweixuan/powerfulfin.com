@@ -11,6 +11,7 @@ namespace App\Models\Org;
 use App\Components\ArrayUtil;
 use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\Server\BU\BULoanProduct;
+use App\Models\Server\BU\BULoanStatus;
 use Illuminate\Support\Facades\DB;
 
 class OrgDataHelper
@@ -25,7 +26,7 @@ class OrgDataHelper
         if (empty($ids)) {
             return $ret;
         }
-        $sql = "SELECT l.id id,l.id lid,ur.full_name full_name,ur.identity_number identity_number,oc.class_name class_name,oc.class_price class_price,l.borrow_money borrow_money,l.create_time create_time,l.resource resource, l.status status,l.loan_product loan_product FROM pf_loan l left join pf_org_class oc on l.class = oc.cid left join pf_users_real ur on l.uid = ur.uid where l.id in (" . implode(',', $ids) . ")";
+        $sql = "SELECT l.id id,l.id lid,ur.full_name full_name,u.phone phone,ur.identity_number identity_number,o.short_name org_short_name,o.org_name org_name,oc.class_name class_name,oc.class_price class_price,l.borrow_money borrow_money,l.org_receivable org_receivable,l.create_time create_time,l.loan_time loan_time,l.resource resource, l.status status,l.loan_product loan_product, l.audit_opinion audit_opinion FROM pf_loan l left join pf_org_class oc on l.class = oc.cid left join pf_users_real ur on l.uid = ur.uid left join pf_users u on l.uid = u.id left join pf_org o on l.oid = o.id where l.id in (" . implode(',', $ids) . ")";
         $result = DB::select($sql);
         $result = ArrayUtil::addKeyToArray($result, 'id');
         $ret = [];
@@ -37,11 +38,14 @@ class OrgDataHelper
             }
             $tmp = $result[$id];
             if (array_key_exists($tmp['loan_product'], $loanTypes)) {
-                $tmp['loan_product_desc'] = $loanTypes[$v['loan_product']];
+                $tmp['loan_product_desc'] = $loanTypes[$tmp['loan_product']];
             } else {
                 $tmp['loan_product_desc'] = '未知产品';
             }
             $tmp['resource_desc'] = BULoanProduct::getResourceCompany($tmp['resource'], true);
+            $tmp['status_B'] = BULoanStatus::getStatusDescriptionForB($tmp['status']);
+            $tmp['status_C'] = BULoanStatus::getStatusDescriptionForC($tmp['status']);
+            $tmp['status_A'] = BULoanStatus::getStatusDescriptionForAdmin($tmp['status']);
             $ret[$id] = $tmp;
         }
         return $ret;
