@@ -22,5 +22,6 @@ Route::group([
      * 机构管理
      */
     $router->get('/org/index', 'OrgController@index');
+    $router->get('/org/head', 'OrgController@head');
 
 });

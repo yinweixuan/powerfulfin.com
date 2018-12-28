@@ -10,6 +10,7 @@ namespace App\Admin\Models;
 
 
 use App\Models\ActiveRecord\ARPFOrg;
+use App\Models\ActiveRecord\ARPFOrgHead;
 use Illuminate\Support\Facades\DB;
 
 class OrgModel
@@ -55,5 +56,23 @@ class OrgModel
         $info = $query->paginate(10, ['id'], 'page', $data['page'])
             ->appends($data);
         return $info;
+    }
+
+    public static function getOrgHeadList($data)
+    {
+        $query = DB::table(ARPFOrgHead::TABLE_NAME)->select('*');
+        if (array_key_exists('hid', $data) && !empty($data['hid'])) {
+            $query->where('hid', $data['hid']);
+        }
+
+        if (array_key_exists('full_name', $data) && !empty($data['full_name'])) {
+            $query->where('full_name', 'like', '%' . $data['full_name'] . '%');
+        }
+
+        $query->orderByDesc('hid');
+        $info = $query->paginate(10, ['hid'], 'page', $data['page'])
+            ->appends($data);
+        return $info;
+
     }
 }

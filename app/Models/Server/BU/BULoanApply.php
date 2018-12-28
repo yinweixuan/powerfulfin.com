@@ -144,7 +144,7 @@ class BULoanApply
      * @param array $status
      * @throws PFException
      */
-    static public function checkDoingLoan($uid, array $status)
+    static public function checkDoingLoan($uid, array $status = [])
     {
         if (is_null($uid) || !is_numeric($uid)) {
             throw new PFException("提交参数异常：" . $uid, ERR_SYS_PARAM);

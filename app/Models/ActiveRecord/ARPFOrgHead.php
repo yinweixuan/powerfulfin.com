@@ -31,7 +31,7 @@ class ARPFOrgHead extends Model
         return $data;
     }
 
-    public static function update($hid, $update)
+    public static function updateInfo($hid, $update)
     {
         if (is_null($hid) || !is_numeric($hid) || $hid < 0) {
             return false;

@@ -11,18 +11,13 @@ namespace App\Admin\Controllers;
 
 use App\Admin\AdminController;
 use App\Admin\Models\OrgModel;
-use App\Models\ActiveRecord\ARPFOrg;
 use Encore\Admin\Layout\Content;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 class OrgController extends AdminController
 {
     public function index(Content $content)
     {
-        $info = DB::table(ARPFOrg::TABLE_NAME . ' as o')
-            ->select('*')
-            ->paginate(10);
         $data = [
             'page' => Input::get('page', 1),
             'oid' => Input::get('oid', ''),
@@ -42,5 +37,22 @@ class OrgController extends AdminController
                 ['text' => '机构列表', 'url' => '/admin/org']
             )
             ->row(view('admin.org.index', $data));
+    }
+
+    public function head(Content $content)
+    {
+        $data = [
+            'page' => Input::get('page'),
+            'hid' => Input::get('hid'),
+            'full_name' => Input::get('full_name')
+        ];
+        $data['info'] = OrgModel::getOrgHeadList($data);
+        return $content
+            ->header('商户列表')
+            ->description('商户管理')
+            ->breadcrumb(
+                ['text' => '商户列表', 'url' => '/admin/org/head']
+            )
+            ->row(view('admin.org.head', $data));
     }
 }
