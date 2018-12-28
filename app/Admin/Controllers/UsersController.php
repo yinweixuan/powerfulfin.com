@@ -10,13 +10,13 @@ namespace App\Admin\Controllers;
 
 
 use App\Admin\AdminController;
+use App\Admin\Models\UsersModel;
 use App\Models\ActiveRecord\ARPfUsers;
-use App\Models\ActiveRecord\ARPFUsersReal;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class UsersController extends AdminController
 {
@@ -30,13 +30,19 @@ class UsersController extends AdminController
      */
     public function index(Content $content)
     {
+        $page = Input::get('page', 1);
+        $uid = Input::get('uid', '');
+        $phone = Input::get('phone', '');
+        $full_name = Input::get('full_name', '');
+        $info = UsersModel::getUsers($page, $uid, $phone, $full_name);
+
         return $content
             ->header('用户列表')
             ->description('注册用户')
             ->breadcrumb(
                 ['text' => '用户列表', 'url' => '/admin/users']
             )
-            ->body($this->grid());
+            ->row(view('admin.user.index', ['info' => $info, 'uid' => $uid, 'phone' => $phone, 'full_name' => $full_name, 'page' => $page]));
     }
 
     /**
