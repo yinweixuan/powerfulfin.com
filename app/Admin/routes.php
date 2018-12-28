@@ -16,6 +16,7 @@ Route::group([
      */
     $router->get('/users/index', 'UsersController@index');
     $router->get('/users/real', 'UsersController@real');
+    $router->get('/users/banks', 'UsersController@banks');
 
     /**
      * 机构管理

@@ -37,7 +37,8 @@ class UsersController extends AdminController
             ->header('用户列表')
             ->description('注册用户')
             ->breadcrumb(
-                ['text' => '用户列表', 'url' => '/admin/users']
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '注册用户', 'url' => '/admin/users']
             )
             ->row(view('admin.user.index', ['info' => $info, 'uid' => $uid, 'phone' => $phone, 'full_name' => $full_name, 'page' => $page]));
     }
@@ -53,9 +54,32 @@ class UsersController extends AdminController
         return $content->header('实名用户')
             ->description('用户信息')
             ->breadcrumb(
-                ['text' => '用户列表', 'url' => '/admin/users']
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '实名用户', 'url' => '/admin/users/real']
             )
             ->row(view('admin.user.real', ['info' => $info, 'uid' => $uid, 'phone' => $phone, 'full_name' => $full_name, 'page' => $page, 'identity_number' => $identity_number]));
     }
+
+    public function banks(Content $content)
+    {
+
+        $data = [
+            'page' => Input::get('page', 1),
+            'uid' => Input::get('uid', ''),
+            'phone' => Input::get('phone', ''),
+            'bank_account' => Input::get('bank_account', ''),
+            'bank_code' => Input::get('bank_code', ''),
+            'full_name' => Input::get('full_name', '')
+        ];
+        $info = UsersModel::getUserBanks($data);
+        $data['info'] = $info;
+        return $content->header("银行卡")->description('银行卡列表')
+            ->breadcrumb(
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '银行卡', 'url' => '/admin/users/banks']
+            )
+            ->row(view('admin.user.banks', $data));
+    }
+
 
 }
