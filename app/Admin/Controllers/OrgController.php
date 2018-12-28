@@ -30,6 +30,7 @@ class OrgController extends AdminController
         ];
         $info = OrgModel::getOrgList($data);
         $data['info'] = $info;
+        admin_toastr('查询成功...', 'success');
         return $content
             ->header('机构列表')
             ->description('机构管理')
@@ -47,6 +48,7 @@ class OrgController extends AdminController
             'full_name' => Input::get('full_name')
         ];
         $data['info'] = OrgModel::getOrgHeadList($data);
+        admin_toastr('查询成功...', 'success');
         return $content
             ->header('商户列表')
             ->description('商户管理')
@@ -66,6 +68,7 @@ class OrgController extends AdminController
             'status' => Input::get('status'),
         ];
         $data['info'] = OrgModel::getClassList($data);
+        admin_toastr('查询成功...', 'success');
         return $content->header('课程管理')
             ->description('课程信息列表')
             ->breadcrumb(
@@ -84,6 +87,7 @@ class OrgController extends AdminController
             'org_name' => Input::get('org_name', '')
         ];
         $data['info'] = OrgModel::getUsersList($data);
+        admin_toastr('查询成功...', 'success');
         return $content->header('机构管理员')
             ->description('机构管理员信息列表')
             ->breadcrumb(
