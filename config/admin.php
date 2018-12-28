@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<img src="/web/img/logo.png" alt="Admin logo">',
+    'logo' => '<img src="/org/images/org-logo.png" style="height: 30px" alt="大圣分期">',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<img src="/web/img/logo.png" alt="Admin logo">',
+    'logo-mini' => '<img src="/web/img/logo.png" style="height: 30px" alt="大圣分期">',
 
     /*
     |--------------------------------------------------------------------------
