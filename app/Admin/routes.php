@@ -26,4 +26,9 @@ Route::group([
     $router->get('/org/class', 'OrgController@class');
     $router->get('/org/users', 'OrgController@users');
 
+    /**
+     * 订单管理
+     */
+    $router->get('/loan/index', 'LoanController@index');
+
 });

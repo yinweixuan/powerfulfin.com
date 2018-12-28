@@ -409,7 +409,7 @@ class BUUserInfo
             throw new PFException(ERR_GPS_CONTENT, ERR_GPS);
         }
         try {
-            BULoanApply::checkDoingLoan($user['id']);
+            BULoanApply::checkDoingLoan($uid);
         } catch (PFException $exception) {
             throw new PFException("存在贷中订单，请不要更改个人信息，谢谢！", ERR_SYS_PARAM);
         }
@@ -493,6 +493,7 @@ class BUUserInfo
             } else {
                 $userReal['idcard_national_pic_url'] = '';
             }
+            $userReal['uid'] = (string)$userReal['uid'];
             $userReal['user_real'] = self::checkUserReal($uid);
             return $userReal;
         }
@@ -519,6 +520,7 @@ class BUUserInfo
             ];
             return $params;
         } else {
+            $userContact['uid'] = (string)$userContact['uid'];
             return $userContact;
         }
 
@@ -562,6 +564,7 @@ class BUUserInfo
             } else {
                 $userWork['edu_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userWork['edu_pic']);
             }
+            $userWork['uid'] = (string)$userWork['uid'];
             return $userWork;
         }
 

@@ -189,15 +189,9 @@ class BUUserBank
             }
             $info['banks'] = $lists;
         } else {
-            $info['banks'] = new \stdClass();
+            $info['banks'] = array();
         }
-
-        $userReal = ARPFUsersReal::getInfo($uid);
-        $info['user_real'] = [
-            'full_name' => $userReal['full_name'],
-            'identity_number' => $userReal['identity_number']
-        ];
-
+        
         return $info;
     }
 
