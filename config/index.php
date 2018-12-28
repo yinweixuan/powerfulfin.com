@@ -7,11 +7,11 @@ return [
     //顶部banner
     'banner' => [
         [
-            'img' => '/img/banner/banner1.png',
+            'img' => 'http://www.powerfulfin.com/img/banner/banner1.png',
             'url' => 'http://www.baidu.com',
         ],
         [
-            'img' => '/img/banner/banner2.png',
+            'img' => 'http://www.powerfulfin.com/img/banner/banner2.png',
             'url' => 'http://www.baidu.com',
         ],
     ],

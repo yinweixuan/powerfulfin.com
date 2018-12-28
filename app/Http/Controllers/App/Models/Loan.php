@@ -235,80 +235,89 @@ class Loan
      * 首页获取订单详情
      * @param $uid
      * @return array
-     * @throws PFException
      */
-    public static function getHomeLoanInfo($uid)
-    {
-        if (is_null($uid) || !is_numeric($uid)) {
-            return [];
-        }
-
-        if (config('app.env') == 'product') {
-
-
+    public static function getHomeLoanInfo($uid = null) {
+        $data = [
+            'id' => 0,
+            'step' => 0,
+            'is_overdue' => 0,
+            'repay_date' => '',
+            'repay_money' => 0,
+            'can_repay' => 0,
+        ];
+        if (!is_null($uid) && is_numeric($uid)) {
             $loan = DB::table(ARPFLoan::TABLE_NAME)->select('*')
                 ->where('uid', $uid)
                 ->orderByDesc('id')
                 ->first();
-
-            if (empty($loan)) {
-                return [];
-            }
-
-            $org = ARPFOrg::getOrgById($loan['oid']);
-            $data = [
-                'status' => $loan['status'],
-                'status_desp' => BULoanStatus::getStatusDescriptionForC($loan['status']),
-                'repay_date' => '2019-01-15',
-                'repay_money' => '1205.12',
-                'remark' => $loan['remark'],
-                'buttons' => [
-                    [
-                        'name' => '订单详情',
-                        'url' => 'powerfulfin://loandetail?lid=' . $loan['id'],
-                        'style' => '1'
-                    ],
-
-                ],
-                'school_id' => $loan['oid'],
-                'school_name' => $org['name'],
-            ];
-
-            if (in_array($loan['status'], [LOAN_10000_REPAY, LOAN_11100_OVERDUE_KZ])) {
-                $data['repay_date'] = '2019-01-15';
-                $data['repay_money'] = '1205.12';
-                $data['buttons'][] = [
-                    'name' => '分期确认',
-                    'url' => 'powerfulfin://loanconfirm?lid=' . $loan['id'],
-                    'style' => 2
-                ];
-            }
-            return $data;
-        } else {
-            return $data = [
-                'status' => '1',
-                'status_img_2x' => '/img/loan/confirm2x.png',
-                'status_img_3x' => '/img/loan/confirm3x.png',
-                'status_desp' => '待确认',
-                'repay_date' => '2019-01-15',
-                'repay_money' => '1205.12',
-                'remark' => '请确认分期',
-                'buttons' => [
-                    [
-                        'name' => '订单详情',
-                        'url' => 'powerfulfin://loandetail?lid=123',
-                        'style' => '1'
-                    ],
-                    [
-                        'name' => '分期确认',
-                        'url' => 'powerfulfin://loanconfirm?lid=123',
-                        'style' => 2
+            if (!empty($loan)) {
+                $data['id'] = $loan['id'];
+                if (in_array($loan['status'], [
+                        LOAN_1200_SURE_FILE,
+                        LOAN_4500_STUDENT_SURE
                     ]
-                ],
-                'school_id' => 12345,
-                'school_name' => '恒企教育（东风北桥分校）',
-            ];
+                )) {
+                    //待确认
+                    $data['step'] = 2;
+                } elseif (in_array($loan['status'], [
+                        LOAN_2100_SCHOOL_REFUSE,
+                        LOAN_3100_KZ_REFUSE,
+                        LOAN_4100_P2P_REFUSE,
+                        LOAN_14000_FOREVER_REFUSE,
+                        LOAN_10200_REVOCATION,
+                    ]
+                )) {
+                    //已拒绝
+                    $data['step'] = 3;
+                } elseif (in_array($loan['status'], [
+                        LOAN_5100_SCHOOL_REFUSE,
+                        LOAN_5200_SCHOOL_STOP,
+                        LOAN_5400_CHANGE_RESOURCE,
+                        LOAN_5500_PAY_TIME_OUT,
+                        LOAN_10100_REFUSE,
+                        LOAN_10200_REVOCATION,
+                        LOAN_11500_BAD,
+                        LOAN_11000_FINISH,
+                        LOAN_12000_DROP,
+                        LOAN_13000_EARLY_FINISH,
+                    ]
+                )) {
+                    //已终止
+                    $data['step'] = 4;
+                } elseif (in_array($loan['status'], [
+                        LOAN_10000_REPAY,
+                        LOAN_11100_OVERDUE_KZ,
+                        LOAN_11200_OVERDUE_P2P,
+                    ]
+                )) {
+                    //还款/逾期中
+                    $data['step'] = 5;
+                    $loan_bill = ARPFLoanBill::getLoanBillByLidAndUid($loan['id'], $uid);
+                    $bill_date = '';
+                    foreach ($loan_bill as $bill) {
+                        if (in_array($bill['status'], [0, 2]) && $bill['bill_date'] < $bill_date) {
+                            $data['repay_date'] = date('Y-m-d', strtotime($bill['bill_date'] . '15'));
+                            $data['repay_money'] = $bill['miss_total'];
+                            $bill_date = $bill['bill_date'];
+                        }
+                    }
+                    if (in_array($loan['resource'], [RESOURCE_JCFC])) {
+                        $data['can_repay'] = 1;
+                    }
+                    if (in_array($loan['status'], [
+                            LOAN_11100_OVERDUE_KZ,
+                            LOAN_11200_OVERDUE_P2P,
+                        ]
+                    )) {
+                        $data['is_overdue'] = 1;
+                    }
+                } else {
+                    //审核中
+                    $data['step'] = 1;
+                }
+            }
         }
+        return $data;
     }
 
 }

@@ -12,19 +12,24 @@ namespace App\Http\Controllers\App\V1;
 use App\Http\Controllers\App\AppController;
 use App\Components\OutputUtil;
 use App\Components\AliyunOpenSearchUtil;
+use App\Http\Controllers\App\Models\Loan;
+use App\Models\DataBus;
 
 class IndexController extends AppController {
 
     public function index() {
-        $version = mt_rand(0, 1);
+        $version = mt_rand(0, 3);
         $mac = mt_rand(0, 1) == 1 ? '' : 'AA:AA:AA:AA:AA:AA';
         $loan = [
             'id' => 123,
             'step' => mt_rand(0, 5),
             'is_overdue' => mt_rand(0, 1),
             'repay_date' => '2019-02-15',
-            'repay_money' => mt_rand(10000, 500000) / 100
+            'repay_money' => mt_rand(10000, 500000) / 100,
+            'can_repay' => mt_rand(0, 1),
         ];
+        $uid = DataBus::getUid();
+//        $loan = Loan::getHomeLoanInfo($uid);
         $data = [];
         $data['audit'] = $this->getAppStoreAudit($version);
         $data['banner'] = $this->getBanner();
@@ -61,12 +66,13 @@ class IndexController extends AppController {
         $repay_date = $loan['repay_date'];
         $repay_money = $loan['repay_money'];
         $is_overdue = $loan['is_overdue'];
+        $can_repay = $loan['can_repay'];
         if ($step == 1) {
             //审核中
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => '/img/loan/audit2x.png',
-                'status_img_3x' => '/img/loan/audit3x.png',
+                'status_img_2x' => 'http://www.powerfulfin.com/img/loan/audit2x.png',
+                'status_img_3x' => 'http://www.powerfulfin.com/img/loan/audit3x.png',
                 'status_desp' => '审核中',
                 'remark' => '您的分期正在审核中，请耐心等待',
                 'buttons' => [
@@ -77,8 +83,8 @@ class IndexController extends AppController {
             //待确认
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => '/img/loan/confirm2x.png',
-                'status_img_3x' => '/img/loan/confirm3x.png',
+                'status_img_2x' => 'http://www.powerfulfin.com/img/loan/confirm2x.png',
+                'status_img_3x' => 'http://www.powerfulfin.com/img/loan/confirm3x.png',
                 'status_desp' => '待确认',
                 'remark' => '请您确认分期',
                 'buttons' => [
@@ -90,8 +96,8 @@ class IndexController extends AppController {
             //已拒绝
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => '/img/loan/refused2x.png',
-                'status_img_3x' => '/img/loan/refused3x.png',
+                'status_img_2x' => 'http://www.powerfulfin.com/img/loan/refused2x.png',
+                'status_img_3x' => 'http://www.powerfulfin.com/img/loan/refused3x.png',
                 'status_desp' => '已拒绝',
                 'remark' => '您的分期已被拒绝',
                 'buttons' => [
@@ -102,8 +108,8 @@ class IndexController extends AppController {
             //已终止
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => '/img/loan/end2x.png',
-                'status_img_3x' => '/img/loan/end3x.png',
+                'status_img_2x' => 'http://www.powerfulfin.com/img/loan/end2x.png',
+                'status_img_3x' => 'http://www.powerfulfin.com/img/loan/end3x.png',
                 'status_desp' => '已终止',
                 'remark' => '您的分期已终止',
                 'buttons' => [
@@ -119,10 +125,12 @@ class IndexController extends AppController {
                 'repay_money' => $repay_money,
                 'is_overdue' => '0',
                 'buttons' => [
-                    $this->getButton(1, $lid),
-                    $this->getButton(3, $lid)
+                    $this->getButton(1, $lid)
                 ]
             ];
+            if ($can_repay) {
+                $data_detail['buttons'][] = $this->getButton(3, $lid);
+            }
             if ($is_overdue) {
                 $data_detail['remark'] = '您已逾期，请尽快偿还';
                 $data_detail['is_overdue'] = '1';
@@ -208,8 +216,8 @@ class IndexController extends AppController {
                         'status' => '0',
                         'school_id' => $school['id'],
                         'school_name' => $school['org_name'],
-                        'status_img_2x' => '/img/loan/recommend2x.png',
-                        'status_img_3x' => '/img/loan/recommend3x.png',
+                        'status_img_2x' => 'http://www.powerfulfin.com/img/loan/recommend2x.png',
+                        'status_img_3x' => 'http://www.powerfulfin.com/img/loan/recommend3x.png',
                         'buttons' => [
                             $this->getButton(4, $school['id']),
                             $this->getButton(5)
