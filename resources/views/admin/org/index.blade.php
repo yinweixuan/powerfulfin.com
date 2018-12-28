@@ -9,55 +9,44 @@
         </div>
         <form class="form_inline" role="form" name='form1' action=""
               method="get">
-            <input type="hidden" name="is_finance" value="1">
-            <input type="hidden" name="excel" value="0"/>
-            <input type="hidden" name="query" value="1"/>
+            <input type="hidden" name="page" value="{{$page}}"/>
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>关键字：</label>
+                            <label>机构id：</label>
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-university"></i>
                                 </div>
-                                <input type="text" name="keyword" class="form-control input-sm" placeholder="机构ID/机构简称"
-                                       value="">
+                                <input type="text" name="oid" class="form-control input-sm" placeholder="机构ID/机构简称"
+                                       value="{{$oid}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>省份：</label>
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;"
+                            <select class="form-control" style="width: 100%;"
                                     tabindex="-1" aria-hidden="true" id="select_province" name="province">
                                 <option value="0">请选择...</option>
 
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>金融状态：</label>
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;"
-                                    tabindex="-1" aria-hidden="true" id="select_status" name="b_status">
-                                <option value="-1">请选择...</option>
-
-                                </option>
-                            </select>
-                        </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>金融总校：</label>
+                            <label>机构名称：</label>
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-university"></i>
                                 </div>
-                                <input type="text" name="sbid" class="form-control input-sm" placeholder="请输入金融总校ID"
-                                       onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');"
-                                       value="">
+                                <input type="text" name="org_name" class="form-control input-sm"
+                                       placeholder="请输入机构名称，模糊查询"
+                                       value="{{$org_name}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>城市：</label>
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;"
+                            <select class="form-control" style="width: 100%;"
                                     tabindex="-1" aria-hidden="true" id="select_city" name="city">
                                 <option value="0">请选择...</option>
 
@@ -66,45 +55,20 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>相关商务：</label>
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;"
-                                    tabindex="-1" aria-hidden="true" id="busi_id" name="busi_id">
-                                <option value="0">请选择...</option>
-
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>是否上架:</label>
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;"
-                                    tabindex="-1" aria-hidden="true" name="status">
-                                <option value="-1">请选择上下架状态</option>
-
-                            </select>
+                            <label>金融ID：</label>
+                            <input type="text" name="org_name" class="form-control input-sm"
+                                   placeholder="请输入金融ID"
+                                   value="{{$hid}}">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>创建时间:</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control pull-right datepicker" placeholder="开始时间"
-                                       name="beginDate" value="">
-                                <div class="input-group-addon">至</div>
-                                <input type="text" class="form-control pull-right datepicker" name="endDate"
-                                       placeholder="结束时间" value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label>是否分期:</label>
-                            <select class="form-control select2 select2-hidden-accessible" style="width: 100%;"
+                            <select class="form-control" style="width: 100%;"
                                     tabindex="-1" aria-hidden="true" name="can_loan">
-                                <option value="-1">请选择是否支持分期</option>
-                                <option value="0">课程不支持分期
-                                </option>
-                                <option value="1">课程支持分期
-                                </option>
+                                <option value="">请选择是否支持分期</option>
+                                <option value="SUCCESS" @if($can_loan == 'SUCCESS') selected @endif>支持分期</option>
+                                <option value="FAIL" @if($can_loan == 'FAIL') selected @endif>不支持分期</option>
                             </select>
                         </div>
                     </div>
@@ -112,8 +76,6 @@
             </div>
             <div class="box-footer">
                 <button type="submit" class="btn btn-primary">查询</button>
-                <input type='button' class="btn btn-primary"
-                       onclick="document.getElementsByName('excel')[0].value=1;document.form1.submit();" value='导出'>
             </div>
         </form>
     </div>
@@ -190,5 +152,5 @@
     </div>
 </section>
 <script type="text/javascript">
-    var url = location.href;
+    
 </script>

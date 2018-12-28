@@ -34,7 +34,7 @@ class UsersModel
         }
         $query->orderByDesc('u.id');
 
-        $info = $query->paginate(2, ['u.id'], 'page', $page)
+        $info = $query->paginate(10, ['u.id'], 'page', $page)
             ->appends(['uid' => $uid, 'phone' => $phone, 'full_name' => $full_name]);
         return $info;
     }
@@ -63,7 +63,7 @@ class UsersModel
 
         $query->orderByDesc('ur.uid');
 
-        $info = $query->paginate(2, ['ur.uid'], 'page', $page)
+        $info = $query->paginate(10, ['ur.uid'], 'page', $page)
             ->appends(['uid' => $uid, 'phone' => $phone, 'full_name' => $full_name, 'identity_number' => $identity_number]);
         return $info;
     }
@@ -96,7 +96,7 @@ class UsersModel
 
         $query->orderByDesc('ub.id');
         $query->orderByDesc('ub.uid');
-        $info = $query->paginate(2, ['ub.id'], 'page', $data['page'])
+        $info = $query->paginate(10, ['ub.id'], 'page', $data['page'])
             ->appends($data);
         return $info;
 
