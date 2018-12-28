@@ -42,7 +42,7 @@ class OrgController extends AdminController
     public function head(Content $content)
     {
         $data = [
-            'page' => Input::get('page'),
+            'page' => Input::get('page', 1),
             'hid' => Input::get('hid'),
             'full_name' => Input::get('full_name')
         ];
@@ -54,5 +54,41 @@ class OrgController extends AdminController
                 ['text' => '商户列表', 'url' => '/admin/org/head']
             )
             ->row(view('admin.org.head', $data));
+    }
+
+    public function class(Content $content)
+    {
+        $data = [
+            'page' => Input::get('page', 1),
+            'id' => Input::get('id', ''),
+            'oid' => Input::get('oid', ''),
+            'class_name' => Input::get('class_name', ''),
+            'status' => Input::get('status'),
+        ];
+        $data['info'] = OrgModel::getClassList($data);
+        return $content->header('课程管理')
+            ->description('课程信息列表')
+            ->breadcrumb(
+                ['text' => '课程管理', 'url' => '/admin/org/class']
+            )
+            ->row(view('admin.org.class', $data));
+    }
+
+    public function users(Content $content)
+    {
+        $data = [
+            'page' => Input::get('page', 1),
+            'org_uid' => Input::get('org_uid', ''),
+            'oid' => Input::get('oid', ''),
+            'org_username' => Input::get('org_username', ''),
+            'org_name' => Input::get('org_name', '')
+        ];
+        $data['info'] = OrgModel::getUsersList($data);
+        return $content->header('机构管理员')
+            ->description('机构管理员信息列表')
+            ->breadcrumb(
+                ['text' => '机构管理员', 'url' => '/admin/org/class']
+            )
+            ->row(view('admin.org.users', $data));
     }
 }

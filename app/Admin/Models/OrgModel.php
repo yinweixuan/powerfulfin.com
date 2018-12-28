@@ -10,7 +10,9 @@ namespace App\Admin\Models;
 
 
 use App\Models\ActiveRecord\ARPFOrg;
+use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
+use App\Models\ActiveRecord\ARPFOrgUsers;
 use Illuminate\Support\Facades\DB;
 
 class OrgModel
@@ -71,6 +73,59 @@ class OrgModel
 
         $query->orderByDesc('hid');
         $info = $query->paginate(10, ['hid'], 'page', $data['page'])
+            ->appends($data);
+        return $info;
+    }
+
+    public static function getClassList($data)
+    {
+        $query = DB::table(ARPFOrgClass::TABLE_NAME . ' as oc')
+            ->select(['oc.*','o.org_name'])
+            ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'oc.oid');
+
+
+        if (array_key_exists('id', $data) && !empty($data['id'])) {
+            $query->where('oc.cid', $data['id']);
+        }
+
+        if (array_key_exists('oid', $data) && !empty($data['oid'])) {
+            $query->where('oc.oid', $data['oid']);
+        }
+
+        if (array_key_exists('class_name', $data) && !empty($data['class_name'])) {
+            $query->where('oc.class_name', 'like', '%' . $data['class_name'] . '%');
+        }
+
+        if (array_key_exists('status', $data) && !empty($data['status'])) {
+            $query->where('oc.status', $data['status']);
+        }
+
+        $query->orderByDesc('oc.cid');
+        $info = $query->paginate(10, ['oc.cid'], 'page', $data['page'])
+            ->appends($data);
+        return $info;
+    }
+
+    public static function getUsersList($data)
+    {
+        $query = DB::table(ARPFOrgUsers::TABLE_NAME . ' as ou')
+            ->select('*')
+            ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'ou.org_id', '=', 'o.id');
+
+        if (array_key_exists('org_uid', $data) && !empty($data['org_uid'])) {
+            $query->where('ou.org_uid', $data['org_uid']);
+        }
+        if (array_key_exists('oid', $data) && !empty($data['oid'])) {
+            $query->where('ou.org_id', $data['oid']);
+        }
+        if (array_key_exists('org_username', $data) && !empty($data['org_username'])) {
+            $query->where('ou.org_username', $data['org_username']);
+        }
+        if (array_key_exists('org_name', $data) && !empty($data['org_name'])) {
+            $query->where('o.org_name', 'like', '%' . $data['org_name'] . '%');
+        }
+        $query->orderByDesc('ou.org_uid');
+        $info = $query->paginate(10, ['ou.org_uid'], 'page', $data['page'])
             ->appends($data);
         return $info;
 

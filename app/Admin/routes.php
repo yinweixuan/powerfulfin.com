@@ -23,5 +23,7 @@ Route::group([
      */
     $router->get('/org/index', 'OrgController@index');
     $router->get('/org/head', 'OrgController@head');
+    $router->get('/org/class', 'OrgController@class');
+    $router->get('/org/users', 'OrgController@users');
 
 });
