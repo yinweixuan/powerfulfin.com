@@ -204,7 +204,6 @@
     function goUrl(page) {
         var page = "page_" + page;
         var url = $("#" + page + "").data();
-        console.log(url);
         $.pjax({
             url: url['url'],
             container: '#pjax-content',

@@ -51,3 +51,10 @@ define('LOAN_11500_BAD', 11500);                //坏账,终止
 define('LOAN_12000_DROP', 12000);               //退课
 define('LOAN_13000_EARLY_FINISH', 13000);       //提前还款
 define('LOAN_14000_FOREVER_REFUSE', 14000);     //永久拒绝
+
+
+define('BILL_STATUS_DOING', 0);        //账期待还
+define('BILL_STATUS_DONE', 1);          //已还
+define('BILL_STATUS_OVERDUE', 2);       //逾期
+define('BILL_STATUS_EARLY', 3);         //提前还款
+define('BILL_STATUS_DROP', 4);          //退课
