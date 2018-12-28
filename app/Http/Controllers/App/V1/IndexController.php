@@ -201,8 +201,8 @@ class IndexController extends AppController {
     public function getRecommend($mac = null) {
         $recommend = [
             'status' => '0',
-            'status_img_2x' => '/img/loan/noresult2x.png',
-            'status_img_3x' => '/img/loan/noresult3x.png',
+            'status_img_2x' => 'http://www.powerfulfin.com/img/loan/noresult2x.png',
+            'status_img_3x' => 'http://www.powerfulfin.com/img/loan/noresult3x.png',
             'buttons' => [
                 $this->getButton(5)
             ]
