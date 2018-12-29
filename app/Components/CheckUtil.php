@@ -213,7 +213,7 @@ class CheckUtil
         for ($i = $cc_length - 5; $i >= 0; $i--) {
             // ADDS HYPHEN HERE
             if ((($i + 1) - $cc_length) % 4 == 0) {
-                $newCreditCard = '-' . $newCreditCard;
+                $newCreditCard = '*' . $newCreditCard;
             }
             $newCreditCard = $cc[$i] . $newCreditCard;
         }
@@ -223,7 +223,7 @@ class CheckUtil
                 if ($newCreditCard[$i] == '-') {
                     continue;
                 }
-                $newCreditCard[$i] = 'X';
+                $newCreditCard[$i] = '*';
             }
         }
 
