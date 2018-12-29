@@ -11,13 +11,18 @@ namespace App\Models\Server\BU;
 
 use App\Components\ArrayUtil;
 use App\Components\HttpUtil;
+use App\Components\OutputUtil;
 use App\Components\PFException;
 use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
+use App\Models\ActiveRecord\ARPFUsersBank;
+use App\Models\ActiveRecord\ARPFUsersContact;
 use App\Models\ActiveRecord\ARPFUsersPhonebook;
+use App\Models\ActiveRecord\ARPFUsersReal;
+use App\Models\ActiveRecord\ARPFUsersWork;
 use App\Models\DataBus;
 use Illuminate\Support\Facades\DB;
 
@@ -273,5 +278,42 @@ class BULoanApply
         }
     }
 
+    /**
+     * 根据订单号,查找该订单的所有信息
+     * @param $lid
+     */
+    public static function getDetailById($lid)
+    {
+        $ret = [];
+        $loan = ARPFLoan::getLoanById($lid);
+        //判断是json,如果不存在,则拉取各个表的数据进行拼装
+        if (array_key_exists('supply_info', $loan) && strlen($loan['supply_info']) >= 10) {
+            $ret = OutputUtil::json_decode($loan['supply_info']);
+            $ret['info_from'] = 'supply_info';
+        } else {
+            $ret['base'] = $loan;
+            $ret['info_from'] = 'table';
+            $ret['real'] = ARPFUsersReal::getInfo($loan['uid']);
+            $ret['bank'] = ARPFUsersBank::getUserBanksByUid($loan['uid']);
+            $ret['contact'] = ARPFUsersContact::getContractInfo($loan['uid']);
+            $ret['work'] = ARPFUsersWork::getUserWork($loan['uid']);
+            $ret['location'] = ARPFUsersContact::getContractInfo($loan['uid']);
+            $ret['phonebook'] = ARPFUsersPhonebook::getPhoneBookLastOneByUid($loan['uid']);
+        }
+        //补充机构和课程信息
+        $ret['org'] = ARPFOrg::getOrgById($loan['oid']);
+        //补充资方,费率信息
+        $ret['base']['resource_desc'] = BULoanProduct::getResourceCompany($ret['base']['resource']);
+        $ret['base']['resource_desc_simple'] = BULoanProduct::getResourceCompany($ret['base']['resource'], true);
+        $loanProduct = BULoanProduct::getLoanTypeByIds($loan['loan_product']);
+        if (array_key_exists($loan['loan_product'], $loanProduct)) {
+            $ret['base']['loan_product_config'] = $loanProduct[$loan['loan_product']];
+            $ret['base']['loan_product_desc'] = $loanProduct[$loan['loan_product']]['name'];
+        } else {
+            $ret['base']['loan_product_config'] = [];
+            $ret['base']['loan_product_desc'] = '未知';
+        }
+        return $ret;
+    }
 
 }

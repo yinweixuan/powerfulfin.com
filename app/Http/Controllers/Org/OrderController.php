@@ -105,6 +105,15 @@ class OrderController extends OrgBaseController
     public function detail()
     {
         $data = [];
+        $lid = Input::get('lid');
+        $data['lid'] = $lid;
+        try {
+            $loan = BULoanApply::getDetailById($lid);
+            //检查是否属于该机构
+            var_dump($loan);
+        } catch (\Exception $e) {
+            $data['errmsg'] = $e->getMessage();
+        }
         return $this->view('org.order.detail', $data);
     }
 
