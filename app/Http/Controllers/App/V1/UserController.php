@@ -216,6 +216,9 @@ class UserController extends AppController
                 'idcard_national_pic_url' => '',
                 'idcard_national_pic' => ''];
             $data = ARPFUsersAuthLog::getInfoTrueByOrder($orderId);
+            if (empty($data)) {
+                throw new PFException(ERR_UPLOAD_CONTENT . ':错误订单号:' . $orderId, ERR_UPLOAD);
+            }
             if ($data['uid'] != DataBus::get('uid')) {
                 throw new PFException(ERR_UPLOAD_CONTENT . ":请求文件非当前用户所有", ERR_UPLOAD);
             }
@@ -228,7 +231,7 @@ class UserController extends AppController
 
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $img);
         } catch (PFException $exception) {
-            OutputUtil::err($exception->getMessage(), $exception->getCode());
+            OutputUtil::err($exception->getMessage(), $exception->getCode(), ['order' => $orderId]);
         }
     }
 

@@ -13,6 +13,10 @@ use App\Components\OutputUtil;
 use App\Http\Controllers\Controller;
 use App\Models\DataBus;
 use App\Models\Server\BU\BUAppMobile;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
+
+use Symfony\Component\HttpKernel\Log\Logger;
 
 class AppController extends Controller
 {
@@ -35,6 +39,7 @@ class AppController extends Controller
         $this->isWX = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'micromessenger') !== false ? true : false);
         $this->isAppcan = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'appcan') !== false ? true : false);
         $this->mobileModel();
+        Log::info(json_encode(Input::get()));
     }
 
     /**
