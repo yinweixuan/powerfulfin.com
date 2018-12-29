@@ -52,8 +52,9 @@ class BUUdcredit
             $dir = 'simg' . DIRECTORY_SEPARATOR . date("Ym");
             $fileName = $uid . '_' . date('His') . '_' . intval(microtime(true)) . '_' . rand(1, 9999) . ".png";
             $filePath = $dir . DIRECTORY_SEPARATOR . $fileName;
-            if (!file_exists(PATH_STORAGE . '/' . $dir)) {
-                mkdir(PATH_STORAGE . '/' . $dir,0777,true);
+            $savePath = PATH_STORAGE . DIRECTORY_SEPARATOR . $dir;
+            if (!file_exists($savePath)) {
+                mkdir($savePath, 0777, true);
             }
             file_put_contents(PATH_STORAGE . '/' . $filePath, base64_decode($base64_image_content));
             AliyunOSSUtil::upload(AliyunOSSUtil::getLoanBucket(), $filePath, PATH_STORAGE . '/' . $filePath);
