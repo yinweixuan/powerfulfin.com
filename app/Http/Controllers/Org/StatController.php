@@ -18,6 +18,7 @@ use App\Models\ActiveRecord\ARPFUsers;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\Server\BU\BULoanStatus;
+use App\Models\Server\BU\BUOrgStat;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -125,6 +126,14 @@ class StatController extends OrgBaseController
     public function sumup()
     {
         $data = [];
+        try {
+            $data['stat'] = BUOrgStat::orgGeneral([OrgDataBus::get('org_id')]);
+            $org = OrgDataBus::get('org');
+            //先不打开总校统计开关
+            //$data['headStat'] = BUOrgStat::headGeneral([$org['hid']]);
+        } catch (\Exception $e) {
+            $data['errmsg'] = $e->getMessage();
+        }
         return $this->view('org.stat.sumup', $data);
     }
 }
