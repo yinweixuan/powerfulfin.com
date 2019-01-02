@@ -106,7 +106,7 @@ class Loan
     {
         $loanList = DB::table(ARPFLoan::TABLE_NAME . ' as l')
             ->select(['l.id', 'l.borrow_money', 'l.status', 'o.org_name'])
-            ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'l.cid')
+            ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'l.oid')
             ->where('l.uid', $uid)
             ->orderByDesc('id')
             ->get()->toArray();
@@ -127,13 +127,7 @@ class Loan
 
     public static function getLoanConfig($oid, $uid)
     {
-        if ($loanList = self::getLoanList($uid)) {
-            foreach ($loanList as $item) {
-                if (in_array($item['status'], [])) {
-                    throw new PFException("您目前存在贷中订单，请稍后重试", ERR_SYS_PARAM);
-                }
-            }
-        }
+        BULoanApply::checkDoingLoan($uid);
 
         $user = ARPfUsers::getUserAllInfo($uid);
         if (empty($user)) {
@@ -149,14 +143,13 @@ class Loan
         if (empty($orgHead) || empty($orgHead['loan_product'])) {
             throw new PFException("机构暂不支持分期业务，请稍后再试！", ERR_SYS_PARAM);
         }
-
         $class = ARPFOrgClass::getClassByOidWhichCanLoan($oid);
-        if (empty($classInfo)) {
-            throw new PFException("暂未获取到可分期订单，请稍后再试!", ERR_SYS_PARAM);
+        if (empty($class)) {
+            throw new PFException("暂未获取到可分期课程，请稍后再试!", ERR_SYS_PARAM);
         }
 
         $loan_product = ArrayUtil::escapeEmpty(explode(',', $orgHead['loan_product']));
-        $loanProducts = BULoanProduct::getLoanTypeByIds($loan_product, false);
+        $loanProducts = BULoanProduct::getLoanTypeByIds($loan_product, false, STATUS_SUCCESS);
 
         //计算用户支持的费率ID
         $resource = self::getUserResource($user['uid'], $loanProducts, $orgHead, $org);
@@ -167,18 +160,14 @@ class Loan
         }
 
         $loanProducts = array_values($loanProducts);
-        $data = BULoanConfig::getConfig($user, $org, $orgHead, $class, $loanProducts, $resource);
+        $data = BULoanConfig::getConfig($org, $orgHead, $class, $loanProducts, $resource);
 
         //判断资金方是否需要手持身份证照片
         $data['idcard_person_pic_switch'] = BULoanConfig::getIdcardPersonPic($resource);
         //判断资金方是否需要场景照
         $data['school_pic_switch'] = BULoanConfig::getSchoolPic($resource);
-        //判断是否开启审核时间
-        $data['review_time_switch'] = BULoanConfig::getReviewTimeSwitch();
         //开课时间
         $data['course_open_time_switch'] = true;
-        //判断班级是否需要开启，目前为潭州必须填写
-        $data['class_switch'] = BULoanConfig::getClassSwitch($orgHead['hid']);
         //重新定义是否需要培训协议照片
         $data['train'] = BULoanConfig::getTrainingContractSwitch($resource, $orgHead['hid']);
         return $data;

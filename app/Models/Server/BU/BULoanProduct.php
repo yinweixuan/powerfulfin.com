@@ -40,9 +40,11 @@ class BULoanProduct
     /**
      * 解析费率模板
      * @param type $ids
+     * @param bool $isMemcache
+     * @param $status
      * @return array
      */
-    public static function getLoanTypeByIds($ids, $withCate = true)
+    public static function getLoanTypeByIds($ids, $isMemcache = true,$status)
     {
         $ret = array();
         if (empty($ids)) {
@@ -50,7 +52,7 @@ class BULoanProduct
         }
         static $config = array();
         if (empty($config)) {
-            $config = self::getLoanTypeAll();
+            $config = self::getLoanTypeAll($isMemcache,$status);
         }
         foreach ($ids as $id) {
             if (isset($config[$id])) {
@@ -58,7 +60,7 @@ class BULoanProduct
                 $nameAndDesp = self::getLoanTypeNameAndDesp($tmp);
                 $tmp = array_merge($tmp, $nameAndDesp);
 
-                if ($withCate) {
+                if ($status) {
                     $tmp['name'] .= "({$tmp['cate']})";
                 }
                 $ret[$id] = $tmp;
@@ -67,12 +69,12 @@ class BULoanProduct
         return $ret;
     }
 
-    public static function getLoanTypeAll()
+    public static function getLoanTypeAll($isMemcache=true,$status)
     {
         $config = array();
         try {
-            $loanTypeAll = ARPFLoanProduct::getLoanTypeAll(true);
-            foreach ($loanTypeAll as &$item) {
+            $loanTypeAll = ARPFLoanProduct::getLoanProductAll($isMemcache, $status);
+            foreach ($loanTypeAll as $key => &$item) {
                 $item['resource_company'] = ARPFLoanProduct::$resourceCompany[$item['resource']];
                 $config[$item['loan_product']] = $item;
             }
@@ -86,6 +88,7 @@ class BULoanProduct
      * 获取资金方描述
      * @param $resource
      * @param $isSimple 简称
+     * @return string
      */
     public static function getResourceCompany($resource, $isSimple = false)
     {

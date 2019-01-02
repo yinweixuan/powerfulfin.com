@@ -27,7 +27,6 @@ class BULoanConfig
 
     /**
      * 配置集合
-     * @param array $user 用户信息
      * @param array $org 机构信息
      * @param array $orgHead 机构金融信息
      * @param array $class 课程信息
@@ -35,7 +34,7 @@ class BULoanConfig
      * @param $resource
      * @return array|bool|mixed|string
      */
-    public static function getConfig(array $user, array $org, array $orgHead, array $class, array $loanProducts, $resource)
+    public static function getConfig( array $org, array $orgHead, array $class, array $loanProducts, $resource)
     {
         $redis = RedisUtil::getInstance();
         $key = self::REDIS_KEY_FOR_FUNCTION_GETCONFGI . '_' . md5($org['id']);
@@ -45,10 +44,8 @@ class BULoanConfig
         } else {
             $data = array(
                 'loanProducts' => $loanProducts,  //所支持的费率类型
-                'user' => $user,    //用户信息
                 'course' => self::getClassInfo($class, $orgHead, $resource),   //课程信息描述
                 'courseOpenDefaultTime' => date('Y-m-d', strtotime('+1 day')),//开课默认时间(当前日期加一天)
-                'reviewTime' => self::getReviewTime(), //审核时间
                 'statement_pic' => self::getStatementPic($org['hid']),//是否需要上传申明图片，需要 true，不需要 FALSE
                 'train' => self::getTrainingContract($org['hid']),   //判断是否需要培训协议
             );
@@ -73,40 +70,6 @@ class BULoanConfig
     public static function getRelationsTwo()
     {
         return array('父母', '配偶', '监护人', '子女', '兄弟姐妹', '亲属', '同事', '朋友', '同学', '其他',);
-    }
-
-    /**
-     * 获取审核时间范围
-     * @return array|mixed
-     */
-    public static function getReviewTime()
-    {
-        $reviewTime = ['9:00-11:00', '11:00-13:00', '13:00-15:00', '15:00-17:00', '17:00-19:00',];
-        $time = time();
-        $review = array();
-        if ($time > strtotime(date('Y-m-d') . ' 00:00:00') && $time < strtotime(date('Y-m-d') . ' 09:00:00')) {
-            $review = $reviewTime;
-            $review[0] = '尽快审核';
-        } elseif ($time > strtotime(date('Y-m-d') . ' 19:00:00') && $time < strtotime(date('Y-m-d') . ' 23:59:59')) {
-            foreach ($reviewTime as $key => $value) {
-                $review[$key + 5] = $value . '(明天)';
-            }
-            $review[0] = '尽快审核';
-        } else {
-            foreach ($reviewTime as $key => $value) {
-                list($min, $max) = explode('-', $value);
-                if ($time > strtotime(date('Y-m-d') . $max)) {
-                    $review[$key + 5] = $value . '(明天)';
-                } elseif ($time > strtotime(date('Y-m-d') . $min) && $time < strtotime(date('Y-m-d') . $max)) {
-                    $review[$key] = '尽快审核';
-                } elseif ($time < strtotime(date('Y-m-d') . $min)) {
-                    $review[$key] = $value;
-                }
-
-            }
-        }
-        ksort($review);
-        return $review;
     }
 
     /**
@@ -244,18 +207,23 @@ class BULoanConfig
 
     public static function getClassInfo($classes, $orgHead, $resource)
     {
-        foreach ($classes as $key => &$class) {
+        $result = [];
+        foreach ($classes as $key => $class) {
             if ($class['status'] != STATUS_SUCCESS) {
-                unset($class[$key]);
                 continue;
             }
-            unset($classes[$key]['create_time']);
-            unset($classes[$key]['update_time']);
             $limit = self::getMoneyApplyLimit($class, $orgHead, $resource);
-            $class['money_apply_max'] = $limit['money_apply_max'];
-            $class['money_apply_min'] = $limit['money_apply_min'];
+            $tmp = [
+                'cid' => $class['cid'],
+                'class_name' => $class['class_name'],
+                'money_apply_max' => $limit['money_apply_max'],
+                'money_apply_min' => $limit['money_apply_min'],
+                'class_days' => (string)$class['class_days'],
+                'class_price' => (int)$class['class_price'],
+            ];
+            $result[] = $tmp;
         }
-        return $classes;
+        return $result;
     }
 
     /**
@@ -267,7 +235,7 @@ class BULoanConfig
      */
     public static function getMoneyApplyLimit($course, $orgHead, $resource)
     {
-        $tuition = ceil($course['tuition']);
+        $tuition = ceil($course['class_price']);
 
         if (in_array($resource, array(RESOURCE_FCS, RESOURCE_FCS_SC, RESOURCE_JCFC))) {
             $moneyApplyMin = 3000;
@@ -322,30 +290,4 @@ class BULoanConfig
             return true;
         }
     }
-
-    /**
-     * 判断审核时间开关
-     * @return bool
-     */
-    public static function getReviewTimeSwitch()
-    {
-        return true;
-    }
-
-    public static $class_switch = array(124704);
-
-    /**
-     * 是否填写班级
-     * @param $sbid
-     * @return bool
-     */
-    public static function getClassSwitch($hid)
-    {
-        if (in_array($hid, self::$class_switch)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }

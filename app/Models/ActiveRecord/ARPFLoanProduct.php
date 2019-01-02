@@ -65,7 +65,7 @@ class ARPFLoanProduct extends Model
             ->first();
     }
 
-    public static function getLoanTypeAll($isMemcache = false)
+    public static function getLoanProductAll($isMemcache = false, $status)
     {
         if ($isMemcache) {
             $redis = RedisUtil::getInstance();
@@ -77,7 +77,16 @@ class ARPFLoanProduct extends Model
                 }
             }
         }
-        $result = DB::table(self::TABLE_NAME)->select('*')->get()->toArray();
+        $query = DB::table(self::TABLE_NAME)
+            ->select(['resource', 'loan_product', 'loan_type', 'loan_channel', 'rate_time_x', 'rate_x', 'rate_time_y', 'rate_y']);
+        if ($status == STATUS_SUCCESS) {
+            $result = $query->where('status', STATUS_SUCCESS)->get()->toArray();
+        } else if ($status == STATUS_FAIL) {
+            $result = $query->where('status', STATUS_FAIL)->get()->toArray();
+        } else {
+            $result = $query->get()->toArray();
+        }
+
         if ($isMemcache) {
             if ($redis) {
                 $redis->set($key, json_encode($result), 1800);

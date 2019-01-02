@@ -32,7 +32,8 @@ class CalcResource
     static public function getUserResource($uid, $loanProducts, $org, $oid = null)
     {
         //读取用户信息
-        $userInfo = BUUserInfo::getByUid($uid);
+        $userInfo = [];
+        return 3;
 
         //如果有曾经转单的资金方,可用的资金方里排除.
         $changeLoan = DB::table(ARPFLoan::TABLE_NAME)->select('resource')
@@ -60,7 +61,7 @@ class CalcResource
         foreach ($resources as $resource) {
             switch ($resource) {
                 case RESOURCE_JCFC:
-                    $can[$resource] = self::calcJcfcResource($userInfo, $org, $errJcfc, );
+                    $can[$resource] = self::calcJcfcResource($userInfo, $org, $errJcfc);
                     break;
                 case RESOURCE_FCS:
                 case RESOURCE_FCS_SC:
