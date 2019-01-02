@@ -20,6 +20,7 @@ use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersContact;
+use App\Models\ActiveRecord\ARPFUsersLocation;
 use App\Models\ActiveRecord\ARPFUsersPhonebook;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\ActiveRecord\ARPFUsersWork;
@@ -285,7 +286,7 @@ class BULoanApply
         $ret['bank'] = ARPFUsersBank::getUserBanksByUid($uid);
         $ret['contact'] = ARPFUsersContact::getContractInfo($uid);
         $ret['work'] = ARPFUsersWork::getUserWork($uid);
-        $ret['location'] = ARPFUsersContact::getContractInfo($uid);
+        $ret['location'] = ARPFUsersLocation::getUserLocation($uid);
         $ret['phonebook'] = ARPFUsersPhonebook::getPhoneBookLastOneByUid($uid);
         return OutputUtil::json_encode($ret);
     }
@@ -310,7 +311,7 @@ class BULoanApply
             $ret['bank'] = ARPFUsersBank::getUserBanksByUid($loan['uid']);
             $ret['contact'] = ARPFUsersContact::getContractInfo($loan['uid']);
             $ret['work'] = ARPFUsersWork::getUserWork($loan['uid']);
-            $ret['location'] = ARPFUsersContact::getContractInfo($loan['uid']);
+            $ret['location'] = ARPFUsersLocation::getUserLocation($loan['uid']);
             $ret['phonebook'] = ARPFUsersPhonebook::getPhoneBookLastOneByUid($loan['uid']);
         }
         //补充机构和课程信息

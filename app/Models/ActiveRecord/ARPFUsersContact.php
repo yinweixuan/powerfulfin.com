@@ -90,7 +90,6 @@ class ARPFUsersContact extends Model
     {
         return DB::table(self::TABLE_NAME)->select('*')
             ->where('uid', $uid)
-            ->orderByDesc('id')
             ->first();
     }
 }

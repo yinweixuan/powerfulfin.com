@@ -12,6 +12,7 @@ namespace App\Models\ActiveRecord;
 use App\Components\ArrayUtil;
 use App\Components\PFException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class ARPFUsersLocation extends Model
@@ -43,5 +44,13 @@ class ARPFUsersLocation extends Model
         $ar->create_time = date('Y-m-d H:i:s');
         $ar->save();
         return $ar->getAttributes();
+    }
+
+    public static function getUserLocation($uid)
+    {
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->orderByDesc('id')
+            ->first();
     }
 }
