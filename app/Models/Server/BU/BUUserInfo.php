@@ -383,7 +383,7 @@ class BUUserInfo
         }
         self::supplyUserStepCheckParams($params2, $data);
 
-        if ($data['work_type'] == ARPFUsersWork::WORKING_CONDITION_WORKING && $data['monthly_income'] > 100000) {
+        if ($data['working_status'] == ARPFUsersWork::WORKING_CONDITION_WORKING && $data['monthly_income'] > 100000) {
             throw new PFException("您挣得比俺老孙还多呢，真的吗？", ERR_SYS_PARAM);
         }
         $data['monthly_income'] = $data['monthly_income'] * 100;
