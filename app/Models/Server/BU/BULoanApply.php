@@ -46,7 +46,7 @@ class BULoanApply
         //检查用户手机设备是否有他人进行分期申请
         $phoneid = HttpUtil::getPhoneID();
         if ($phoneid) {
-            self::checkPhoneID($phoneid, $user['uid']);
+            self::checkPhoneID($phoneid, $user['id']);
         }
 
         $paramsNeed = array('cid', 'borrow_money', 'loan_product', 'course_open_time', 'school_pic', 'review_time');
@@ -62,25 +62,25 @@ class BULoanApply
         //根据课程id判断目前是否允许分期以
         $orgClass = ARPFOrgClass::getById($data['cid']);
         if (empty($course) || $orgClass['status'] != STATUS_SUCCESS) {
-            throw new PFException("该课程目前暂停分期业务，请与机构联系确认，谢谢");
+            throw new PFException("该课程目前暂停分期业务，请与机构联系确认，谢谢", ERR_SYS_PARAM);
         }
 
         //判断申请价格是否高于课程价格
         if ($course['class_price'] < $data['borrow_money']) {
-            throw new PFException("您的期望分期价格高于课程价格，请慎重考虑");
+            throw new PFException("您的期望分期价格高于课程价格，请慎重考虑", ERR_SYS_PARAM);
         }
 
         //根据课程信息取机构的信息，判断是否分期
         $org = ARPFOrg::getOrgById($data['oid']);
         if (empty($org) || $org['status'] != STATUS_SUCCESS) {
-            throw new Exception("该课程所属机构目前暂停分期业务，请与机构联系确认，谢谢");
+            throw new PFException("该课程所属机构目前暂停分期业务，请与机构联系确认，谢谢", ERR_SYS_PARAM);
         }
 
         //判断机构是否为需要声明照片机构
         $statementPic = BULoanConfig::getStatementPic($org['hid']);
         if ($statementPic) {
             if (!array_key_exists('statement_pic', $data) || trim($data['statement_pic']) === '') {
-                throw new PFException("请上传声明照片");
+                throw new PFException("请上传声明照片", ERR_SYS_PARAM);
             }
         }
 
@@ -93,27 +93,27 @@ class BULoanApply
         $loan_product = ArrayUtil::escapeEmpty(explode(',', $orgHead['loan_product']));
         $loanProducts = BULoanProduct::getLoanTypeByIds($loan_product, false);
         if (empty($loanProducts) || !array_key_exists($data['loan_product'], $loanProducts)) {
-            throw new PFException("机构{$orgHead['full_name']}不允许进行分期业务！");
+            throw new PFException("机构{$orgHead['full_name']}不允许进行分期业务！", ERR_SYS_PARAM);
         }
 
         $loanProduct = $loanProducts[$data['loan_product']];
         if ($loanProduct['status'] != STATUS_SUCCESS) {
-            throw new PFException("该类费率暂时不可用，请稍后再试");
+            throw new PFException("该类费率暂时不可用，请稍后再试", ERR_SYS_PARAM);
         }
 
         //支持多张协议照片，向下兼容
         $trainingSchool = BULoanConfig::getTrainingContractSwitch($loanProduct['resource'], $orgHead['hid']);
         if ($trainingSchool) {
             if (!array_key_exists('training_contract', $data)) {
-                throw new PFException("请上传协议照片");
+                throw new PFException("请上传协议照片", ERR_SYS_PARAM);
             }
             $trainingContractArr = json_decode($data['training_contract'], true);
             if (!is_array($trainingContractArr)) {
-                throw new PFException("协议照片无法解析");
+                throw new PFException("协议照片无法解析", ERR_SYS_PARAM);
             }
             $count = count($trainingContractArr);
             if ($count > 9 || $count < 1) {
-                throw new PFException("您好，培训协议最多上传9张");
+                throw new PFException("您好，培训协议最多上传9张", ERR_SYS_PARAM);
             }
         }
 
@@ -187,7 +187,6 @@ class BULoanApply
      * 检查设备号
      * @param $phone_id
      * @param $uid
-     * @throws CException
      * @throws PFException
      */
     public static function checkPhoneID($phone_id, $uid)
@@ -261,7 +260,7 @@ class BULoanApply
         \Yii::log('[' . __CLASS__ . '][' . __FUNCTION__ . '][' . __LINE__ . ']:Create loan info:' . var_export($info, true), self::YII_LOAN_NAME);
         try {
             //用redis做个防止重入
-            $entryKey = 'pf_loan_create_' . $user['uid'];
+            $entryKey = 'pf_loan_create_' . $user['id'];
             $redis = RedisUtil::getInstance();
             $redisRes = $redis->exists($entryKey);
             if ($redisRes) {
@@ -270,7 +269,7 @@ class BULoanApply
             } else {
                 $redis->setex($entryKey, 10, DataBus::get('curtime'));
             }
-
+            $info['supply_info'] = self::getDetailByUidForCreateLoan($user['id']);
             $loan = BULoanUpdate::createLoan($info);
             return $loan;
         } catch (PFException $e) {
@@ -279,9 +278,22 @@ class BULoanApply
         }
     }
 
+    public static function getDetailByUidForCreateLoan($uid)
+    {
+        $ret = [];
+        $ret['real'] = ARPFUsersReal::getInfo($uid);
+        $ret['bank'] = ARPFUsersBank::getUserBanksByUid($uid);
+        $ret['contact'] = ARPFUsersContact::getContractInfo($uid);
+        $ret['work'] = ARPFUsersWork::getUserWork($uid);
+        $ret['location'] = ARPFUsersContact::getContractInfo($uid);
+        $ret['phonebook'] = ARPFUsersPhonebook::getPhoneBookLastOneByUid($uid);
+        return OutputUtil::json_encode($ret);
+    }
+
     /**
      * 根据订单号,查找该订单的所有信息
      * @param $lid
+     * @return array|mixed
      */
     public static function getDetailById($lid)
     {
