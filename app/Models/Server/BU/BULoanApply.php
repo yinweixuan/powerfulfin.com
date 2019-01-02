@@ -185,16 +185,17 @@ class BULoanApply
 
     /**
      * 检查设备号
-     * @param $phoneid
+     * @param $phone_id
      * @param $uid
      * @throws CException
      * @throws PFException
      */
-    public static function checkPhoneID($phoneid, $uid)
+    public static function checkPhoneID($phone_id, $uid)
     {
-        return;
-        $check = Yii::app()->db->createCommand()->select('id')->from(ARStuAddition::TABLE_NAME)->where('uid!=:uid AND phoneid=:phoneid', array(':uid' => $uid, ':phoneid' => $phoneid))->queryRow();
-        if (!empty($check) && !ENV_DEBUG) {
+        $check = DB::table(ARPFLoan::TABLE_NAME)->select('*')
+            ->where('uid', '!=', $uid)
+            ->where('phone_id', $phone_id)->first();
+        if (!empty($check) && !config('app.env') == 'production') {
             throw new PFException("该手机已为其他用户申请分期，请使用自己手机重新申请");
         }
     }
