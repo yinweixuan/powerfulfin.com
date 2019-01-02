@@ -620,14 +620,14 @@ class BUUserInfo
             if (!empty($userWork['work_area'])) {
                 $work = ARPFAreas::getArea($userWork['work_area']);
                 if ($work) {
-                    list($userWork['work_province_name'], $userWork['work_city_name'], $userWork['work_area_name']) = explode(',', $work);
+                    list($userWork['work_province_name'], $userWork['work_city_name'], $userWork['work_area_name']) = explode(',', $work['joinname']);
                 }
             }
 
             if (!empty($userWork['school_area'])) {
-                $work = ARPFAreas::getArea($userWork['school_area']);
-                if ($work) {
-                    list($userWork['school_province_name'], $userWork['school_city_name'], $userWork['school_area_name']) = explode(',', $work);
+                $school = ARPFAreas::getArea($userWork['school_area']);
+                if ($school) {
+                    list($userWork['school_province_name'], $userWork['school_city_name'], $userWork['school_area_name']) = explode(',', $school['joinname']);
                 }
             }
 
@@ -639,6 +639,7 @@ class BUUserInfo
             $userWork['school_province'] = (string)$userWork['school_province'];
             $userWork['school_city'] = (string)$userWork['school_city'];
             $userWork['school_area'] = (string)$userWork['school_area'];
+            $userWork['working_status'] = (string)$userWork['working_status'];
             unset($userWork['create_time']);
             unset($userWork['update_time']);
             return $userWork;
