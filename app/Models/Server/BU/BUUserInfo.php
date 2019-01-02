@@ -13,6 +13,7 @@ use App\Components\AliyunOSSUtil;
 use App\Components\CheckUtil;
 use App\Components\MapUtil;
 use App\Components\PFException;
+use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFUsersAuthLog;
 use App\Models\ActiveRecord\ARPFUsersBank;
@@ -482,20 +483,29 @@ class BUUserInfo
             ];
             return $params;
         } else {
+            $params = [
+                'full_name' => $userReal['full_name'],
+                'identity_number' => $userReal['identity_number'],
+                'nationality' => $userReal['nationality'],
+                'start_date' => $userReal['start_date'],
+                'end_date' => $userReal['end_date'],
+                'address' => $userReal['address'],
+                'issuing_authority' => $userReal['issuing_authority'],
+                'idcard_information_pic' => $userReal['idcard_information_pic'],
+                'idcard_national_pic' => $userReal['idcard_national_pic'],
+                'uid' => (string)$uid,
+                'idcard_information_pic_url' => '',
+                'idcard_national_pic_url' => '',
+                'user_real' => self::checkUserReal($uid),
+            ];
             if (!empty($userReal['idcard_information_pic'])) {
-                $userReal['idcard_information_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userReal['idcard_information_pic']);
-            } else {
-                $userReal['idcard_information_pic_url'] = '';
+                $params['idcard_information_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userReal['idcard_information_pic']);
             }
 
             if (!empty($userReal['idcard_national_pic'])) {
-                $userReal['idcard_national_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userReal['idcard_national_pic']);
-            } else {
-                $userReal['idcard_national_pic_url'] = '';
+                $params['idcard_national_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userReal['idcard_national_pic']);
             }
-            $userReal['uid'] = (string)$userReal['uid'];
-            $userReal['user_real'] = self::checkUserReal($uid);
-            return $userReal;
+            return $params;
         }
     }
 
@@ -506,8 +516,11 @@ class BUUserInfo
             $params = [
                 'email' => '',
                 'home_province' => '',
+                'home_province_name' => '',
                 'home_city' => '',
+                'home_city_name' => '',
                 'home_area' => '',
+                'home_area_name' => '',
                 'home_address' => '',
                 'housing_situation' => '',
                 'marital_status' => '',
@@ -521,6 +534,23 @@ class BUUserInfo
             return $params;
         } else {
             $userContact['uid'] = (string)$userContact['uid'];
+            $userContact['home_province'] = (string)$userContact['home_province'];
+            $userContact['home_city'] = (string)$userContact['home_city'];
+            $userContact['home_area'] = (string)$userContact['home_area'];
+            if (!empty($userContact['home_area'])) {
+                $home = ARPFAreas::getArea($userContact['home_area']);
+                if ($home) {
+                    list($userContact['home_province_name'], $userContact['home_city_name'], $userContact['home_area_name']) = explode(',', $home['joinname']);
+                } else {
+                    $userContact['home_province_name'] = '';
+                    $userContact['home_city_name'] = '';
+                    $userContact['home_area_name'] = '';
+                }
+            } else {
+                $userContact['home_province_name'] = '';
+                $userContact['home_city_name'] = '';
+                $userContact['home_area_name'] = '';
+            }
             return $userContact;
         }
 
@@ -540,16 +570,22 @@ class BUUserInfo
                 'edu_pic_url' => '',
                 'work_name' => '',
                 'work_province' => '',
+                'work_province_name' => '',
                 'work_city' => '',
+                'work_city_name' => '',
                 'work_area' => '',
+                'work_area_name' => '',
                 'work_address' => '',
                 'work_entry_time' => '',
                 'work_profession' => '',
                 'work_contact' => '',
                 'school_name' => '',
                 'school_province' => '',
+                'school_province_name' => '',
                 'school_city' => '',
+                'school_city_name' => '',
                 'school_area' => '',
+                'school_area_name' => '',
                 'school_address' => '',
                 'school_contact' => '',
                 'school_major' => '',
@@ -559,12 +595,40 @@ class BUUserInfo
             ];
             return $params;
         } else {
-            if (empty($userWork['edu_pic'])) {
-                $userWork['edu_pic_url'] = '';
-            } else {
+            $userWork['work_province_name'] = '';
+            $userWork['work_city_name'] = '';
+            $userWork['work_area_name'] = '';
+            $userWork['school_province_name'] = '';
+            $userWork['school_city_name'] = '';
+            $userWork['school_area_name'] = '';
+            $userWork['edu_pic_url'] = '';
+
+            if (!empty($userWork['edu_pic'])) {
                 $userWork['edu_pic_url'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $userWork['edu_pic']);
             }
+
+            if (!empty($userWork['work_area'])) {
+                $work = ARPFAreas::getArea($userWork['work_area']);
+                if ($work) {
+                    list($userWork['work_province_name'], $userWork['work_city_name'], $userWork['work_area_name']) = explode(',', $work);
+                }
+            }
+
+            if (!empty($userWork['school_area'])) {
+                $work = ARPFAreas::getArea($userWork['school_area']);
+                if ($work) {
+                    list($userWork['school_province_name'], $userWork['school_city_name'], $userWork['school_area_name']) = explode(',', $work);
+                }
+            }
+
+
             $userWork['uid'] = (string)$userWork['uid'];
+            $userWork['work_province'] = (string)$userWork['work_province'];
+            $userWork['work_city'] = (string)$userWork['work_city'];
+            $userWork['work_area'] = (string)$userWork['work_area'];
+            $userWork['school_province'] = (string)$userWork['school_province'];
+            $userWork['school_city'] = (string)$userWork['school_city'];
+            $userWork['school_area'] = (string)$userWork['school_area'];
             return $userWork;
         }
 

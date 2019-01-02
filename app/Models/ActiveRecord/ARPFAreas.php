@@ -32,4 +32,15 @@ class ARPFAreas extends Model
         $info = $query->orderBy('name')->get()->toArray();
         return $info;
     }
+
+    public static function getArea($areaId)
+    {
+        if (!is_numeric($areaId) || is_null($areaId)) {
+            return [];
+        }
+
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('areaid', $areaId)
+            ->first();
+    }
 }
