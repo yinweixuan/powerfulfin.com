@@ -12,6 +12,7 @@ namespace App\Models\Server\BU;
 use App\Components\AliyunOSSUtil;
 use App\Components\CheckUtil;
 use App\Components\MapUtil;
+use App\Components\NearbyUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFOrg;
@@ -419,6 +420,10 @@ class BUUserInfo
             'location' => $lng . ',' . $lat,
             'distance' => '0.00',
             'uid' => (string)$uid,
+            'channel' => '',
+            'address' => '',
+            'org_name' => '',
+            'oid' => $oid,
         ];
         try {
             $gps = MapUtil::getPosInfo($lng, $lat);
@@ -432,13 +437,17 @@ class BUUserInfo
                 $info['channel'] = 'IP';
             }
         } catch (PFException $exception) {
-            $info['address'] = '';
+            \Yii::log($exception->getMessage(), 'map.op');
         }
 
         if ($oid) {
             $org = ARPFOrg::getOrgById($oid);
             if ($org) {
-                //TODO
+                $info['org_name'] = $org['org_name'];
+                if (!empty($org['org_lng']) && !empty($org['org_lat'])) {
+                    $distance = NearbyUtil::getDistance($lng, $lat, $org['org_lng'], $org['org_lat']);
+                    $info['distance'] = (string)($distance / 1000);
+                }
             }
         }
 
@@ -550,6 +559,8 @@ class BUUserInfo
                 $userContact['home_city_name'] = '';
                 $userContact['home_area_name'] = '';
             }
+            unset($userContact['create_time']);
+            unset($userContact['update_time']);
             return $userContact;
         }
 
@@ -628,6 +639,8 @@ class BUUserInfo
             $userWork['school_province'] = (string)$userWork['school_province'];
             $userWork['school_city'] = (string)$userWork['school_city'];
             $userWork['school_area'] = (string)$userWork['school_area'];
+            unset($userWork['create_time']);
+            unset($userWork['update_time']);
             return $userWork;
         }
 
