@@ -104,16 +104,20 @@ class Loan
 
     public static function getLoanList($uid)
     {
-        $loanList = ARPFLoan::getLoanByUid($uid);
-
+        $loanList = DB::table(ARPFLoan::TABLE_NAME . ' as l')
+            ->select(['l.id', 'l.borrow_money', 'l.status', 'o.org_name'])
+            ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'l.cid')
+            ->where('l.uid', $uid)
+            ->orderByDesc('id')
+            ->get()->toArray();
         $info = [];
         foreach ($loanList as $item) {
             $tmp = [
                 'lid' => $item['id'],
                 'borrow_money' => $item['borrow_money'],
                 'status' => $item['status'],
-                'status_desp' => '',
-                'org_name' => ''
+                'status_desp' => BULoanStatus::getStatusDescriptionForC($item['status']),
+                'org_name' => $item['org_name']
             ];
             $info[] = $tmp;
         }
@@ -236,7 +240,8 @@ class Loan
      * @param $uid
      * @return array
      */
-    public static function getHomeLoanInfo($uid = null) {
+    public static function getHomeLoanInfo($uid = null)
+    {
         $data = [
             'id' => 0,
             'step' => 0,
