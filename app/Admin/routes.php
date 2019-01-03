@@ -30,5 +30,6 @@ Route::group([
      * 订单管理
      */
     $router->get('/loan/index', 'LoanController@index');
+    $router->get('/loan/info', 'LoanController@info');
 
 });

@@ -11,6 +11,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\AdminController;
 use App\Admin\Models\LoanModel;
+use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BULoanProduct;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
@@ -46,5 +47,19 @@ class LoanController extends AdminController
                 ['text' => '订单管理', 'url' => '/admin/loan']
             )
             ->row(view('admin.loan.index', $data));
+    }
+
+    public function info(Content $content)
+    {
+        $lid = Input::get('lid');
+        $loan = BULoanApply::getDetailById($lid);
+//        var_dump($loan);
+        return $content->header('订单详情')
+            ->description($loan['real']['full_name'])
+            ->breadcrumb(
+                ['text' => '订单管理', 'url' => 'loan/index'],
+                ['text' => '订单详情', 'url' => 'loan/info?lid=' . $lid]
+            )
+            ->row(view('admin.loan.info', $loan));
     }
 }

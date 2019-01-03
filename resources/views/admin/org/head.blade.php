@@ -1,5 +1,5 @@
 <section class="content">
-    <div class="box box-default">
+    <div class="box box-danger">
         <div class="box-header with-border">
             <h3 class="box-title">搜索</h3>
             <div class="box-tools pull-right">
@@ -52,7 +52,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <div class="box">
+            <div class="box box-danger">
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">

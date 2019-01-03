@@ -1,5 +1,5 @@
 <section class="content">
-    <div class="box box-default collapsed-box">
+    <div class="box box-danger collapsed-box">
         <div class="box-header with-border">
             <h3 class="box-title">搜索</h3>
             <div class="box-tools pull-right">
@@ -147,7 +147,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <div class="box">
+            <div class="box box-danger">
                 <div class="box-header">
                     <h3 class="box-title">订单列表</h3>
                 </div>
@@ -177,14 +177,16 @@
                                             <td>{{ $item['id'] }}</td>
                                             <td>{{ \App\Models\ActiveRecord\ARPFLoanProduct::$resourceCompanySimple[$item['resource']] }}</td>
                                             <td>{{ $item['org_name'] }}</td>
-                                            <td>{{ $item['full_name'] }}({{ $item['uid'] }})<br/>{{ $item['identity_number'] }}</td>
+                                            <td>{{ $item['full_name'] }}({{ $item['uid'] }}
+                                                )<br/>{{ $item['identity_number'] }}</td>
                                             <td>￥{{ $item['borrow_money'] }}</td>
                                             <td>{{ $loan_product[$item['id']]['loan_product_name'] }}</td>
                                             <td>{{ \App\Models\Server\BU\BULoanStatus::getStatusDescriptionForAdmin($item['status']) }}</td>
                                             <td>{{ $item['create_time'] }}</td>
                                             <td>{{ $item['loan_time'] }}</td>
                                             <td>
-                                                <button class="btn btn-sm btn-success">详情</button>
+                                                <a class="btn btn-sm btn-success"
+                                                   href="/admin/loan/info?lid={{ $item['id'] }}">详情</a>
                                             </td>
                                         </tr>
                                     @endforeach
