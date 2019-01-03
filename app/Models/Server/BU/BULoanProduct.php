@@ -44,7 +44,7 @@ class BULoanProduct
      * @param $status
      * @return array
      */
-    public static function getLoanTypeByIds($ids, $isMemcache = true,$status)
+    public static function getLoanTypeByIds($ids, $isMemcache = true,$status= true)
     {
         $ret = array();
         if (empty($ids)) {
