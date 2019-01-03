@@ -61,6 +61,7 @@ class ARPFLoan extends Model
             'class_start_date' => $info['class_start_date'],
             'supply_info' => $info['supply_info'],
             'create_time' => date('Y-m-d H:i:s'),
+            'update_time' => date('Y-m-d H:i:s'),
         ];
 
         foreach ($data as $datum) {

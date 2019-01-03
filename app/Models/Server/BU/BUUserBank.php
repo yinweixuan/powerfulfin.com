@@ -185,13 +185,15 @@ class BUUserBank
         if (!empty($lists)) {
             foreach ($lists as &$list) {
                 $list['logo'] = BUBanks::getBankLogo($list['bank_code']);
-                $list['bank_account'] = CheckUtil::formatCreditCard($list['bank_code']);
+                $list['bank_account'] = substr($list['bank_account'], -4);
+                unset($list['create_time']);
+                unset($list['update_time']);
             }
             $info['banks'] = $lists;
         } else {
             $info['banks'] = array();
         }
-        
+
         return $info;
     }
 
