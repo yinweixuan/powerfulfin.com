@@ -192,4 +192,81 @@ class OutputUtil
             return $c . "整";
         }
     }
+
+    /**
+     * 页面输出内容
+     * @param type $word
+     * @param type $limit
+     * @param type $etc
+     */
+    public static function echoEscape($word, $limit = null, $etc = '...')
+    {
+        echo self::valueEscape($word, $limit, $etc);
+    }
+
+    /**
+     * 获得展示的内容,不输出
+     * @param type $word
+     * @param type $limit,截字
+     * @param type $etc, 截字后加上后面的内容
+     */
+    public static function valueEscape($word, $limit = null, $etc = '...')
+    {
+        $charset = 'utf-8';
+        $word = htmlspecialchars($word);
+        if ($limit !== null && is_numeric($limit)) {
+            $len = mb_strlen($word, $charset);
+            if ($len>$limit) {
+                $ret = mb_substr($word, 0, $limit, $charset) . $etc;
+            } else {
+                $ret = $word;
+            }
+        } else {
+            $ret = $word;
+        }
+        return $ret;
+    }
+
+    /**
+     * 展示手机类型
+     * @param $type
+     */
+    public static function valuePhoneType($type)
+    {
+        $ret = '未知';
+        switch ($type) {
+            case PHONE_TYPE_ANDROID:
+            case 2:
+                $ret = 'Android';
+                break;
+            case PHONE_TYPE_IOS:
+            case 1:
+                $ret = 'iOS';
+                break;
+            default:
+                $ret = '未知';
+                break;
+        }
+        return $ret;
+    }
+
+    /**
+     * 展示工作状态
+     * @param $workStatus
+     */
+    public static function valueWorkStatus($workStatus)
+    {
+        $ret = '未知';
+        switch ($workStatus) {
+            case 1:
+                $ret = '在职';break;
+            case 2:
+                $ret = '学生';break;
+            case 3:
+                $ret = '待业';break;
+            default:
+                $ret = '未知';break;
+        }
+        return $ret;
+    }
 }

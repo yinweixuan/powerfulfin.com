@@ -108,9 +108,11 @@ class OrderController extends OrgBaseController
         $lid = Input::get('lid');
         $data['lid'] = $lid;
         try {
-            $loan = BULoanApply::getDetailById($lid);
+            $data = BULoanApply::getDetailById($lid);
             //检查是否属于该机构
-            var_dump($loan);
+            if ($data['base']['org_id'] != OrgDataBus::get('org_id')) {
+                throw new PFException("非本机构订单,无法查看");
+            }
         } catch (\Exception $e) {
             $data['errmsg'] = $e->getMessage();
         }

@@ -44,7 +44,7 @@ class BULoanProduct
      * @param $status
      * @return array
      */
-    public static function getLoanTypeByIds($ids, $isMemcache = true,$status= true)
+    public static function getLoanTypeByIds($ids, $isMemcache = true,$status = true)
     {
         $ret = array();
         if (empty($ids)) {
@@ -76,6 +76,7 @@ class BULoanProduct
             $loanTypeAll = ARPFLoanProduct::getLoanProductAll($isMemcache, $status);
             foreach ($loanTypeAll as $key => &$item) {
                 $item['resource_company'] = ARPFLoanProduct::$resourceCompany[$item['resource']];
+                $item['rate_time'] = $item['rate_time_x'] + $item['rate_time_y'];
                 $config[$item['loan_product']] = $item;
             }
         } catch (PFException $e) {
