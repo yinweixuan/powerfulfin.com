@@ -175,12 +175,12 @@
                                     @foreach($info as $item)
                                         <tr>
                                             <td>{{ $item['id'] }}</td>
-                                            <td>{{ $item['resource'] }}</td>
+                                            <td>{{ \App\Models\ActiveRecord\ARPFLoanProduct::$resourceCompanySimple[$item['resource']] }}</td>
                                             <td>{{ $item['org_name'] }}</td>
-                                            <td>{{ $item['full_name'] }}</td>
-                                            <td>{{ $item['borrow_money'] }}</td>
-                                            <td>{{ $item['loan_product'] }}</td>
-                                            <td>{{ $item['status'] }}</td>
+                                            <td>{{ $item['full_name'] }}({{ $item['uid'] }})<br/>{{ $item['identity_number'] }}</td>
+                                            <td>￥{{ $item['borrow_money'] }}</td>
+                                            <td>{{ $loan_product[$item['id']]['loan_product_name'] }}</td>
+                                            <td>{{ \App\Models\Server\BU\BULoanStatus::getStatusDescriptionForAdmin($item['status']) }}</td>
                                             <td>{{ $item['create_time'] }}</td>
                                             <td>{{ $item['loan_time'] }}</td>
                                             <td>

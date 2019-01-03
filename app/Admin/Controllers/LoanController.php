@@ -11,6 +11,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\AdminController;
 use App\Admin\Models\LoanModel;
+use App\Models\Server\BU\BULoanProduct;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
 
@@ -33,6 +34,12 @@ class LoanController extends AdminController
             'bank_code' => Input::get('bank_code', ''),
         ];
         $data['info'] = LoanModel::getLoanList($data);
+
+        foreach ($data['info'] as $key => $datum) {
+            $loanProducts = BULoanProduct::getLoanTypeByIds([$datum['loan_product']], true, true);
+            $loanProduct = array_shift($loanProducts);
+            $data['loan_product'][$datum['id']]['loan_product_name'] = $loanProduct['name'];
+        }
         return $content->header('订单列表')
             ->description('订单信息列表')
             ->breadcrumb(
