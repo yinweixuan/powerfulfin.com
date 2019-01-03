@@ -460,4 +460,9 @@ class HttpUtil
         $isWX = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'micromessenger') !== false ? true : false);
         return $isWX;
     }
+
+    public static function getPhoneID()
+    {
+        return '';
+    }
 }

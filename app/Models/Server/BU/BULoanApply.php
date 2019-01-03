@@ -50,7 +50,7 @@ class BULoanApply
             self::checkPhoneID($phoneid, $user['id']);
         }
 
-        $paramsNeed = array('cid', 'borrow_money', 'loan_product', 'course_open_time', 'school_pic', 'review_time');
+        $paramsNeed = array('cid', 'borrow_money', 'class_start_date', 'course_open_time', 'scene_pic');
         foreach ($paramsNeed as $item) {
             if (!array_key_exists($item, $data)) {
                 throw new PFException("系统异常，必填项目未正确上报，请联系课栈运营人员", ERR_SYS_PARAM);
@@ -80,7 +80,7 @@ class BULoanApply
         //判断机构是否为需要声明照片机构
         $statementPic = BULoanConfig::getStatementPic($org['hid']);
         if ($statementPic) {
-            if (!array_key_exists('statement_pic', $data) || trim($data['statement_pic']) === '') {
+            if (!array_key_exists('train_statement_pic', $data) || trim($data['train_statement_pic']) === '') {
                 throw new PFException("请上传声明照片", ERR_SYS_PARAM);
             }
         }
@@ -105,10 +105,10 @@ class BULoanApply
         //支持多张协议照片，向下兼容
         $trainingSchool = BULoanConfig::getTrainingContractSwitch($loanProduct['resource'], $orgHead['hid']);
         if ($trainingSchool) {
-            if (!array_key_exists('training_contract', $data)) {
+            if (!array_key_exists('train_contract_pic', $data)) {
                 throw new PFException("请上传协议照片", ERR_SYS_PARAM);
             }
-            $trainingContractArr = json_decode($data['training_contract'], true);
+            $trainingContractArr = json_decode($data['train_contract_pic'], true);
             if (!is_array($trainingContractArr)) {
                 throw new PFException("协议照片无法解析", ERR_SYS_PARAM);
             }
@@ -135,10 +135,19 @@ class BULoanApply
             'uid' => $user['uid'],
             'oid' => $org['id'],
             'hid' => $orgHead['hid'],
-            'create_time' => DataBus::get('ctime'),
-            'review_time' => self::getReviewTime($data['review_time']),
+            'class' => $data['cid'],
             'status' => LOAN_1000_CREATE,
-            'course_period' => $course['course_period'] . $course['course_period_property'],
+            'borrow_money' => $data['borrow_money'],
+            'loan_product' => $data['loan_product'],
+            'resource' => $loanProduct['resource'],
+            'class_start_date' => $data['class_start_date'],
+            'scene_pic' => $data['scene_pic'],
+            'person_pic' => $data['person_pic'],
+            'train_contract_pic' => $data['train_contract_pic'],
+            'train_statement_pic' => $data['train_statement_pic'],
+            'phone_id' => '',
+            'version' => $data['version'],
+            'create_time' => DataBus::get('ctime'),
         );
 
         return array_merge($data, $info);
