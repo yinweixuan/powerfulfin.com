@@ -328,7 +328,7 @@ class BULoanApply
         //补充资方,费率信息
         $ret['base']['resource_desc'] = BULoanProduct::getResourceCompany($ret['base']['resource']);
         $ret['base']['resource_desc_simple'] = BULoanProduct::getResourceCompany($ret['base']['resource'], true);
-        $loanProduct = BULoanProduct::getLoanTypeByIds($loan['loan_product']);
+        $loanProduct = BULoanProduct::getLoanTypeByIds([$loan['loan_product']]);
         if (array_key_exists($loan['loan_product'], $loanProduct)) {
             $ret['base']['loan_product_config'] = $loanProduct[$loan['loan_product']];
             $ret['base']['loan_product_desc'] = $loanProduct[$loan['loan_product']]['name'];
