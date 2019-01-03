@@ -73,6 +73,8 @@ class ARPFLoan extends Model
         $data['person_pic'] = $info['person_pic'];
         $data['train_contract_pic'] = $info['train_contract_pic'];
         $data['train_statement_pic'] = $info['train_statement_pic'];
+        $data['phone_id'] = $info['phone_id'];
+        $data['version'] = $info['version'];
 
         return DB::table(self::TABLE_NAME)->insertGetId($data);
     }
