@@ -185,7 +185,7 @@ class EsignUtil {
         $log .= 'response : ' . print_r($result, true);
         \Yii::log($log, 'loan.sign');
         if ($result['errCode'] == 0 && $result['accountId']) {
-            \App\Models\ActiveRecord\ARPFOrgHead::update($sid, array('esign_id' => $result['accountId']));
+            \App\Models\ActiveRecord\ARPFOrgHead::updateInfo($sid, array('esign_id' => $result['accountId']));
             //创建印章模板
             self::addTemplateSeal($result['accountId'], self::TEMPLATE_CATE_SCHOOL);
             return $result['accountId'];
