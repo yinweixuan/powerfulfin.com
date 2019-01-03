@@ -34,7 +34,7 @@ class BULoanConfig
      * @param $resource
      * @return array|bool|mixed|string
      */
-    public static function getConfig( array $org, array $orgHead, array $class, array $loanProducts, $resource)
+    public static function getConfig(array $org, array $orgHead, array $class, array $loanProducts, $resource)
     {
         $redis = RedisUtil::getInstance();
         $key = self::REDIS_KEY_FOR_FUNCTION_GETCONFGI . '_' . md5($org['id']);
@@ -46,7 +46,8 @@ class BULoanConfig
                 'loanProducts' => $loanProducts,  //所支持的费率类型
                 'course' => self::getClassInfo($class, $orgHead, $resource),   //课程信息描述
                 'courseOpenDefaultTime' => date('Y-m-d', strtotime('+1 day')),//开课默认时间(当前日期加一天)
-                'statement_pic' => self::getStatementPic($org['hid']),//是否需要上传申明图片，需要 true，不需要 FALSE
+//                'statement_pic' => self::getStatementPic($org['hid']),//是否需要上传申明图片，需要 true，不需要 FALSE
+                'statement_pic' => true,//是否需要上传申明图片，需要 true，不需要 FALSE
                 'train' => self::getTrainingContract($org['hid']),   //判断是否需要培训协议
             );
             $redis->set($key, json_encode($data), 86400);

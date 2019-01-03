@@ -50,7 +50,7 @@ class BULoanApply
             self::checkPhoneID($phoneid, $user['id']);
         }
 
-        $paramsNeed = array('cid', 'borrow_money', 'class_start_date', 'course_open_time', 'scene_pic');
+        $paramsNeed = array('cid', 'borrow_money', 'class_start_date', 'loan_product', 'oid');
         foreach ($paramsNeed as $item) {
             if (!array_key_exists($item, $data)) {
                 throw new PFException("系统异常，必填项目未正确上报，请联系课栈运营人员", ERR_SYS_PARAM);
@@ -62,12 +62,12 @@ class BULoanApply
 
         //根据课程id判断目前是否允许分期以
         $orgClass = ARPFOrgClass::getById($data['cid']);
-        if (empty($course) || $orgClass['status'] != STATUS_SUCCESS) {
+        if (empty($orgClass) || $orgClass['status'] != STATUS_SUCCESS) {
             throw new PFException("该课程目前暂停分期业务，请与机构联系确认，谢谢", ERR_SYS_PARAM);
         }
 
         //判断申请价格是否高于课程价格
-        if ($course['class_price'] < $data['borrow_money']) {
+        if ($orgClass['class_price'] < $data['borrow_money']) {
             throw new PFException("您的期望分期价格高于课程价格，请慎重考虑", ERR_SYS_PARAM);
         }
 
@@ -92,13 +92,13 @@ class BULoanApply
 
         //取机构的费率信息,判断费率是否正确
         $loan_product = ArrayUtil::escapeEmpty(explode(',', $orgHead['loan_product']));
-        $loanProducts = BULoanProduct::getLoanTypeByIds($loan_product, false);
+        $loanProducts = BULoanProduct::getLoanTypeByIds($loan_product, false, STATUS_SUCCESS);
         if (empty($loanProducts) || !array_key_exists($data['loan_product'], $loanProducts)) {
             throw new PFException("机构{$orgHead['full_name']}不允许进行分期业务！", ERR_SYS_PARAM);
         }
 
         $loanProduct = $loanProducts[$data['loan_product']];
-        if ($loanProduct['status'] != STATUS_SUCCESS) {
+        if (empty($loanProduct)) {
             throw new PFException("该类费率暂时不可用，请稍后再试", ERR_SYS_PARAM);
         }
 
@@ -148,6 +148,7 @@ class BULoanApply
             'phone_id' => '',
             'version' => $data['version'],
             'create_time' => DataBus::get('ctime'),
+            'supply_info' => self::getDetailByUidForCreateLoan($user['id']),
         );
 
         return array_merge($data, $info);
@@ -217,13 +218,13 @@ class BULoanApply
      */
     public static function checkCourseInfo($data)
     {
-        if (!isset($data['course_open_time'])) {
+        if (!isset($data['class_start_date'])) {
             throw new PFException("请填写开课时间,如果无此项,请更新课栈App", ERR_SYS_PARAM);
-        } else if (trim($data['course_open_time']) === '') {
+        } else if (trim($data['class_start_date']) === '') {
             throw new PFException("开课时间未填写", ERR_SYS_PARAM);
-        } else if ($data['course_open_time'] < date('Y-m-d')) {
+        } else if ($data['class_start_date'] < date('Y-m-d')) {
             throw new PFException('开课时间不能早于当前时间', ERR_SYS_PARAM);
-        } else if (strtotime($data['course_open_time']) > strtotime('+60 days')) {
+        } else if (strtotime($data['class_start_date']) > strtotime('+60 days')) {
             throw new PFException('开课时间已超过当前两个月时间', ERR_SYS_PARAM);
         } else {
             return true;
@@ -279,7 +280,6 @@ class BULoanApply
             } else {
                 $redis->setex($entryKey, 10, DataBus::get('curtime'));
             }
-            $info['supply_info'] = self::getDetailByUidForCreateLoan($user['id']);
             $loan = BULoanUpdate::createLoan($info);
             return $loan;
         } catch (PFException $e) {
