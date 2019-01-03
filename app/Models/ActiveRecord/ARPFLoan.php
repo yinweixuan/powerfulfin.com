@@ -59,6 +59,7 @@ class ARPFLoan extends Model
             'loan_product' => $info['loan_product'],
             'resource' => $info['resource'],
             'class_start_date' => $info['class_start_date'],
+            'supply_info' => $info['supply_info'],
             'create_time' => date('Y-m-d H:i:s'),
         ];
 
@@ -68,10 +69,10 @@ class ARPFLoan extends Model
             }
         }
 
-        $data['scene_pic'] = $info[''];
-        $data['person_pic'] = $info[''];
-        $data['train_contract_pic'] = $info[''];
-        $data['train_statement_pic'] = $info[''];
+        $data['scene_pic'] = $info['scene_pic'];
+        $data['person_pic'] = $info['person_pic'];
+        $data['train_contract_pic'] = $info['train_contract_pic'];
+        $data['train_statement_pic'] = $info['train_statement_pic'];
 
         return DB::table(self::TABLE_NAME)->insertGetId($data);
     }

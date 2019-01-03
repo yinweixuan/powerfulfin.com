@@ -24,7 +24,8 @@ class BULoanUpdate
     public static function createLoan(array $info)
     {
         try {
-            $loan = ARPFLoan::addLoan($info);
+            $lid = ARPFLoan::addLoan($info);
+            $loan = ARPFLoan::getLoanById($lid);
             ARPFLoanLog::insertLog($loan, LOAN_1000_CREATE, '创建分期信息');
             if ($info['resource'] == RESOURCE_JCFC) {
                 ARPFLoan::_update($loan['id'], array('status' => LOAN_1200_SURE_FILE));
