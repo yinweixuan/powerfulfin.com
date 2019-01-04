@@ -17,6 +17,11 @@
 Route::get('/', 'HomeController@index');
 
 /**
+ * 下载页
+ */
+Route::get('download', 'HomeController@download');
+
+/**
  * 回调路由
  */
 Route::group(['namespace' => 'Inner'], function () {
