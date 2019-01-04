@@ -26,6 +26,7 @@ class LoginController extends AppController {
             $phone = Input::get('phone');
             $vcode = Input::get('vcode');
             $password = Input::get('password');
+            $phoneid = Input::get('phoneid', '');
             $ip = DataBus::get('ip');
             if (!CheckUtil::checkPhone($phone)) {
                 throw new PFException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
@@ -63,7 +64,7 @@ class LoginController extends AppController {
             $login_log['uid'] = $userInfo['id'];
             $login_log['login_time'] = date('Y-m-d H:i:s');
             $login_log['ip'] = $ip;
-            $login_log['device'] = '';
+            $login_log['device'] = $phoneid;
             if (DataBus::get('plat') == 1) {
                 $login_log['phone_type'] = 'IOS';
             } elseif (DataBus::get('plat') == 2) {
@@ -119,7 +120,7 @@ class LoginController extends AppController {
             $login_log['uid'] = $uid;
             $login_log['logout_time'] = date('Y-m-d H:i:s');
             $login_log['ip'] = DataBus::get('ip');
-            $login_log['device'] = '';
+            $login_log['device'] = Input::get('phoneid', '');
             if (DataBus::get('plat') == 1) {
                 $login_log['phone_type'] = 'IOS';
             } elseif (DataBus::get('plat') == 2) {

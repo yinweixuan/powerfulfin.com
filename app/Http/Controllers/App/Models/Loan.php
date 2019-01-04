@@ -255,7 +255,7 @@ class Loan
                     $data['step'] = 2;
                 } elseif (in_array($loan['status'], [
                         LOAN_2100_SCHOOL_REFUSE,
-                        LOAN_3100_KZ_REFUSE,
+                        LOAN_3100_PF_REFUSE,
                         LOAN_4100_P2P_REFUSE,
                         LOAN_14000_FOREVER_REFUSE,
                         LOAN_10200_REVOCATION,
@@ -280,8 +280,7 @@ class Loan
                     $data['step'] = 4;
                 } elseif (in_array($loan['status'], [
                         LOAN_10000_REPAY,
-                        LOAN_11100_OVERDUE_KZ,
-                        LOAN_11200_OVERDUE_P2P,
+                        LOAN_11100_OVERDUE,
                     ]
                 )) {
                     //还款/逾期中
@@ -299,8 +298,7 @@ class Loan
                         $data['can_repay'] = 1;
                     }
                     if (in_array($loan['status'], [
-                            LOAN_11100_OVERDUE_KZ,
-                            LOAN_11200_OVERDUE_P2P,
+                            LOAN_11100_OVERDUE,
                         ]
                     )) {
                         $data['is_overdue'] = 1;
