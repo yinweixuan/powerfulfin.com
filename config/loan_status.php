@@ -46,7 +46,6 @@ define('LOAN_10100_REFUSE', 10100);             //放款拒绝
 define('LOAN_10200_REVOCATION', 10200);         //放款撤销
 define('LOAN_11000_FINISH', 11000);             //还款已结束
 define('LOAN_11100_OVERDUE', 11100);         //还款逾期,课栈催缴
-define('LOAN_11200_OVERDUE_P2P', 11200);        //还款逾期,P2P催缴
 define('LOAN_11500_BAD', 11500);                //坏账,终止
 define('LOAN_12000_DROP', 12000);               //退课
 define('LOAN_13000_EARLY_FINISH', 13000);       //提前还款
