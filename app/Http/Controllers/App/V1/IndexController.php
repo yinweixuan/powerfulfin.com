@@ -14,22 +14,25 @@ use App\Components\OutputUtil;
 use App\Components\AliyunOpenSearchUtil;
 use App\Http\Controllers\App\Models\Loan;
 use App\Models\DataBus;
+use Illuminate\Support\Facades\Input;
 
 class IndexController extends AppController {
 
     public function index() {
-        $version = mt_rand(0, 3);
-        $mac = mt_rand(0, 1) == 1 ? '' : 'AA:AA:AA:AA:AA:AA';
-        $loan = [
-            'id' => 123,
-            'step' => mt_rand(0, 5),
-            'is_overdue' => mt_rand(0, 1),
-            'repay_date' => '2019-02-15',
-            'repay_money' => mt_rand(10000, 500000) / 100,
-            'can_repay' => mt_rand(0, 1),
-        ];
+//        $version = mt_rand(0, 3);
+//        $mac = mt_rand(0, 1) == 1 ? '' : 'AA:AA:AA:AA:AA:AA';
+//        $loan = [
+//            'id' => 123,
+//            'step' => mt_rand(0, 5),
+//            'is_overdue' => mt_rand(0, 1),
+//            'repay_date' => '2019-02-15',
+//            'repay_money' => mt_rand(10000, 500000) / 100,
+//            'can_repay' => mt_rand(0, 1),
+//        ];
+        $version = Input::get('version');
+        $mac = Input::get('mac');
         $uid = DataBus::getUid();
-//        $loan = Loan::getHomeLoanInfo($uid);
+        $loan = Loan::getHomeLoanInfo($uid);
         $data = [];
         $data['audit'] = $this->getAppStoreAudit($version);
         $data['banner'] = $this->getBanner();

@@ -121,7 +121,7 @@ class QueueUtil
     public static function createQueueNew($queueName, $attributes = NULL)
     {
         if (!is_string($queueName) || strlen($queueName) >= self::MAX_STR_LEN) {
-            throw new PFException("队列名非法:{$queueName}", ERR_QUEUE_CREATE);
+            throw new PFException("队列名非法:{$queueName}", ERR_SYS_PARAM);
         }
         $client = self::getClient();
         //创建队列
@@ -182,7 +182,7 @@ class QueueUtil
             //校验md5是否正确
             $sendMD5 = strtoupper($res->getMessageBodyMD5());
             if ($sendMD5 != $bodyMD5) {
-                throw new KZException("MD5计算有误.before:{$bodyMD5}.after:{$sendMD5}");
+                throw new \Exception("MD5计算有误.before:{$bodyMD5}.after:{$sendMD5}");
             }
             $messageId = $res->getMessageId();
         } catch (\Exception $e) {
