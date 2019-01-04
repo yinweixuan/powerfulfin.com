@@ -311,12 +311,15 @@ class BULoanApply
     {
         $ret = [];
         $loan = ARPFLoan::getLoanById($lid);
+        if (empty($loan)) {
+            return $ret;
+        }
         $ret['base'] = $loan;
         //判断是json,如果不存在,则拉取各个表的数据进行拼装
         if (array_key_exists('supply_info', $loan) && strlen($loan['supply_info']) >= 10) {
             $supply_info = OutputUtil::json_decode($loan['supply_info']);
             $ret['info_from'] = 'supply_info';
-            array_merge($ret, $supply_info);
+            $ret = array_merge($ret, $supply_info);
         } else {
             $ret['info_from'] = 'table';
             $ret['real'] = ARPFUsersReal::getInfo($loan['uid']);
