@@ -30,7 +30,7 @@ class IndexController extends AppController {
 //            'can_repay' => mt_rand(0, 1),
 //        ];
         $version = Input::get('version');
-        $mac = Input::get('mac');
+        $mac = Input::get('school_mac');
         $uid = DataBus::getUid();
         $loan = Loan::getHomeLoanInfo($uid);
         $data = [];

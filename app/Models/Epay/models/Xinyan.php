@@ -18,16 +18,16 @@ class Xinyan extends App\Models\Epay\Epay {
             $this->host = 'https://test.xinyan.com';
             $this->member_id = env('XINYAN_MEMBER_ID_DEV');
             $this->terminal_id = env('XINYAN_TERMINAL_ID_DEV');
-            $this->pfxpath = PATH_BASE . '/cer/baofoo/xinyan/cer_test/8000013189_pri.pfx';
-            $this->cerpath = PATH_BASE . '/cer/baofoo/xinyan/cer_test/bfkey_8000013189.cer';
+            $this->pfxpath = PATH_STORAGE . '/cer/baofoo/xinyan/cer_test/8000013189_pri.pfx';
+            $this->cerpath = PATH_STORAGE . '/cer/baofoo/xinyan/cer_test/bfkey_8000013189.cer';
             $this->pfx_pwd = env('XINYAN_CER_PASSWORD_DEV');
         } else {
             //正式环境
             $this->host = 'https://api.xinyan.com';
             $this->member_id = env('XINYAN_MEMBER_ID');
             $this->terminal_id = env('XINYAN_TERMINAL_ID');
-            $this->pfxpath = PATH_BASE . '/cer/baofoo/xinyan/cer/k2b_private.pfx';
-            $this->cerpath = PATH_BASE . '/cer/baofoo/xinyan/cer/b2k_public.cer';
+            $this->pfxpath = PATH_STORAGE . '/cer/baofoo/xinyan/cer/k2b_private.pfx';
+            $this->cerpath = PATH_STORAGE . '/cer/baofoo/xinyan/cer/b2k_public.cer';
             $this->pfx_pwd = env('XINYAN_CER_PASSWORD');
         }
     }

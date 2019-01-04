@@ -32,8 +32,8 @@ class BaofooPayAP extends App\Models\Epay\Epay {
         $this->id_card_type = '01'; //身份证
         if ($this->env == self::ENV_DEV) {
             //测试环境
-            $this->bf_public_cer = PATH_BASE . '/cer/baofoo/baofoo/cer_test/bfkey_100025773@@200001173.cer';
-            $this->bf_private_cer = PATH_BASE . '/cer/baofoo/baofoo/cer_test/bfkey_100025773@@200001173.pfx';
+            $this->bf_public_cer = PATH_STORAGE . '/cer/baofoo/baofoo/cer_test/bfkey_100025773@@200001173.cer';
+            $this->bf_private_cer = PATH_STORAGE . '/cer/baofoo/baofoo/cer_test/bfkey_100025773@@200001173.pfx';
             $this->bf_private_cer_password = env('BAOFOO_AP_CER_PASSWORD_DEV');
             $this->member_id = env('BAOFOO_AP_MEMBER_ID_DEV');
             $this->terminal_id = env('BAOFOO_AP_TERMINAL_ID_DEV');
@@ -41,8 +41,8 @@ class BaofooPayAP extends App\Models\Epay\Epay {
             $this->return_url = 'http://www.kezhanwang.cn/test1/eoasduhfaeuieiygsuyfs';
         } else {
             //正式环境
-            $this->bf_public_cer = dirname(__FILE__) . '/baofoo/cer/b2k_public.cer';
-            $this->bf_private_cer = dirname(__FILE__) . '/baofoo/cer/k2b_private.pfx';
+            $this->bf_public_cer = PATH_STORAGE . '/cer/baofoo/baofoo/cer/b2k_public.cer';
+            $this->bf_private_cer = PATH_STORAGE . '/cer/baofoo/baofoo/cer/k2b_private.pfx';
             $this->bf_private_cer_password = env('BAOFOO_AP_CER_PASSWORD');
             $this->member_id = env('BAOFOO_AP_MEMBER_ID');
             $this->terminal_id = env('BAOFOO_AP_TERMINAL_ID');

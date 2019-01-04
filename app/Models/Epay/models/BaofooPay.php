@@ -54,16 +54,16 @@ class BaofooPay extends App\Models\Epay\Epay {
         $this->id_card_type = '01';
         if ($this->env == self::ENV_DEV) {
             //测试环境
-            $this->BF_PUBLIC_CER = PATH_BASE . '/cer/baofoo/baofoo/cer_test/baofoo_pub.cer';
-            $this->BF_PRIVATE_CER = PATH_BASE . '/cer/baofoo/baofoo/cer_test/bfkey_100000178@@100000916.pfx';
+            $this->BF_PUBLIC_CER = PATH_STORAGE . '/cer/baofoo/baofoo/cer_test/baofoo_pub.cer';
+            $this->BF_PRIVATE_CER = PATH_STORAGE . '/cer/baofoo/baofoo/cer_test/bfkey_100000178@@100000916.pfx';
             $this->BF_PRIVATE_CER_PASSWORD = env('BAOFOO_PAY_CER_PASSWORD_DEV');
             $this->BF_MEMBER_ID = env('BAOFOO_PAY_MEMBER_ID_DEV');
             $this->terminal_id = env('BAOFOO_PAY_TERMINAL_ID_DEV');
             $this->apiurl = 'https://vgw.baofoo.com/cutpayment/api/backTransRequest';
         } else {
             //正式环境
-            $this->BF_PUBLIC_CER = PATH_BASE . '/cer/baofoo/baofoo/cer/b2k_public.cer';
-            $this->BF_PRIVATE_CER = PATH_BASE . '/cer/baofoo/baofoo/cer/k2b_private.pfx';
+            $this->BF_PUBLIC_CER = PATH_STORAGE . '/cer/baofoo/baofoo/cer/b2k_public.cer';
+            $this->BF_PRIVATE_CER = PATH_STORAGE . '/cer/baofoo/baofoo/cer/k2b_private.pfx';
             $this->BF_PRIVATE_CER_PASSWORD = env('BAOFOO_PAY_CER_PASSWORD');
             $this->BF_MEMBER_ID = env('BAOFOO_PAY_MEMBER_ID');
             $this->terminal_id = env('BAOFOO_PAY_TERMINAL_ID');
