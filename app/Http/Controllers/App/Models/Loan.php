@@ -74,8 +74,8 @@ class Loan
             throw new PFException("请求订单信息非当前登录用户所有，请稍后重试！", ERR_SYS_PARAM);
         }
 
-
-        $loanProduct = ARPFLoanProduct::getLoanProductByProduct($loanInfo['loan_product']);
+        $loanProducts = BULoanProduct::getLoanTypeByIds([$loanInfo['loan_product']], true, null);
+        $loanProduct = array_shift($loanProducts);
         if (empty($loanProduct)) {
             throw new PFException("金融产品异常，请稍后再试！", ERR_SYS_PARAM);
         }
@@ -85,18 +85,24 @@ class Loan
         $userReal = ARPFUsersReal::getInfo($uid);
         $userBank = ARPFUsersBank::getUserRepayBankByUid($uid);
         $info = [
-            'lid' => $loanInfo['id'],   //订单号
+            'lid' => (string)$loanInfo['id'],   //订单号
+            'status' => $loanInfo['status'],    //状态
+            'status_desp' => BULoanStatus::getStatusDescriptionForC($loanInfo['status']),
             'create_time' => $loanInfo['create_time'],  //申请时间
             'resource' => $loanInfo['resource'],    //资金方
+            'resource_company' => ARPFLoanProduct::$resourceCompany[$loanInfo['resource']],    //资金方
             'borrow_money' => $loanInfo['borrow_money'],    //借款金额
+            'installment' => (string)($loanProduct['rate_time_x'] + $loanProduct['rate_time_y']),
             'repay_need' => count($loanBill),   //总期数
-            'org' => $org['org_name'],  //机构名称
+            'org_name' => $org['org_name'],  //机构名称
             'oid' => $loanInfo['oid'],  //机构ID
             'full_name' => $userReal['full_name'],
             'phone' => $userReal['phone'],
-            'bank_account' => CheckUtil::formatCreditCard($userBank['bank_account']),
+            'bank_account' => $userBank['bank_account'],
             'bank_name' => $userBank['bank_name'],
-            'contract' => ''
+            'loan_product' => $loanProduct['name'],
+            'contract' => '',
+            'audit_opinion' => $loanInfo['audit_opinion']
         ];
 
         return $info;
@@ -113,7 +119,7 @@ class Loan
         $info = [];
         foreach ($loanList as $item) {
             $tmp = [
-                'lid' => $item['id'],
+                'lid' => (string)$item['id'],
                 'borrow_money' => $item['borrow_money'],
                 'status' => $item['status'],
                 'status_desp' => BULoanStatus::getStatusDescriptionForC($item['status']),
@@ -164,12 +170,15 @@ class Loan
 
         //判断资金方是否需要手持身份证照片
         $data['idcard_person_pic_switch'] = BULoanConfig::getIdcardPersonPic($resource);
+        $data['idcard_person_pic_switch'] = true;
         //判断资金方是否需要场景照
         $data['school_pic_switch'] = BULoanConfig::getSchoolPic($resource);
+        $data['school_pic_switch'] = true;
         //开课时间
         $data['course_open_time_switch'] = true;
         //重新定义是否需要培训协议照片
         $data['train'] = BULoanConfig::getTrainingContractSwitch($resource, $orgHead['hid']);
+        $data['train'] = true;
         return $data;
     }
 
@@ -255,7 +264,7 @@ class Loan
                     $data['step'] = 2;
                 } elseif (in_array($loan['status'], [
                         LOAN_2100_SCHOOL_REFUSE,
-                        LOAN_3100_KZ_REFUSE,
+                        LOAN_3100_PF_REFUSE,
                         LOAN_4100_P2P_REFUSE,
                         LOAN_14000_FOREVER_REFUSE,
                         LOAN_10200_REVOCATION,
@@ -280,8 +289,7 @@ class Loan
                     $data['step'] = 4;
                 } elseif (in_array($loan['status'], [
                         LOAN_10000_REPAY,
-                        LOAN_11100_OVERDUE_KZ,
-                        LOAN_11200_OVERDUE_P2P,
+                        LOAN_11100_OVERDUE,
                     ]
                 )) {
                     //还款/逾期中
@@ -299,8 +307,7 @@ class Loan
                         $data['can_repay'] = 1;
                     }
                     if (in_array($loan['status'], [
-                            LOAN_11100_OVERDUE_KZ,
-                            LOAN_11200_OVERDUE_P2P,
+                            LOAN_11100_OVERDUE,
                         ]
                     )) {
                         $data['is_overdue'] = 1;
