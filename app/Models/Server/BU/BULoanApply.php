@@ -316,7 +316,7 @@ class BULoanApply
         if (array_key_exists('supply_info', $loan) && strlen($loan['supply_info']) >= 10) {
             $supply_info = OutputUtil::json_decode($loan['supply_info']);
             $ret['info_from'] = 'supply_info';
-            array_push($ret, $supply_info);
+            array_merge($ret, $supply_info);
         } else {
             $ret['info_from'] = 'table';
             $ret['real'] = ARPFUsersReal::getInfo($loan['uid']);

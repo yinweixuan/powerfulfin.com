@@ -151,22 +151,24 @@
                                 <td>手机号</td>
                                 <td>用途</td>
                             </tr>
-                            @foreach($bank as $item)
-                                <tr>
-                                    <td><img src="{{ \App\Models\Server\BU\BUBanks::getBankLogo($item['bank_code']) }}"
-                                             style="width: 19px">{{ $item['bank_name'] }}</td>
-                                    <td>{{ $item['bank_account'] }}</td>
-                                    <td>{{ $item['phone'] }}</td>
-                                    <td>
-                                        @if($item['type'] == 1)
-                                            划扣卡
-                                        @else
-                                            主动还款卡
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-
+                            @if(!empty($bank))
+                                @foreach($bank as $item)
+                                    <tr>
+                                        <td><img
+                                                src="{{ \App\Models\Server\BU\BUBanks::getBankLogo($item['bank_code']) }}"
+                                                style="width: 19px">{{ $item['bank_name'] }}</td>
+                                        <td>{{ $item['bank_account'] }}</td>
+                                        <td>{{ $item['phone'] }}</td>
+                                        <td>
+                                            @if($item['type'] == 1)
+                                                划扣卡
+                                            @else
+                                                主动还款卡
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             <tr>
                                 <td colspan="4" align="center">工作状态:<?php switch ($work['working_status']) {
                                         case \App\Models\ActiveRecord\ARPFUsersWork::WORKING_CONDITION_WORKING:
