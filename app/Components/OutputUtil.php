@@ -269,4 +269,24 @@ class OutputUtil
         }
         return $ret;
     }
+
+    /**
+     * 获取图片展示地址
+     * @param $object
+     */
+    public static function valueImg($object, $bucket = null)
+    {
+        if (empty($object)) {
+            return '';
+        }
+        if (empty($bucket)) {
+            $bucket = AliyunOSSUtil::getLoanBucket();
+        }
+        try {
+            $url = AliyunOSSUtil::getAccessUrl($bucket, $object);
+            return $url;
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
 }

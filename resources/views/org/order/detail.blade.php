@@ -87,7 +87,7 @@ use App\Components\OutputUtil;
                             echo \App\Models\Server\BU\BUBanks::getBankName($bank[0]['bank_code']);
                             ?></td>
                         <td>银行卡号</td>
-                        <td><?php echo $bank[0]['bank_account']; ?></td>
+                        <td><?php OutputUtil::echoEscape($bank[0]['bank_account']); ?></td>
                     </tr>
                     <tr>
                         <td>学历</td>
@@ -106,33 +106,51 @@ use App\Components\OutputUtil;
                     </tr>
                     <tr>
                         <td>场景照</td>
-                        <td>
-                            <?php if (!empty($info['school_pic'])) {  ?>
-                            <a href="<?php echo PicUtil::getUrl($info['school_pic'], 1) ?>" target="_blank">
-                                <img src="<?php echo PicUtil::getUrl($info['school_pic'], 1) ?>"
-                                     style="width:200px">
+                        <td colspan="3" align="center">
+                            <?php if (!empty($base['scene_pic'])) {
+                                $picArr = OutputUtil::json_decode($base['scene_pic']);
+                                if (!is_array($picArr)) {
+                                    $picArr = [$picArr];
+                                }
+                                foreach ($picArr as $pic) {
+                                    $url = OutputUtil::valueImg($pic);
+                                ?>
+                            <a href="<?php echo $url; ?>" target="_blank">
+                                <img src="<?php echo $url; ?>" style="width:200px">
                             </a>
-                            <?php } else { ?>
-                            <p style="color: red" align="center">暂无场景照</p>
+                            <?php }} else { ?>
+                            <p style="color: red" align="center">暂无</p>
                             <?php } ?>
                         </td>
+                    </tr>
+                    <tr>
                         <td>学籍证明</td>
-                        <td>
-                            <?php if (!empty($info['pic_education'])) { ?>
-                            <a href="<?php echo PicUtil::getUrl($info['pic_education'], 1) ?>" target="_blank">
-                                <img src="<?php echo PicUtil::getUrl($info['pic_education'], 1) ?>"
-                                     style="width:200px">
+                        <td colspan="3" align="center">
+                            <?php if (!empty($work['edu_pic'])) {
+                            $picArr = OutputUtil::json_decode($work['edu_pic']);
+                            if (!is_array($picArr)) {
+                                $picArr = [$picArr];
+                            }
+                            foreach ($picArr as $pic) {
+                                $url = OutputUtil::valueImg($pic);
+                            ?>
+                            <a href="<?php echo $url; ?>" target="_blank">
+                                <img src="<?php echo $url; ?>" style="width:200px">
                             </a>
-                            <?php } else { ?>
+                            <?php }} else { ?>
                             <p style="color: red" align="center">未上传学籍证明，有拒绝风险，请联系学员上传学生证或学信网截图</p>
                             <?php } ?>
                         </td>
                     </tr>
-                    <?php if (!empty($info['training_contract_arr'])) {
+                    <?php if (!empty($info['train_contract_pic'])) {
                         echo "<tr><td>培训协议</td><td colspan='3'>";
-                        foreach ($info['training_contract_arr'] as $p) {
-                            $p = PicUtil::getUrl($p, 1);
-                            echo "<a href='{$p}' target='_blank'><img src='{$p}' style='width:200px'></a>";
+                        $picArr = OutputUtil::json_decode($base['train_contract_pic']);
+                        if (!is_array($picArr)) {
+                            $picArr = [$picArr];
+                        }
+                        foreach ($picArr as $pic) {
+                            $url = OutputUtil::valueImg($pic);
+                            echo "<a href='{$url}' target='_blank'><img src='{$url}' style='width:200px'></a>";
                         }
                         echo "</td></tr>";
                     }?>

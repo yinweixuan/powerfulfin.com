@@ -25,11 +25,13 @@ class BUBanks
     {
         $redis = RedisUtil::getInstance();
         $redisKey = 'PF_BANKS_INFO';
-        if ($redis->exists($redisKey)) {
+        if ($redis && $redis->exists($redisKey)) {
             return json_decode($redis->get($redisKey), true);
         } else {
             $banks = config('bank');
-            $redis->set($redisKey, json_encode($banks));
+            if ($redis) {
+                $redis->set($redisKey, json_encode($banks));
+            }
             return $banks;
         }
     }

@@ -23,6 +23,7 @@ use App\Models\ActiveRecord\ARPFUsersContact;
 use App\Models\ActiveRecord\ARPFUsersLocation;
 use App\Models\ActiveRecord\ARPFUsersPhonebook;
 use App\Models\ActiveRecord\ARPFUsersReal;
+use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\ActiveRecord\ARPFUsersWork;
 use App\Models\DataBus;
 use Illuminate\Support\Facades\DB;
