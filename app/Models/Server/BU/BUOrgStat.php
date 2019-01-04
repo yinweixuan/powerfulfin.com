@@ -54,7 +54,7 @@ class BUOrgStat
             $ret[$s['oid']]['statusInfo'][$s['status']] = $s;
             $ret[$s['oid']]['total'] += $s['c'];
             $ret[$s['oid']]['total_money'] += $s['s'];
-            if (in_array($s['status'], [LOAN_2000_SCHOOL_CONFIRM, LOAN_3000_KZ_CONFIRM, LOAN_4200_DATA_P2P_SEND,])) {
+            if (in_array($s['status'], [LOAN_2000_SCHOOL_CONFIRM, LOAN_3000_PF_CONFIRM, LOAN_4200_DATA_P2P_SEND,])) {
                 $ret[$s['oid']]['audit'] += $s['c'];
                 $ret[$s['oid']]['audit_money'] += $s['s'];
             } else if (in_array($s['status'], [LOAN_5000_SCHOOL_BEGIN, LOAN_6000_NOTICE_MONEY,])) {

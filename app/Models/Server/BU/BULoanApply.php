@@ -168,7 +168,7 @@ class BULoanApply
         //检查用户是否存在正在进行的订单
         $rejectStatusArr = array(
             LOAN_2100_SCHOOL_REFUSE,
-            LOAN_3100_KZ_REFUSE,
+            LOAN_3100_PF_REFUSE,
             LOAN_4100_P2P_REFUSE,
             LOAN_4300_SUPPLEMENT,
             LOAN_5100_SCHOOL_REFUSE,

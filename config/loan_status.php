@@ -14,14 +14,14 @@ define('LOAN_1200_SURE_FILE', 1200);            //确认合同
 define('LOAN_2000_SCHOOL_CONFIRM', 2000);       //机构确认
 define('LOAN_2100_SCHOOL_REFUSE', 2100);        //机构拒绝
 
-define('LOAN_3000_KZ_CONFIRM', 3000);           //课栈已通过
-define('LOAN_3100_KZ_REFUSE', 3100);            //课栈已拒绝
-define('LOAN_3200_KZ_CREDIT_COMPANY', 3200);    //课栈脚本问题--机构查询
-define('LOAN_3300_KZ_CREDIT_UPLOAD', 3300);     //课栈脚本问题--上传文件
-define('LOAN_3400_KZ_CREDIT_SEND_INFO', 3400);  //课栈脚本问题--提交信息
-define('LOAN_3500_KZ_CREDIT_LOAN_APPLY', 3500); //课栈脚本问题--贷款申请
-define('LOAN_3600_KZ_CREDIT_UPLOAD_SUCCESS', 3600); //课栈脚本成功--上传文件
-define('LOAN_3700_KZ_CREDIT_SEND_INFO_SUCCESS', 3700);  //课栈脚本成功--提交信息
+define('LOAN_3000_PF_CONFIRM', 3000);           //课栈已通过
+define('LOAN_3100_PF_REFUSE', 3100);            //课栈已拒绝
+define('LOAN_3200_PF_CREDIT_COMPANY', 3200);    //课栈脚本问题--机构查询
+define('LOAN_3300_PF_CREDIT_UPLOAD', 3300);     //课栈脚本问题--上传文件
+define('LOAN_3400_PF_CREDIT_SEND_INFO', 3400);  //课栈脚本问题--提交信息
+define('LOAN_3500_PF_CREDIT_LOAN_APPLY', 3500); //课栈脚本问题--贷款申请
+define('LOAN_3600_PF_CREDIT_UPLOAD_SUCCESS', 3600); //课栈脚本成功--上传文件
+define('LOAN_3700_PF_CREDIT_SEND_INFO_SUCCESS', 3700);  //课栈脚本成功--提交信息
 
 define('LOAN_4200_DATA_P2P_SEND', 4200);        //已经将审核信息发给P2P
 define('LOAN_4000_P2P_CONFIRM', 4000);          //P2P已通过

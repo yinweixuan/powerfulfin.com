@@ -173,7 +173,7 @@
                                 ?></td>
                             <td style="color:<?php if ($l['status'] == LOAN_11100_OVERDUE) {echo "red";} ?>"><?php
                                 echo $l['status_B'];
-                                if (in_array($l['status'], array(LOAN_2100_SCHOOL_REFUSE, LOAN_3100_KZ_REFUSE, LOAN_4100_P2P_REFUSE, LOAN_2000_SCHOOL_CONFIRM))) {
+                                if (in_array($l['status'], array(LOAN_2100_SCHOOL_REFUSE, LOAN_3100_PF_REFUSE, LOAN_4100_P2P_REFUSE, LOAN_2000_SCHOOL_CONFIRM))) {
                                     echo '<br />(原因:' . html_entity_decode($l['audit_opinion']) . ')';
                                 }
                                 ?></td>
