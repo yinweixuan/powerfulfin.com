@@ -30,7 +30,7 @@ class LoanController extends AppController
             $lid = Input::get("lid");
             $user = DataBus::get("user");
             $info = Loan::getLoanBill($lid, $user['id']);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, ['laon_bill' => $info]);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, ['loan_bill' => $info]);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }

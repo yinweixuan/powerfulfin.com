@@ -60,17 +60,17 @@ class BUOrgStat
             } else if (in_array($s['status'], [LOAN_5000_SCHOOL_BEGIN, LOAN_6000_NOTICE_MONEY,])) {
                 $ret[$s['oid']]['repaying'] += $s['c'];
                 $ret[$s['oid']]['repaying_money'] += $s['s'];
-            } else if (in_array($s['status'], [LOAN_10000_REPAY, LOAN_11100_OVERDUE_KZ, LOAN_11000_FINISH, LOAN_12000_DROP, LOAN_13000_EARLY_FINISH,])) {
+            } else if (in_array($s['status'], [LOAN_10000_REPAY, LOAN_11100_OVERDUE, LOAN_11000_FINISH, LOAN_12000_DROP, LOAN_13000_EARLY_FINISH,])) {
                 $ret[$s['oid']]['repayed'] += $s['c'];
                 $ret[$s['oid']]['repayed_money'] += $s['s'];
-                if ($s['status'] == LOAN_11100_OVERDUE_KZ) {
+                if ($s['status'] == LOAN_11100_OVERDUE) {
                     $ret[$s['oid']]['delay'] += $s['c'];
                     $ret[$s['oid']]['delay_money'] += $s['s'];
                 }
             }
         }
         //统计还款信息
-        $statusStr = implode(',', [LOAN_10000_REPAY, LOAN_11000_FINISH, LOAN_11100_OVERDUE_KZ, LOAN_12000_DROP, LOAN_13000_EARLY_FINISH,]);
+        $statusStr = implode(',', [LOAN_10000_REPAY, LOAN_11000_FINISH, LOAN_11100_OVERDUE, LOAN_12000_DROP, LOAN_13000_EARLY_FINISH,]);
         $sql = "select l.oid oid,b.status status, sum(b.principal) s from pf_loan l, pf_loan_bill b where l.oid in ($oidStr) and l.status in ({$statusStr}) and l.id = b.lid group by l.oid,b.status";
         $billInfo = DB::select($sql);
         foreach ($billInfo as $b) {

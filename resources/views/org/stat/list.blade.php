@@ -155,7 +155,7 @@
                         foreach ($lists as $l) {
                         ?>
                         <tr data-id="<?php echo $l['id']; ?>"
-                            style="background-color:<?php if ($l['status'] == LOAN_11100_OVERDUE_KZ) {
+                            style="background-color:<?php if ($l['status'] == LOAN_11100_OVERDUE) {
                                 echo "#44C8F4";
                             } ?>">
                             <td><?php echo $l['id']; ?></td>
@@ -171,7 +171,7 @@
                                     echo $l['loan_time'];
                                 }
                                 ?></td>
-                            <td style="color:<?php if ($l['status'] == LOAN_11100_OVERDUE_KZ) {echo "red";} ?>"><?php
+                            <td style="color:<?php if ($l['status'] == LOAN_11100_OVERDUE) {echo "red";} ?>"><?php
                                 echo $l['status_B'];
                                 if (in_array($l['status'], array(LOAN_2100_SCHOOL_REFUSE, LOAN_3100_KZ_REFUSE, LOAN_4100_P2P_REFUSE, LOAN_2000_SCHOOL_CONFIRM))) {
                                     echo '<br />(原因:' . html_entity_decode($l['audit_opinion']) . ')';
