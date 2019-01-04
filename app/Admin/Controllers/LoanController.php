@@ -53,7 +53,6 @@ class LoanController extends AdminController
     {
         $lid = Input::get('lid');
         $loan = BULoanApply::getDetailById($lid);
-//        var_dump($loan);
         return $content->header('订单详情')
             ->description($loan['real']['full_name'])
             ->breadcrumb(

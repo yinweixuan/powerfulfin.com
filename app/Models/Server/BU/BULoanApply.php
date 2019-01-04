@@ -305,17 +305,19 @@ class BULoanApply
      * 根据订单号,查找该订单的所有信息
      * @param $lid
      * @return array|mixed
+     * @throws PFException
      */
     public static function getDetailById($lid)
     {
         $ret = [];
         $loan = ARPFLoan::getLoanById($lid);
+        $ret['base'] = $loan;
         //判断是json,如果不存在,则拉取各个表的数据进行拼装
         if (array_key_exists('supply_info', $loan) && strlen($loan['supply_info']) >= 10) {
-            $ret = OutputUtil::json_decode($loan['supply_info']);
+            $supply_info = OutputUtil::json_decode($loan['supply_info']);
             $ret['info_from'] = 'supply_info';
+            array_push($ret, $supply_info);
         } else {
-            $ret['base'] = $loan;
             $ret['info_from'] = 'table';
             $ret['real'] = ARPFUsersReal::getInfo($loan['uid']);
             $ret['bank'] = ARPFUsersBank::getUserBanksByUid($loan['uid']);
@@ -327,11 +329,11 @@ class BULoanApply
         //补充机构和课程信息
         $ret['org'] = ARPFOrg::getOrgById($loan['oid']);
         $ret['class'] = ARPFOrgClass::getById($loan['class']);
-        $ret['user'] =ARPfUsers::getUserInfoByID($loan['uid']);
+        $ret['user'] = ARPfUsers::getUserInfoByID($loan['uid']);
         //补充资方,费率信息
         $ret['base']['resource_desc'] = BULoanProduct::getResourceCompany($ret['base']['resource']);
         $ret['base']['resource_desc_simple'] = BULoanProduct::getResourceCompany($ret['base']['resource'], true);
-        $loanProduct = BULoanProduct::getLoanTypeByIds([$loan['loan_product']]);
+        $loanProduct = BULoanProduct::getLoanTypeByIds([$loan['loan_product']], true, null);
         if (array_key_exists($loan['loan_product'], $loanProduct)) {
             $ret['base']['loan_product_config'] = $loanProduct[$loan['loan_product']];
             $ret['base']['loan_product_desc'] = $loanProduct[$loan['loan_product']]['name'];
