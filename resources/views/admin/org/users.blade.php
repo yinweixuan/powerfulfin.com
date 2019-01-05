@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">查询</button>
+                <button type="submit" class="btn btn-sm btn-danger">查询</button>
             </div>
         </form>
     </div>

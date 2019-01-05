@@ -12,11 +12,15 @@ namespace App\Admin\Controllers;
 use App\Admin\AdminController;
 use App\Admin\Models\OrgModel;
 use App\Components\PFException;
+use App\Components\RedisUtil;
+use App\Models\ActiveRecord\ARPFAreas;
+use App\Models\ActiveRecord\ARPFOrg;
+use App\Models\ActiveRecord\ARPFOrgHead;
 use App\Models\Server\BU\BULoanProduct;
+use Encore\Admin\Exception\Handler;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 
 class OrgController extends AdminController
 {
@@ -27,19 +31,30 @@ class OrgController extends AdminController
             'oid' => Input::get('oid', ''),
             'hid' => Input::get('hid', ''),
             'org_name' => Input::get('org_name', ''),
+            'full_name' => Input::get('full_name', ''),
             'status' => Input::get('status', ''),
             'can_loan' => Input::get('can_loan', ''),
-            'province' => Input::get('province', ''),
-            'city' => Input::get('city', '')
+            'org_province' => Input::get('org_province', ''),
+            'org_city' => Input::get('org_city', ''),
         ];
         $info = OrgModel::getOrgList($data);
         $data['info'] = $info;
+        $redis = RedisUtil::getInstance();
+        $key = "PF_PROVINCE";
+        $redisProvinceData = $redis->get($key);
+        if ($redisProvinceData) {
+            $province = json_decode($redisProvinceData, true);
+        } else {
+            $province = ARPFAreas::getAreas(0);
+            $redis->set($key, json_encode($province), 86400);
+        }
+        $data['province'] = $province;
         admin_toastr('查询成功...', 'success');
         return $content
-            ->header('机构列表')
-            ->description('机构管理')
+            ->header('分校列表')
+            ->description('分校管理')
             ->breadcrumb(
-                ['text' => '机构列表', 'url' => '/admin/org']
+                ['text' => '分校列表', 'url' => '/admin/org']
             )
             ->row(view('admin.org.index', $data));
     }
@@ -49,7 +64,13 @@ class OrgController extends AdminController
         $data = [
             'page' => Input::get('page', 1),
             'hid' => Input::get('hid'),
-            'full_name' => Input::get('full_name')
+            'full_name' => Input::get('full_name'),
+            'org_bank_account' => Input::get('org_bank_account'),
+            'org_bank_code' => Input::get('org_bank_code'),
+            'business_license' => Input::get('business_license'),
+            'business_type' => Input::get('business_type'),
+            'legal_person' => Input::get('legal_person'),
+            'legal_person_idcard' => Input::get('legal_person_idcard'),
         ];
         $data['info'] = OrgModel::getOrgHeadList($data);
         admin_toastr('查询成功...', 'success');
@@ -92,10 +113,18 @@ class OrgController extends AdminController
     {
         $data = [
             'page' => Input::get('page', 1),
-            'id' => Input::get('id', ''),
+            'cid' => Input::get('cid', ''),
             'oid' => Input::get('oid', ''),
+            'org_name' => Input::get('org_name', ''),
+            'hid' => Input::get('hid', ''),
+            'full_name' => Input::get('full_name', ''),
             'class_name' => Input::get('class_name', ''),
-            'status' => Input::get('status'),
+            'status' => Input::get('status', ''),
+            'class_price_max' => Input::get('class_price_max', ''),
+            'class_price_min' => Input::get('class_price_min', ''),
+            'class_online' => Input::get('class_online', ''),
+            'class_type' => Input::get('class_type', ''),
+            'class_days' => Input::get('class_days', ''),
         ];
         $data['info'] = OrgModel::getClassList($data);
         admin_toastr('查询成功...', 'success');
@@ -124,5 +153,115 @@ class OrgController extends AdminController
                 ['text' => '机构管理员', 'url' => '/admin/org/class']
             )
             ->row(view('admin.org.users', $data));
+    }
+
+    public function edithead(Content $content)
+    {
+
+    }
+
+    public function addorg(Content $content)
+    {
+        try {
+            $hid = Input::get('hid');
+            if (empty($hid)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT . ":未正确获取商户ID", ERR_SYS_PARAM);
+            }
+            $orgHead = ARPFOrgHead::getInfo($hid);
+            if (empty($orgHead)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT . ":未正确获取商户信息", ERR_SYS_PARAM);
+            }
+            $type = Input::get('type', '');
+
+            $redis = RedisUtil::getInstance();
+            $key = "PF_PROVINCE";
+            $data = $redis->get($key);
+            if ($data) {
+                $province = json_decode($data, true);
+            } else {
+                $province = ARPFAreas::getAreas(0);
+                $redis->set($key, json_encode($province), 86400);
+            }
+
+            $view = $content->header('新增分校')
+                ->description('添加分校信息')
+                ->breadcrumb(
+                    ['text' => '商户列表', 'url' => '/admin/org/head'],
+                    ['text' => '新增分校', 'url' => '/admin/org/addorg']
+                )
+                ->row(view('admin.org.addorg', ['orgHead' => $orgHead, 'province' => $province]));
+            if ($type == 'addorg') {
+                try {
+                    $data = $_POST;
+                    $result = OrgModel::addOrg($data);
+                    if ($result) {
+                        return Redirect::to("/admin/org/index")->send();
+                    }
+                } catch (PFException $exception) {
+                    return $view->withError($exception->getMessage());
+                }
+            } else {
+                return $view;
+            }
+        } catch (PFException $exception) {
+            return Handler::renderException($exception);
+        }
+    }
+
+    public function addorgclass(Content $content)
+    {
+        try {
+            $hid = Input::get('hid', 0);
+            $oid = Input::get('oid', 0);
+            if (empty($hid) && empty($oid)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT . ":未正确获取商户ID", ERR_SYS_PARAM);
+            }
+            if (!empty($hid)) {
+                $orgHead = ARPFOrgHead::getInfo($hid);
+                if (empty($orgHead)) {
+                    throw new PFException(ERR_SYS_PARAM_CONTENT . ":未正确获取商户信息", ERR_SYS_PARAM);
+                }
+                $org = [];
+            }
+
+            if (!empty($oid)) {
+                $org = ARPFOrg::getOrgById($oid);
+                if (empty($org)) {
+                    throw new PFException(ERR_SYS_PARAM_CONTENT . ":未正确获取分校信息", ERR_SYS_PARAM);
+                }
+                if (!empty($hid) && $hid != $org['hid']) {
+                    throw new PFException(ERR_SYS_PARAM_CONTENT . ":商户信息和分校信息不对等", ERR_SYS_PARAM);
+                }
+                $orgHead = ARPFOrgHead::getInfo($hid);
+                if (empty($orgHead)) {
+                    throw new PFException(ERR_SYS_PARAM_CONTENT . ":未正确获取商户信息", ERR_SYS_PARAM);
+                }
+            }
+            $info = ['orgHead' => $orgHead, 'org' => $org, 'hid' => $hid, 'oid' => $oid];
+            $type = Input::get('type', '');
+
+            $view = $content->header('新增课程')
+                ->description('添加课程信息')
+                ->breadcrumb(
+                    ['text' => '课程列表', 'url' => '/admin/org/class'],
+                    ['text' => '新增课程', 'url' => '/admin/org/addclass']
+                )
+                ->row(view('admin.org.addclass', $info));
+            if ($type == 'addclass') {
+                try {
+                    $data = $_POST;
+                    $result = OrgModel::addClass($data);
+                    if ($result) {
+                        return Redirect::to("/admin/org/class")->send();
+                    }
+                } catch (PFException $exception) {
+                    return $view->withError($exception->getMessage());
+                }
+            } else {
+                return $view;
+            }
+        } catch (PFException $exception) {
+            return Handler::renderException($exception);
+        }
     }
 }

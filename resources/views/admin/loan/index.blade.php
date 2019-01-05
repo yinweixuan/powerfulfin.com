@@ -141,7 +141,7 @@
                 </div>
             </div>
             <div class="box-footer">
-                <input type="submit" class="btn btn-sm btn-primary" value='查询'/>
+                <input type="submit" class="btn btn-sm btn-danger" value='查询'/>
             </div>
         </form>
     </div>
@@ -185,7 +185,7 @@
                                             <td>{{ $item['create_time'] }}</td>
                                             <td>{{ $item['loan_time'] }}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-success"
+                                                <a class="btn btn-sm btn-danger"
                                                    href="/admin/loan/info?lid={{ $item['id'] }}">详情</a>
                                             </td>
                                         </tr>

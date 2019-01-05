@@ -27,38 +27,44 @@ class OrgModel
      */
     public static function getOrgList($data)
     {
-        $query = DB::table(ARPFOrg::TABLE_NAME)->select('*');
+        $query = DB::table(ARPFOrg::TABLE_NAME . ' as o')
+            ->select(['o.*', 'oh.full_name'])
+            ->leftJoin(ARPFOrgHead::TABLE_NAME . ' as oh', 'oh.hid', '=', 'o.hid');
 
         if (array_key_exists('oid', $data) && !empty($data['oid'])) {
-            $query->where('id', $data['oid']);
+            $query->where('o.id', $data['oid']);
         }
 
         if (array_key_exists('hid', $data) && !empty($data['hid'])) {
-            $query->where('hid', $data['hid']);
+            $query->where('o.hid', $data['hid']);
         }
 
         if (array_key_exists('org_name', $data) && !empty($data['org_name'])) {
-            $query->where('org_name', 'like', '%' . $data['org_name'] . '%');
+            $query->where('o.org_name', 'like', '%' . $data['org_name'] . '%');
+        }
+
+        if (array_key_exists('full_name', $data) && !empty($data['full_name'])) {
+            $query->where('oh.full_name', 'like', '%' . $data['full_name'] . '%');
         }
 
         if (array_key_exists('status', $data) && !empty($data['status'])) {
-            $query->where('status', $data['status']);
+            $query->where('o.status', $data['status']);
         }
 
         if (array_key_exists('can_loan', $data) && !empty($data['can_loan'])) {
-            $query->where('can_loan', $data['can_loan']);
+            $query->where('o.can_loan', $data['can_loan']);
         }
 
-        if (array_key_exists('province', $data) && !empty($data['province'])) {
-            $query->where('province', $data['province']);
+        if (array_key_exists('org_province', $data) && !empty($data['org_province'])) {
+            $query->where('o.org_province', $data['org_province']);
         }
 
-        if (array_key_exists('city', $data) && !empty($data['city'])) {
-            $query->where('city', $data['city']);
+        if (array_key_exists('org_city', $data) && !empty($data['org_city'])) {
+            $query->where('o.org_city', $data['org_city']);
         }
 
-        $query->orderByDesc('id');
-        $info = $query->paginate(10, ['id'], 'page', $data['page'])
+        $query->orderByDesc('o.id');
+        $info = $query->paginate(10, ['o.id'], 'page', $data['page'])
             ->appends($data);
         return $info;
     }
@@ -74,6 +80,29 @@ class OrgModel
             $query->where('full_name', 'like', '%' . $data['full_name'] . '%');
         }
 
+        if (array_key_exists('org_bank_code', $data) && !empty($data['org_bank_code'])) {
+            $query->where('org_bank_code', $data['org_bank_code']);
+        }
+
+        if (array_key_exists('org_bank_account', $data) && !empty($data['org_bank_account'])) {
+            $query->where('org_bank_account', $data['org_bank_account']);
+        }
+
+        if (array_key_exists('business_license', $data) && !empty($data['business_license'])) {
+            $query->where('business_license', 'like', '%' . $data['business_license'] . '%');
+        }
+
+        if (array_key_exists('business_type', $data) && !empty($data['business_type'])) {
+            $query->where('business_type', $data['business_type']);
+        }
+
+        if (array_key_exists('legal_person', $data) && !empty($data['legal_person'])) {
+            $query->where('legal_person', 'like', '%' . $data['legal_person'] . '%');
+        }
+        if (array_key_exists('legal_person_idcard', $data) && !empty($data['legal_person_idcard'])) {
+            $query->where('legal_person_idcard', 'like', '%' . $data['legal_person_idcard'] . '%');
+        }
+
         $query->orderByDesc('hid');
         $info = $query->paginate(10, ['hid'], 'page', $data['page'])
             ->appends($data);
@@ -83,16 +112,29 @@ class OrgModel
     public static function getClassList($data)
     {
         $query = DB::table(ARPFOrgClass::TABLE_NAME . ' as oc')
-            ->select(['oc.*', 'o.org_name'])
-            ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'oc.oid');
+            ->select(['oc.*', 'o.org_name', 'oh.full_name'])
+            ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'oc.oid')
+            ->leftJoin(ARPFOrgHead::TABLE_NAME . ' as oh', 'oh.hid', '=', 'oc.hid');
 
 
-        if (array_key_exists('id', $data) && !empty($data['id'])) {
-            $query->where('oc.cid', $data['id']);
+        if (array_key_exists('cid', $data) && !empty($data['cid'])) {
+            $query->where('oc.cid', $data['cid']);
         }
 
         if (array_key_exists('oid', $data) && !empty($data['oid'])) {
             $query->where('oc.oid', $data['oid']);
+        }
+
+        if (array_key_exists('hid', $data) && !empty($data['hid'])) {
+            $query->where('oc.hid', $data['hid']);
+        }
+
+        if (array_key_exists('org_name', $data) && !empty($data['org_name'])) {
+            $query->where('o.org_name', 'like', '%' . $data['org_name'] . '%');
+        }
+
+        if (array_key_exists('full_name', $data) && !empty($data['full_name'])) {
+            $query->where('oh.full_name', 'like', '%' . $data['full_name'] . '%');
         }
 
         if (array_key_exists('class_name', $data) && !empty($data['class_name'])) {
@@ -101,6 +143,26 @@ class OrgModel
 
         if (array_key_exists('status', $data) && !empty($data['status'])) {
             $query->where('oc.status', $data['status']);
+        }
+
+        if (array_key_exists('class_online', $data) && !empty($data['class_online'])) {
+            $query->where('oc.class_online', $data['class_online']);
+        }
+
+        if (array_key_exists('class_type', $data) && !empty($data['class_type'])) {
+            $query->where('oc.class_type', $data['class_type']);
+        }
+
+        if (array_key_exists('class_days', $data) && !empty($data['class_days'])) {
+            $query->where('oc.class_days', $data['class_days']);
+        }
+
+        if (array_key_exists('class_price_min', $data) && !empty($data['class_price_min'])) {
+            $query->where('oc.class_price', '>=', $data['class_price_min']);
+        }
+
+        if (array_key_exists('class_price_max', $data) && !empty($data['class_price_max'])) {
+            $query->where('oc.class_price', '<=', $data['class_price_max']);
         }
 
         $query->orderByDesc('oc.cid');
@@ -181,6 +243,79 @@ class OrgModel
         try {
             $result = ARPFOrgHead::addHead($data);
             return $result;
+        } catch (PFException $exception) {
+            throw new PFException($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public static function addOrg($data)
+    {
+        $params = [
+            'hid',
+            'org_name',
+            'short_name',
+            'status',
+            'can_loan',
+            'org_province',
+            'org_province_select',
+            'org_city',
+            'org_city_select',
+            'org_area',
+            'org_area_select',
+            'org_address',
+            'org_lng',
+            'org_lat',
+        ];
+        foreach ($params as $param) {
+            if (!array_key_exists($param, $data) || empty($data[$param])) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+            }
+        }
+        $checkOrg = ARPFOrg::getOrgByOrgName($data['org_name']);
+        if (!empty($checkOrg)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ":分校名称已存在或重复", ERR_SYS_PARAM);
+        }
+
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $data['update_time'] = date('Y-m-d H:i:s');
+        try {
+            return ARPFOrg::addOrg($data);
+        } catch (PFException $exception) {
+            throw new PFException($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public static function addClass($data)
+    {
+        $params = [
+            'class_name',
+            'status',
+            'class_online',
+            'class_type',
+            'class_price',
+            'class_days'
+        ];
+
+        foreach ($params as $param) {
+            if (!array_key_exists($param, $data) || empty($data[$param])) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+            }
+        }
+
+        if (empty($data['hid']) && empty($data['oid'])) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ":商户信息获取错误", ERR_SYS_PARAM);
+        }
+
+        if (empty($data['hid'])) {
+            $org = ARPFOrg::getOrgById($data['oid']);
+            $data['hid'] = $org['hid'];
+        }
+
+        try {
+            $data['create_time'] = date('Y-m-d H:i:s');
+            $data['update_time'] = date('Y-m-d H:i:s');
+
+            return ARPFOrgClass::addClass($data);
         } catch (PFException $exception) {
             throw new PFException($exception->getMessage(), $exception->getCode());
         }

@@ -24,6 +24,9 @@ Route::group([
     $router->get('/org/index', 'OrgController@index');
     $router->get('/org/head', 'OrgController@head');
     $router->any('/org/addhead', 'OrgController@addhead');
+    $router->any('/org/edithead', 'OrgController@edithead');
+    $router->any('/org/addorg', 'OrgController@addorg');
+    $router->any('/org/addorgclass', 'OrgController@addorgclass');
     $router->get('/org/class', 'OrgController@class');
     $router->get('/org/users', 'OrgController@users');
 
@@ -33,4 +36,10 @@ Route::group([
     $router->get('/loan/index', 'LoanController@index');
     $router->get('/loan/info', 'LoanController@info');
 
+    /**
+     * 后台公用地址选择器
+     */
+    $router->any('/area/province', 'AreaController@province');
+    $router->any('/area/city', 'AreaController@city');
+    $router->any('/area/area', 'AreaController@area');
 });
