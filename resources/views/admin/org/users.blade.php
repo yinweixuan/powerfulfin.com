@@ -61,6 +61,7 @@
         </div>
         <div class="box-footer">
             <button type="submit" class="btn btn-sm btn-danger">查询</button>
+            <a href="/admin/org/adduser" class="btn btn-sm btn-danger">新增</a>
         </div>
     </form>
 </div>

@@ -85,7 +85,7 @@
 
         </div>
         <div class=" box-footer">
-            <a href="/admin/org/head" class="btn btn-sm btn-default">取消</a>
+            <a href="/admin/org/class" class="btn btn-sm btn-default">取消</a>
             <button name="submit" type="submit" class="btn btn-sm btn-danger pull-right">提交</button>
         </div>
     </form>

@@ -386,7 +386,35 @@ class OrgController extends AdminController
                 } catch (PFException $exception) {
                     return $view->withError($exception->getMessage());
                 }
+            } else {
+                return $view;
+            }
+        } catch (PFException $exception) {
+            return Handler::renderException($exception);
+        }
+    }
 
+    public function adduser(Content $content)
+    {
+        try {
+            $type = Input::get('type');
+            $view = $content->header('新增机构管理员')
+                ->description('添加机构管理员信息')
+                ->breadcrumb(
+                    ['text' => '机构管理员列表', 'url' => '/admin/org/user'],
+                    ['text' => '新增管理员', 'url' => '/admin/org/adduser']
+                )
+                ->row(view('admin.org.adduser'));
+            if ($type == 'adduser') {
+                try {
+                    $data = $_POST;
+                    $result = OrgModel::addOrgUser($data);
+                    if ($result) {
+                        return Redirect::to("/admin/org/users")->send();
+                    }
+                } catch (PFException $exception) {
+                    return $view->withError($exception->getMessage());
+                }
             } else {
                 return $view;
             }

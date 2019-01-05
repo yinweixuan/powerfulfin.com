@@ -467,4 +467,36 @@ class OrgModel
 
         return ARPFOrgClass::updateInfo($class['cid'], $diff);
     }
+
+    public static function addOrgUser($data)
+    {
+        $params = [
+            'org_username',
+            'org_password',
+            'org_id',
+            'status',
+            'right'
+        ];
+        foreach ($params as $param) {
+            if ($param == 'right') {
+                if (!array_key_exists($param, $data)) {
+                    throw new PFException(ERR_SYS_PARAM_CONTENT . ':' . $param . '=' . $data[$param], ERR_SYS_PARAM);
+                }
+            } else {
+                if (!array_key_exists($param, $data) || empty($data[$param])) {
+                    throw new PFException(ERR_SYS_PARAM_CONTENT . ':' . $param . '=' . $data[$param], ERR_SYS_PARAM);
+                }
+            }
+
+        }
+
+        $checkUserName = ARPFOrgUsers::getOrgUserInfoByOrgUserName($data['org_username']);
+        if (!empty($checkUserName)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ":登录名已存在", ERR_SYS_PARAM);
+        }
+        $data['org_password'] = md5($data['org_password']);
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $data['update_time'] = date('Y-m-d H:i:s');
+        return ARPFOrgUsers::addOrgUser($data);
+    }
 }

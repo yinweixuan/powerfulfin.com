@@ -44,6 +44,7 @@ Route::group([
      * 校区管理员
      */
     $router->any('/org/users', 'OrgController@users');
+    $router->any('/org/adduser', 'OrgController@adduser');
 
     /**
      * 订单管理
