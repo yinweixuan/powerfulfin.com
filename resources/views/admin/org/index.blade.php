@@ -139,6 +139,10 @@
                                         </td>
                                         <td>{{ date('Y-m-d',strtotime($org['create_time'])) }}</td>
                                         <td>
+                                            <a href="" class="btn btn-sm btn-danger">
+                                                详情
+                                            </a>
+                                            <a href="" class="btn btn-sm btn-danger">更新</a>
                                             <a href="/admin/org/addorgclass?hid={{ $org['hid'] }}&oid={{ $org['id'] }}"
                                                class="btn btn-sm btn-danger">添加课程</a>
                                         </td>

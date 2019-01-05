@@ -53,7 +53,6 @@
                         <label>业务类型：</label>
                         <select name="business_type" style="width: 100%">
                             <option value="">请选择</option>
-                            IT、语言、财会、学历、驾校、健身、K12、其他
                             <option value="IT" @if($business_type == "IT") selected @endif>IT</option>
                             <option value="语言" @if($business_type == "语言") selected @endif>语言</option>
                             <option value="财会" @if($business_type == "财会") selected @endif>财会</option>
@@ -144,8 +143,8 @@
                                                class="btn btn-sm btn-danger">添加分校</a>
                                             <a href="/admin/org/addorgclass?hid={{ $org['hid'] }}"
                                                class="btn btn-sm btn-danger">添加课程</a>
-                                            <a href="/adin/org/edithead?hid={{ $org['hid'] }}"
-                                               class="btn btn-sm btn-danger">修改</a>
+                                            <a href="/admin/org/edithead?hid={{ $org['hid'] }}"
+                                               class="btn btn-sm btn-danger">更新</a>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -177,7 +177,36 @@ class OrgController extends AdminController
 
     public function edithead(Content $content)
     {
-
+        try {
+            $hid = Input::get('hid');
+            if (empty($hid)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+            }
+            $type = Input::get('type');
+            $loanProducts = BULoanProduct::getAllLoanType(null, false, STATUS_SUCCESS);
+            $view = $content->header('新增商户')
+                ->description('添加商户信息')
+                ->breadcrumb(
+                    ['text' => '商户列表', 'url' => '/admin/org/head'],
+                    ['text' => '更新商户', 'url' => '/admin/org/addhead']
+                );
+            if ($type == 'updatehead') {
+                try {
+                    $data = $_POST;
+                    $result = OrgModel::updateHead($data);
+                    if ($result) {
+                        return Redirect::to("/admin/org/head")->send();
+                    }
+                } catch (PFException $exception) {
+                    return $view->withError($exception->getMessage())->row(view('admin.org.edithead', ['loanProducts' => $loanProducts]));
+                }
+            } else {
+                $info = OrgModel::getOrgHeadInfo($hid);
+                return $view->row(view('admin.org.edithead', ['loanProducts' => $loanProducts, 'org_head' => $info['org_head'], 'loan_product' => $info['loanProducts']]));;
+            }
+        } catch (PFException $exception) {
+            return Handler::renderException($exception);
+        }
     }
 
     public function addorg(Content $content)

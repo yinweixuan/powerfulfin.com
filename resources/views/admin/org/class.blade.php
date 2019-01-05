@@ -148,6 +148,7 @@
                                     <td>网络授课</td>
                                     <td>状态</td>
                                     <td>创建时间</td>
+                                    <td>操作</td>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -175,6 +176,7 @@
                                             @endif
                                         </td>
                                         <td>{{ date('Y-m-d',strtotime($item['create_time'])) }}</td>
+                                        <td><a href="" class="btn btn-sm btn-danger">更新</a></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -190,6 +192,7 @@
                                     <td>网络授课</td>
                                     <td>状态</td>
                                     <td>创建时间</td>
+                                    <td>操作</td>
                                 </tr>
                                 </tfoot>
                             </table>

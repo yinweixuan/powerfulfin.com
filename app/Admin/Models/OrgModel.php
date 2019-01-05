@@ -327,9 +327,9 @@ class OrgModel
     {
         $orgHead = ARPFOrgHead::getInfo($hid);
         $orgs = ARPFOrg::getOrgByHid($hid);
-
-        $loanProducts = !empty($orgHead['loan_product']) ? explode(',', $orgHead['loan_product']) : [];
-        if ($loanProducts) {
+        $loanProducts = [];
+        $orgHead['loan_product'] = !empty($orgHead['loan_product']) ? explode(',', $orgHead['loan_product']) : [];
+        if ($orgHead['loan_product']) {
             $loanProducts = BULoanProduct::getLoanTypeByIds($loanProducts);
         }
 
@@ -344,6 +344,47 @@ class OrgModel
             'loanProducts' => $loanProducts
         ];
         return $info;
+    }
+
+    public static function updateHead($data)
+    {
+        $info = self::getOrgHeadInfo($data['hid']);
+        if (empty($info['org_head'])) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ':未获取商户信息', ERR_SYS_PARAM);
+        }
+
+        $orgHead = $info['org_head'];
+        $diff = [];
+        $hid = $data['hid'];
+        unset($data['hid']);
+        $data['security_deposit'] = CalcMoney::fenToYuan($data['security_deposit']);
+        $data['credit_line'] = CalcMoney::yuanToFen($data['credit_line']);
+        foreach ($data as $key => $val) {
+            if (array_key_exists($key, $orgHead) && $val != $orgHead[$key]) {
+                $diff[$key] = $val;
+            }
+        }
+
+        if (empty($diff)) {
+            return true;
+        }
+
+        if (array_key_exists('full_name', $diff)) {
+            $checkFullName = ARPFOrgHead::getInfoByFullName($diff['full_name']);
+            if (!empty($checkFullName)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT . ":商户已存在", ERR_SYS_PARAM);
+            }
+        }
+
+
+        if (array_key_exists('business_license', $diff)) {
+            $checkBusinessLicense = ARPFOrgHead::getInfoByBusinessLicense($diff['business_license']);
+            if (!empty($checkBusinessLicense)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT . ":营业执照号已存在", ERR_SYS_PARAM);
+            }
+        }
+
+        return ARPFOrgHead::updateInfo($hid, $diff);
     }
 
 }
