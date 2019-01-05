@@ -75,6 +75,14 @@ class ARPFOrg extends Model
 
         }
         return $ar->getAttributes();
+    }
 
+    public static function updateInfo($id, $update)
+    {
+        if (is_null($id) || !is_numeric($id) || $id < 0) {
+            return false;
+        }
+        $update['update_time'] = date('Y-m-d H:i:s');
+        return DB::table(self::TABLE_NAME)->where('id', $id)->update($update);
     }
 }

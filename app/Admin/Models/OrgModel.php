@@ -387,4 +387,47 @@ class OrgModel
         return ARPFOrgHead::updateInfo($hid, $diff);
     }
 
+
+    public static function getOrgInfo($oid)
+    {
+        if (empty($oid)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+        }
+
+        $org = DB::table(ARPFOrg::TABLE_NAME . ' as o')
+            ->select(['o.*', 'oh.full_name'])
+            ->leftJoin(ARPFOrgHead::TABLE_NAME . ' as oh', 'oh.hid', '=', 'o.hid')
+            ->where('o.id', $oid)
+            ->first();
+        if (empty($org)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ":未获取到分校相关信息", ERR_SYS_PARAM);
+        }
+        $org['org_province_array'] = ARPFAreas::getArea($org['org_province']);
+        $org['org_city_array'] = ARPFAreas::getArea($org['org_city']);
+        $org['org_area_array'] = ARPFAreas::getArea($org['org_area']);
+        return $org;
+    }
+
+    public static function updateOrg($data)
+    {
+        $org = self::getOrgInfo($data['oid']);
+        if (empty($org)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ':未获取分校信息', ERR_SYS_PARAM);
+        }
+
+        $diff = [];
+        unset($data['hid']);
+        $oid = $data['oid'];
+        unset($data['oid']);
+        foreach ($data as $key => $val) {
+            if (array_key_exists($key, $org) && $val != $org[$key]) {
+                $diff[$key] = $val;
+            }
+        }
+        if (empty($diff)) {
+            return true;
+        }
+
+        return ARPFOrg::updateInfo($oid, $diff);
+    }
 }

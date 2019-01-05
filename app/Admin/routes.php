@@ -10,32 +10,45 @@ Route::group([
     'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
 
-    $router->get('/', 'HomeController@index');
+    $router->any('/', 'HomeController@index');
     /**
      * 用户管理
      */
-    $router->get('/users/index', 'UsersController@index');
-    $router->get('/users/real', 'UsersController@real');
-    $router->get('/users/banks', 'UsersController@banks');
+    $router->any('/users/index', 'UsersController@index');
+    $router->any('/users/real', 'UsersController@real');
+    $router->any('/users/banks', 'UsersController@banks');
 
     /**
-     * 机构管理
+     * 商户管理
      */
-    $router->get('/org/index', 'OrgController@index');
-    $router->get('/org/head', 'OrgController@head');
+    $router->any('/org/head', 'OrgController@head');
     $router->any('/org/addhead', 'OrgController@addhead');
     $router->any('/org/edithead', 'OrgController@edithead');
     $router->any('/org/headinfo', 'OrgController@headinfo');
+
+    /**
+     * 分校管理
+     */
+    $router->any('/org/index', 'OrgController@index');
     $router->any('/org/addorg', 'OrgController@addorg');
+    $router->any('/org/editorg', 'OrgController@editorg');
+
+    /**
+     * 课程管理
+     */
+    $router->any('/org/class', 'OrgController@class');
     $router->any('/org/addorgclass', 'OrgController@addorgclass');
-    $router->get('/org/class', 'OrgController@class');
-    $router->get('/org/users', 'OrgController@users');
+
+    /**
+     * 校区管理员
+     */
+    $router->any('/org/users', 'OrgController@users');
 
     /**
      * 订单管理
      */
-    $router->get('/loan/index', 'LoanController@index');
-    $router->get('/loan/info', 'LoanController@info');
+    $router->any('/loan/index', 'LoanController@index');
+    $router->any('/loan/info', 'LoanController@info');
 
     /**
      * 后台公用地址选择器

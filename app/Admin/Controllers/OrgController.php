@@ -257,6 +257,51 @@ class OrgController extends AdminController
         }
     }
 
+    public function editorg(Content $content)
+    {
+        try {
+            $oid = Input::get('oid');
+            if (empty($oid)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT . ":未正确获取分校ID", ERR_SYS_PARAM);
+            }
+            $org = OrgModel::getOrgInfo($oid);
+
+            $redis = RedisUtil::getInstance();
+            $key = "PF_PROVINCE";
+            $data = $redis->get($key);
+            if ($data) {
+                $province = json_decode($data, true);
+            } else {
+                $province = ARPFAreas::getAreas(0);
+                $redis->set($key, json_encode($province), 86400);
+            }
+            $view = $content->header('更新分校')
+                ->description('更新分校信息')
+                ->breadcrumb(
+                    ['text' => '分校列表', 'url' => '/admin/org/head'],
+                    ['text' => '更新分校', 'url' => '/admin/org/editorg?oid=' . $oid]
+                )
+                ->row(view('admin.org.editorg', ['province' => $province, 'org' => $org]));
+
+            $type = Input::get('type', '');
+            if ($type == 'updateorg') {
+                try {
+                    $data = $_POST;
+                    $result = OrgModel::updateOrg($data);
+                    if ($result) {
+                        return Redirect::to("/admin/org/index")->send();
+                    }
+                } catch (PFException $exception) {
+                    return $view->withError($exception->getMessage());
+                }
+            } else {
+                return $view;
+            }
+        } catch (PFException $exception) {
+            return Handler::renderException($exception);
+        }
+    }
+
     public function addorgclass(Content $content)
     {
         try {
