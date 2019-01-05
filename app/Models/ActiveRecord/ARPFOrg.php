@@ -33,6 +33,17 @@ class ARPFOrg extends Model
             ->first();
     }
 
+    public static function getOrgByHid($hid)
+    {
+        if (is_null($hid) || !is_numeric($hid)) {
+            return [];
+        }
+
+        return DB::table(self::TABLE_NAME)->select('*')
+            ->where('hid', $hid)
+            ->get()->toArray();
+    }
+
     public static function getOrgByOrgName($org_name)
     {
         if (empty($org_name)) {

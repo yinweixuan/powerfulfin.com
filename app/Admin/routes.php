@@ -25,6 +25,7 @@ Route::group([
     $router->get('/org/head', 'OrgController@head');
     $router->any('/org/addhead', 'OrgController@addhead');
     $router->any('/org/edithead', 'OrgController@edithead');
+    $router->any('/org/headinfo', 'OrgController@headinfo');
     $router->any('/org/addorg', 'OrgController@addorg');
     $router->any('/org/addorgclass', 'OrgController@addorgclass');
     $router->get('/org/class', 'OrgController@class');

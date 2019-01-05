@@ -10,12 +10,14 @@ namespace App\Admin\Models;
 
 
 use App\Components\PFException;
+use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
 use App\Models\ActiveRecord\ARPFOrgUsers;
 use App\Models\Calc\CalcMoney;
 use App\Models\Server\BU\BUBanks;
+use App\Models\Server\BU\BULoanProduct;
 use Illuminate\Support\Facades\DB;
 
 class OrgModel
@@ -319,6 +321,29 @@ class OrgModel
         } catch (PFException $exception) {
             throw new PFException($exception->getMessage(), $exception->getCode());
         }
+    }
+
+    public static function getOrgHeadInfo($hid)
+    {
+        $orgHead = ARPFOrgHead::getInfo($hid);
+        $orgs = ARPFOrg::getOrgByHid($hid);
+
+        $loanProducts = !empty($orgHead['loan_product']) ? explode(',', $orgHead['loan_product']) : [];
+        if ($loanProducts) {
+            $loanProducts = BULoanProduct::getLoanTypeByIds($loanProducts);
+        }
+
+        foreach ($orgs as &$org) {
+            $city = ARPFAreas::getArea($org['org_city']);
+            $org['org_city'] = !empty($city) ? $city['joinname'] : '';
+        }
+
+        $info = [
+            'org_head' => $orgHead,
+            'orgs' => $orgs,
+            'loanProducts' => $loanProducts
+        ];
+        return $info;
     }
 
 }

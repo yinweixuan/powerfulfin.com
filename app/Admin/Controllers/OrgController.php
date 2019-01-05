@@ -109,6 +109,26 @@ class OrgController extends AdminController
         }
     }
 
+    public function headinfo(Content $content)
+    {
+        try {
+            $hid = Input::get('hid');
+            if (empty($hid)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+            }
+            $info = OrgModel::getOrgHeadInfo($hid);
+            return $content->header('商户详情')
+                ->description($info['org_head']['full_name'])
+                ->breadcrumb(
+                    ['text' => '商户列表', 'url' => '/admin/org/head'],
+                    ['text' => '商户详情', 'url' => '/admin/org/headinfo?hid=' . $hid]
+                )
+                ->row(view('admin.org.headinfo', $info));
+        } catch (PFException $exception) {
+            return Handler::renderException($exception);
+        }
+    }
+
     public function class(Content $content)
     {
         $data = [

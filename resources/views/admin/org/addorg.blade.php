@@ -6,114 +6,112 @@
  * Time: 8:42 PM
  */
 ?>
-<section class="content">
-    <div class="box box-danger">
-        <div class="box-header with-border">
-            <h3 class="box-title">新增</h3>
-        </div>
-        <form class="form-horizontal" role="form" name="form" action="" method="post">
-            <div class="box-body">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">商户名称</label>
-                    <div class="col-sm-9">
-                        <input type="hidden" value="{{ $orgHead['hid'] }}" name="hid">
-                        <input type="hidden" value="addorg" name="type">
-                        <input type="text" class="form-control" value="{{ $orgHead['full_name'] }}" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">分校名称</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" placeholder="请填写分校名称" value=""
-                               name="org_name">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">分校简称</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" placeholder="请填写分校简称" value="" name="short_name">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">分校状态</label>
-                    <div class="col-sm-9">
-                        <select name="status" style="width: 100%;">
-                            <option value="">请选择</option>
-                            <option value="{{ STATUS_SUCCESS }}">可用</option>
-                            <option value="{{ STATUS_FAIL }}">不可用</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">是否分期</label>
-                    <div class="col-sm-9">
-                        <select name="can_loan" style="width: 100%;">
-                            <option value="">请选择</option>
-                            <option value="{{ STATUS_SUCCESS }}">支持分期</option>
-                            <option value="{{ STATUS_FAIL }}">不支持分期</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">请选择机构所在省</label>
-                    <div class="col-sm-9">
-                        <input type="hidden" name="org_province" value="">
-                        <select name="org_province_select" style="width: 100%">
-                            <option value="">请选择分校所在省</option>
-                            @foreach($province as $item)
-                                <option value="{{ $item['areaid'] }}">{{ $item['joinname'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">请选择分校所在市或区</label>
-                    <div class="col-sm-9">
-                        <input type="hidden" name="org_city" value="">
-                        <select name="org_city_select" style="width: 100%">
-                            <option value="">请选择分校所在市或区</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">请选择分校所在区域</label>
-                    <div class="col-sm-9">
-                        <input type="hidden" name="org_area" value="">
-                        <select name="org_area_select" style="width: 100%">
-                            <option value="">请选择分校所在区域</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">详细地址</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" placeholder="请填写详细地址" value="" name="org_address">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">GPS坐标</label>
-                    <div class="col-sm-9 input-group">
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" name="org_lng" placeholder="请填写GPS经度坐标">
-                        </div>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" name="org_lat" placeholder="请填写GPS纬度度坐标">
-                        </div>
-                        <div class="col-sm-2">
-                            <a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank"
-                               class="btn btn-sm btn-danger">拾取坐标</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class=" box-footer">
-                <a href="/admin/org/head" class="btn btn-sm btn-default">取消</a>
-                <button name="submit" type="submit" class="btn btn-sm btn-danger pull-right">提交</button>
-            </div>
-        </form>
+<div class="box box-danger">
+    <div class="box-header with-border">
+        <h3 class="box-title">新增</h3>
     </div>
-</section>
+    <form class="form-horizontal" role="form" name="form" action="" method="post">
+        <div class="box-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">商户名称</label>
+                <div class="col-sm-9">
+                    <input type="hidden" value="{{ $orgHead['hid'] }}" name="hid">
+                    <input type="hidden" value="addorg" name="type">
+                    <input type="text" class="form-control" value="{{ $orgHead['full_name'] }}" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">分校名称</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" placeholder="请填写分校名称" value=""
+                           name="org_name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">分校简称</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" placeholder="请填写分校简称" value="" name="short_name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">分校状态</label>
+                <div class="col-sm-9">
+                    <select name="status" style="width: 100%;">
+                        <option value="">请选择</option>
+                        <option value="{{ STATUS_SUCCESS }}">可用</option>
+                        <option value="{{ STATUS_FAIL }}">不可用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">是否分期</label>
+                <div class="col-sm-9">
+                    <select name="can_loan" style="width: 100%;">
+                        <option value="">请选择</option>
+                        <option value="{{ STATUS_SUCCESS }}">支持分期</option>
+                        <option value="{{ STATUS_FAIL }}">不支持分期</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">请选择机构所在省</label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="org_province" value="">
+                    <select name="org_province_select" style="width: 100%">
+                        <option value="">请选择分校所在省</option>
+                        @foreach($province as $item)
+                            <option value="{{ $item['areaid'] }}">{{ $item['joinname'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">请选择分校所在市或区</label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="org_city" value="">
+                    <select name="org_city_select" style="width: 100%">
+                        <option value="">请选择分校所在市或区</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">请选择分校所在区域</label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="org_area" value="">
+                    <select name="org_area_select" style="width: 100%">
+                        <option value="">请选择分校所在区域</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">详细地址</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" placeholder="请填写详细地址" value="" name="org_address">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">GPS坐标</label>
+                <div class="col-sm-9 input-group">
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" name="org_lng" placeholder="请填写GPS经度坐标">
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" name="org_lat" placeholder="请填写GPS纬度度坐标">
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank"
+                           class="btn btn-sm btn-danger">拾取坐标</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" box-footer">
+            <a href="/admin/org/head" class="btn btn-sm btn-default">取消</a>
+            <button name="submit" type="submit" class="btn btn-sm btn-danger pull-right">提交</button>
+        </div>
+    </form>
+</div>
 
 
 <script type="text/javascript">
