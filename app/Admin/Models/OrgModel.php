@@ -9,10 +9,13 @@
 namespace App\Admin\Models;
 
 
+use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
 use App\Models\ActiveRecord\ARPFOrgUsers;
+use App\Models\Calc\CalcMoney;
+use App\Models\Server\BU\BUBanks;
 use Illuminate\Support\Facades\DB;
 
 class OrgModel
@@ -80,7 +83,7 @@ class OrgModel
     public static function getClassList($data)
     {
         $query = DB::table(ARPFOrgClass::TABLE_NAME . ' as oc')
-            ->select(['oc.*','o.org_name'])
+            ->select(['oc.*', 'o.org_name'])
             ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'oc.oid');
 
 
@@ -128,6 +131,59 @@ class OrgModel
         $info = $query->paginate(10, ['ou.org_uid'], 'page', $data['page'])
             ->appends($data);
         return $info;
-
     }
+
+
+    public static function addHead($data)
+    {
+        $params = [
+            'full_name',
+            'business_license',
+            'register_address',
+            'legal_person',
+            'legal_person_idcard',
+            'org_bank_code',
+            'org_bank_branch',
+            'org_bank_account',
+            'contact_name',
+            'contact_phone',
+            'business_type',
+            'credit_line',
+            'security_deposit',
+            'loan_product',
+        ];
+
+        foreach ($params as $param) {
+            if (!array_key_exists($param, $data) || empty($data[$param])) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
+            }
+        }
+
+        $checkFullName = ARPFOrgHead::getInfoByFullName($data['full_name']);
+        if (!empty($checkFullName)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ":商户已存在", ERR_SYS_PARAM);
+        }
+
+        $checkBusinessLicense = ARPFOrgHead::getInfoByBusinessLicense($data['business_license']);
+        if (!empty($checkBusinessLicense)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ":营业执照号已存在", ERR_SYS_PARAM);
+        }
+
+        $loanProducts = implode(',', $data['loan_product']);
+        $data['loan_product'] = $loanProducts;
+        $data['org_bank_name'] = BUBanks::getBankName($data['org_bank_code']);
+        $data['status'] = STATUS_SUCCESS;
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $data['update_time'] = date('Y-m-d H:i:s');
+        $data['security_deposit'] = CalcMoney::fenToYuan($data['security_deposit']);
+        $data['credit_line'] = CalcMoney::yuanToFen($data['credit_line']);
+
+        try {
+            $result = ARPFOrgHead::addHead($data);
+            return $result;
+        } catch (PFException $exception) {
+            throw new PFException($exception->getMessage(), $exception->getCode());
+        }
+    }
+
 }

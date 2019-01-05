@@ -17,13 +17,16 @@ class BULoanProduct
     /**
      * 获取所有费率模板
      * @staticvar array $config
-     * @return type
+     * @param null $canloan
+     * @param bool $isMemcache
+     * @param null $status
+     * @return array
      */
-    public static function getAllLoanType($canloan = null)
+    public static function getAllLoanType($canloan = null, $isMemcache = true, $status = null)
     {
         static $config = array();
         if (empty($config)) {
-            $config = self::getLoanTypeAll();
+            $config = self::getLoanTypeAll($isMemcache, $status);
             foreach ($config as $k => $tmp) {
                 if ($canloan !== null && $tmp['canloan'] != $canloan) {
                     unset($config[$k]);
@@ -44,7 +47,7 @@ class BULoanProduct
      * @param $status
      * @return array
      */
-    public static function getLoanTypeByIds($ids, $isMemcache = true,$status = true)
+    public static function getLoanTypeByIds($ids, $isMemcache = true, $status = true)
     {
         $ret = array();
         if (empty($ids)) {
@@ -52,7 +55,7 @@ class BULoanProduct
         }
         static $config = array();
         if (empty($config)) {
-            $config = self::getLoanTypeAll($isMemcache,$status);
+            $config = self::getLoanTypeAll($isMemcache, $status);
         }
         foreach ($ids as $id) {
             if (isset($config[$id])) {
@@ -69,7 +72,7 @@ class BULoanProduct
         return $ret;
     }
 
-    public static function getLoanTypeAll($isMemcache=true,$status)
+    public static function getLoanTypeAll($isMemcache = true, $status)
     {
         $config = array();
         try {

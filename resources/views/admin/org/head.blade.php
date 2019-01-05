@@ -46,7 +46,8 @@
                 </div>
             </div>
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">查询</button>
+                <button type="submit" class="btn btn-sm btn-danger">查询</button>
+                <a href="/admin/org/addhead" class="btn btn-sm btn-danger">新增</a>
             </div>
         </form>
     </div>
@@ -81,7 +82,8 @@
                                             <td>{{ $org['full_name'] }}</td>
                                             <td>{{ $org['business_license'] }}</td>
                                             <td><img
-                                                    src="{{\App\Models\Server\BU\BUBanks::getBankLogo($org['org_bank_code'])}}" style="height: 20px">
+                                                    src="{{\App\Models\Server\BU\BUBanks::getBankLogo($org['org_bank_code'])}}"
+                                                    style="height: 20px">
                                                 {{ $org['org_bank_account'] }}</td>
                                             <td>
                                                 @if($org['status'] == STATUS_SUCCESS)

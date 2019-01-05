@@ -11,8 +11,12 @@ namespace App\Admin\Controllers;
 
 use App\Admin\AdminController;
 use App\Admin\Models\OrgModel;
+use App\Components\PFException;
+use App\Models\Server\BU\BULoanProduct;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class OrgController extends AdminController
 {
@@ -56,6 +60,32 @@ class OrgController extends AdminController
                 ['text' => '商户列表', 'url' => '/admin/org/head']
             )
             ->row(view('admin.org.head', $data));
+    }
+
+    public function addhead(Content $content)
+    {
+        $data = $_POST;
+        $loanProducts = BULoanProduct::getAllLoanType(null, false, STATUS_SUCCESS);
+        $view = $content->header('新增商户')
+            ->description('添加商户信息')
+            ->breadcrumb(
+                ['text' => '商户列表', 'url' => '/admin/org/head'],
+                ['text' => '新增商户', 'url' => '/admin/org/addhead']
+            )
+            ->row(view('admin.org.addhead', ['loanProducts' => $loanProducts]));
+
+        if (!empty($data)) {
+            try {
+                $result = OrgModel::addHead($data);
+                if ($result) {
+                    return Redirect::to("/admin/org/head")->send();
+                }
+            } catch (PFException $exception) {
+                return $view->withError($exception->getMessage());
+            }
+        } else {
+            return $view;
+        }
     }
 
     public function class(Content $content)
