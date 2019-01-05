@@ -157,7 +157,7 @@
                                         <td>{{ $item['cid'] }}</td>
                                         <td>{{ $item['class_name'] }}</td>
                                         <td>{{ $item['org_name'] }}({{ $item['oid'] }})</td>
-                                        <td>{{ $item['full-name'] }}({{ $item['hid'] }})</td>
+                                        <td>{{ $item['full_name'] }}({{ $item['hid'] }})</td>
                                         <td>{{ $item['class_price'] }}</td>
                                         <td>{{ $item['class_type'] }}</td>
                                         <td>{{ $item['class_days'] }}</td>
@@ -176,7 +176,8 @@
                                             @endif
                                         </td>
                                         <td>{{ date('Y-m-d',strtotime($item['create_time'])) }}</td>
-                                        <td><a href="" class="btn btn-sm btn-danger">更新</a></td>
+                                        <td><a href="/admin/org/editclass?cid={{ $item['cid'] }}"
+                                               class="btn btn-sm btn-danger">更新</a></td>
                                     </tr>
                                 @endforeach
                                 </tbody>

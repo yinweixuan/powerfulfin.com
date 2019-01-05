@@ -15,6 +15,7 @@ use App\Components\PFException;
 use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFOrg;
+use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
 use App\Models\Server\BU\BULoanProduct;
 use Encore\Admin\Exception\Handler;
@@ -351,6 +352,41 @@ class OrgController extends AdminController
                 } catch (PFException $exception) {
                     return $view->withError($exception->getMessage());
                 }
+            } else {
+                return $view;
+            }
+        } catch (PFException $exception) {
+            return Handler::renderException($exception);
+        }
+    }
+
+    public function editclass(Content $content)
+    {
+        try {
+            $cid = Input::get('cid');
+            if (empty($cid)) {
+                throw new PFException(ERR_SYS_PARAM_CONTENT . ":未正确获取课程ID", ERR_SYS_PARAM);
+            }
+            $type = Input::get('type');
+            $class = OrgModel::getOrgClassInfo($cid);
+            $view = $content->header('更新课程')
+                ->description('更新课程信息')
+                ->breadcrumb(
+                    ['text' => '课程列表', 'url' => '/admin/org/head'],
+                    ['text' => '更新课程', 'url' => '/admin/org/editclass?cid=' . $cid]
+                )
+                ->row(view('admin.org.editclass', ['class' => $class]));
+            if ($type == 'updateclass') {
+                try {
+                    $data = $_POST;
+                    $result = OrgModel::updateOrgClass($data);
+                    if ($result) {
+                        return Redirect::to("/admin/org/class")->send();
+                    }
+                } catch (PFException $exception) {
+                    return $view->withError($exception->getMessage());
+                }
+
             } else {
                 return $view;
             }

@@ -430,4 +430,41 @@ class OrgModel
 
         return ARPFOrg::updateInfo($oid, $diff);
     }
+
+    public static function getOrgClassInfo($cid)
+    {
+        if (empty($cid)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ':未获取课程信息', ERR_SYS_PARAM);
+        }
+
+        $class = DB::table(ARPFOrgClass::TABLE_NAME . ' as oc')
+            ->select(['oc.*', 'o.org_name', 'oh.full_name'])
+            ->leftJoin(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'oc.oid')
+            ->leftJoin(ARPFOrgHead::TABLE_NAME . ' as oh', 'oh.hid', '=', 'oc.hid')
+            ->where('oc.cid', $cid)->first();
+
+        if (empty($class)) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ':未获取课程信息', ERR_SYS_PARAM);
+        }
+        return $class;
+    }
+
+    public static function updateOrgClass($data)
+    {
+        if (empty($data['cid'])) {
+            throw new PFException(ERR_SYS_PARAM_CONTENT . ':未获取课程信息', ERR_SYS_PARAM);
+        }
+        $class = self::getOrgClassInfo($data['cid']);
+        unset($data['cid']);
+        foreach ($data as $key => $val) {
+            if (array_key_exists($key, $class) && $val != $class[$key]) {
+                $diff[$key] = $val;
+            }
+        }
+        if (empty($diff)) {
+            return true;
+        }
+
+        return ARPFOrgClass::updateInfo($class['cid'], $diff);
+    }
 }

@@ -8,7 +8,7 @@
 ?>
 <div class="box box-danger">
     <div class="box-header with-border">
-        <h3 class="box-title">新增</h3>
+        <h3 class="box-title">更新</h3>
     </div>
     <form class="form-horizontal" role="form" name="form" action="" method="post">
         <div class="box-body">

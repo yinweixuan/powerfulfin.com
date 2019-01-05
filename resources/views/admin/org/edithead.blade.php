@@ -8,7 +8,7 @@
 ?>
 <div class="box box-danger">
     <div class="box-header with-border">
-        <h3 class="box-title">新增</h3>
+        <h3 class="box-title">更新</h3>
     </div>
     <form class="form-horizontal" role="form" action="" method="post">
         <div class="box-body">
@@ -150,7 +150,8 @@
                                 <td>
                                     <label>
                                         <input type="checkbox" class="minimal-red" name="loan_product[]"
-                                               value="{{ $loanProduct['loan_product'] }}" @if(in_array($loanProduct['loan_product'],$org_head['loan_product'])) checked @endif>
+                                               value="{{ $loanProduct['loan_product'] }}"
+                                               @if(in_array($loanProduct['loan_product'],$org_head['loan_product'])) checked @endif>
                                     </label>
                                 </td>
                                 <td>{{ $loanProduct['loan_product'] }}</td>

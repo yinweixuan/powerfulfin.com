@@ -38,6 +38,7 @@ Route::group([
      */
     $router->any('/org/class', 'OrgController@class');
     $router->any('/org/addorgclass', 'OrgController@addorgclass');
+    $router->any('/org/editclass', 'OrgController@editclass');
 
     /**
      * 校区管理员
