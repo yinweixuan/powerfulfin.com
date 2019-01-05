@@ -3,7 +3,7 @@
     <!--toggle button start-->
     <a class="toggle-btn"><i class="fa fa-bars"></i></a>
     <!--toggle button end-->
-    <h1><?php if (isset($errmsg)) echo $errmsg;?></h1>
+    <label><?php if (isset($errmsg)) echo $errmsg;?></label>
     <!--notification menu start -->
     <div class="menu-right">
         <ul class="notification-menu">
@@ -20,6 +20,5 @@
         </ul>
     </div>
     <!-- page rolling start -->
-
 </div>
 <!-- header section end-->

@@ -12,7 +12,7 @@ use App\Components\OutputUtil;
 ?>
 <div class="panel panel-default">
     <div class="panel-heading"><h3 class="panel-title">
-            订单详情：<?php OutputUtil::echoEscape("{$real['full_name']}({$base['id']})");?>
+            <?php OutputUtil::echoEscape("{$real['full_name']} (单号:{$base['id']})");?>
         </h3>
     </div>
     <div class="panel-body">
@@ -20,32 +20,17 @@ use App\Components\OutputUtil;
             <div class="col-md-12">
                 <table class="table table-hover table-bordered table-striped ">
                     <tr>
-                        <td>申请来源</td>
-                        <td><?php echo OutputUtil::valuePhoneType($base[''])?></td>
-                        <td>备注</td>
-                        <td><?php OutputUtil::echoEscape($base['audit_opinion'] ? $base['audit_opinion'] : ''); ?></td>
-                    </tr>
-                    <tr>
                         <td colspan="4" align="center">分期信息</td>
                     </tr>
                     <tr>
                         <td>期望分期金额</td>
-                        <td><?php OutputUtil::echoMoney($base['borrow_money']); ?></td>
+                        <td><b><?php echo OutputUtil::echoMoney($base['borrow_money']); ?></b></td>
                         <td>分期类型</td>
-                        <td><?php OutputUtil::echoEscape($base['loan_product_desc']); ?></td>
-                    </tr>
-                    <tr>
-                        <td>学校</td>
-                        <td><?php OutputUtil::echoEscape($org['name']);?></td>
-                        <td>分期课程</td>
-                        <td><?php OutputUtil::echoEscape($class['class_name']); ?></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" align="center">分期账单信息</td>
+                        <td><b><?php OutputUtil::echoEscape($base['loan_product_desc']); ?></b></td>
                     </tr>
                     <tr>
                         <td>订单状态</td>
-                        <td><?php  ?></td>
+                        <td><b><?php  echo \App\Models\Server\BU\BULoanStatus::getStatusDescriptionForB($base['status']);?></b></td>
                         <td>放款时间</td>
                         <td><?php if (!empty($base['loan_time'])) {
                                 echo $base['loan_time'];
@@ -61,19 +46,31 @@ use App\Components\OutputUtil;
                         </td>
                     </tr>
                     <tr>
+                        <td>申请来源</td>
+                        <td><?php echo OutputUtil::valuePhoneType($base['phone_type']);?></td>
+                        <td>备注</td>
+                        <td><b><?php OutputUtil::echoEscape($base['audit_opinion'] ? $base['audit_opinion'] : ''); ?></b></td>
+                    </tr>
+                    <tr>
                         <td colspan="4" align="center">分期信息资料</td>
                     </tr>
                     <tr>
                         <td>订单号</td>
                         <td><?php OutputUtil::echoEscape( $base['id']); ?></td>
                         <td>姓名</td>
-                        <td><?php OutputUtil::echoEscape($real['full_name']); ?></td>
+                        <td><b><?php OutputUtil::echoEscape($real['full_name']); ?></b></td>
                     </tr>
                     <tr>
                         <td>身份证</td>
                         <td><?php OutputUtil::echoEscape($real['identity_number']);?></td>
                         <td>手机号</td>
                         <td><?php OutputUtil::echoEscape($user['phone']); ?></td>
+                    </tr>
+                    <tr>
+                        <td>学校</td>
+                        <td><?php OutputUtil::echoEscape($org['short_name']);?></td>
+                        <td>分期课程</td>
+                        <td><?php OutputUtil::echoEscape($class['class_name']); ?></td>
                     </tr>
                     <tr>
                         <td>开课时间</td>
