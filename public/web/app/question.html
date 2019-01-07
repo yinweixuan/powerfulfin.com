@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        ;(function (win, lib) {
+            var doc = win.document;
+            var docEl = doc.documentElement;
+            var metaEl = doc.querySelector('meta[name="viewport"]');
+            var flexibleEl = doc.querySelector('meta[name="flexible"]');
+            var dpr = 0;
+            var scale = 0;
+            var tid;
+            var flexible = lib.flexible || (lib.flexible = {});
+
+            if (metaEl) {
+                var match = metaEl.getAttribute('content').match(/initial\-scale=([\d\.]+)/);
+                if (match) {
+                    scale = parseFloat(match[1]);
+                    dpr = parseInt(1 / scale);
+                }
+            } else if (flexibleEl) {
+                var content = flexibleEl.getAttribute('content');
+                if (content) {
+                    var initialDpr = content.match(/initial\-dpr=([\d\.]+)/);
+                    var maximumDpr = content.match(/maximum\-dpr=([\d\.]+)/);
+                    if (initialDpr) {
+                        dpr = parseFloat(initialDpr[1]);
+                        scale = parseFloat((1 / dpr).toFixed(2));
+                    }
+                    if (maximumDpr) {
+                        dpr = parseFloat(maximumDpr[1]);
+                        scale = parseFloat((1 / dpr).toFixed(2));
+                    }
+                }
+            }
+
+            if (!dpr && !scale) {
+                var isAndroid = win.navigator.appVersion.match(/android/gi);
+                var isIPhone = win.navigator.appVersion.match(/iphone/gi);
+                var devicePixelRatio = win.devicePixelRatio;
+                if (isIPhone) {
+                    // iOS下，对于2和3的屏，用2倍的方案，其余的用1倍方案
+                    if (devicePixelRatio >= 3 && (!dpr || dpr >= 3)) {
+                        dpr = 3;
+                    } else if (devicePixelRatio >= 2 && (!dpr || dpr >= 2)) {
+                        dpr = 2;
+                    } else {
+                        dpr = 1;
+                    }
+                } else {
+                    // 其他设备下，仍旧使用1倍的方案
+                    dpr = 1;
+                }
+                scale = 1 / dpr;
+            }
+
+            docEl.setAttribute('data-dpr', dpr);
+            if (!metaEl) {
+                metaEl = doc.createElement('meta');
+                metaEl.setAttribute('name', 'viewport');
+                metaEl.setAttribute('content', 'initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
+                if (docEl.firstElementChild) {
+                    docEl.firstElementChild.appendChild(metaEl);
+                } else {
+                    var wrap = doc.createElement('div');
+                    wrap.appendChild(metaEl);
+                    doc.write(wrap.innerHTML);
+                }
+            }
+
+            function refreshRem() {
+                var width = docEl.getBoundingClientRect().width;
+                if (width / dpr > 540) {
+                    width = 540 * dpr;
+                }
+                var rem = width / 10;
+                docEl.style.fontSize = rem + 'px';
+                flexible.rem = win.rem = rem;
+                setTimeout(function () {
+                    flexible.setPFullMinHeight();
+                });
+            }
+
+            win.addEventListener('resize', function () {
+                clearTimeout(tid);
+                tid = setTimeout(refreshRem, 300);
+            }, false);
+            win.addEventListener('pageshow', function (e) {
+                if (e.persisted) {
+                    clearTimeout(tid);
+                    tid = setTimeout(refreshRem, 300);
+                }
+            }, false);
+
+            if (doc.readyState === 'complete') {
+                doc.body.style.fontSize = 12 * dpr + 'px';
+            } else {
+                doc.addEventListener('DOMContentLoaded', function (e) {
+                    doc.body.style.fontSize = 12 * dpr + 'px';
+                }, false);
+            }
+
+
+            refreshRem();
+
+            flexible.dpr = win.dpr = dpr;
+            flexible.refreshRem = refreshRem;
+            flexible.rem2px = function (d) {
+                var val = parseFloat(d) * this.rem;
+                if (typeof d === 'string' && d.match(/rem$/)) {
+                    val += 'px';
+                }
+                return val;
+            }
+            flexible.px2rem = function (d) {
+                var val = parseFloat(d) / this.rem;
+                if (typeof d === 'string' && d.match(/px$/)) {
+                    val += 'rem';
+                }
+                return val;
+            }
+            flexible.setPFullMinHeight = function () {
+                var height = innerHeight;
+
+                if (!flexible.stylesheet) {
+                    flexible.stylesheet = document.createElement('style');
+                    document.head.appendChild(flexible.stylesheet);
+                }
+
+                flexible.stylesheet.textContent = '.p_full{min-height:' + height + 'px}';
+            }
+        })(window, window['lib'] || (window['lib'] = {}));
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>常见问题</title>
+    <link rel="stylesheet" type="text/css" href="/web/app/css/qa_6d007b.css">
+</head>
+<body>
+
+<div class="p_qa p_full">
+    <dl>
+        <dt>
+            日常使用
+        </dt>
+        <dd>
+            <div class="rule">
+                <div class="title">客服的联系方式有哪些？</div>
+                <div class="anwser">
+                    电话：400-002-9691<br><br>
+                    邮箱：jinrongfuwu@kezhanwang.cn
+                </div>
+            </div>
+            <div class="rule">
+                <div class="title">手机号变更，且旧手机号不在使用，怎么办？</div>
+                <div class="anwser">
+                    变更手机号有两种方式<br><br>
+                    1. 将新旧手机号，姓名，身份证号，告知机构老师，由老师帮助联系变更<br><br>
+                    2. 学员可自行发邮件，邮件内容包括：新旧手机号，姓名，身份证号，邮件发送到：jinrongfuwu@kezhanwang.cn
+                </div>
+            </div>
+            <div class="rule">
+                <div class="title">银行卡如何修改？</div>
+                <div class="anwser">
+                    1、学员提供具体信息，由机构老师发送至对接运营修改。<br><br>
+                    主题，【XX修改银行卡】 <br><br>
+                    正文，【姓名、身份证号、手机号、新旧银行卡号、新银行卡照片】<br><br>
+                    2、学员自行发邮件至jinrongfuwu@kezhanwang.cn<br><br>
+                    主题，【XX修改银行卡】<br><br>
+                    正文，【姓名、身份证号、手机号、新旧银行卡号、新银行卡照片】
+                </div>
+            </div>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>
+            借款申请与审核
+        </dt>
+        <dd>
+            <div class="rule">
+                <div class="title">临时身份证是否可以办理？</div>
+                <div class="anwser">
+                    不可以，需要在有效期内的二代身份证原件
+                </div>
+            </div>
+
+            <div class="rule">
+                <div class="title">支持的银行有哪些？</div>
+                <div class="anwser">
+                    中国工商银行，中信银行，广发银行，平安银行、中国建设银行、中国银行、兴业银行、中国光大银行<br><br>
+                    以上八家银行卡并且开通网银的情况下均可办理
+                </div>
+            </div>
+
+            <div class="rule">
+                <div class="title">我是高中学历，可以申请吗？</div>
+                <div class="anwser">
+                    可以，只要是高中（毕业）及以上学历，均可申请课程，具体课程内容，可咨询办学机构
+                </div>
+            </div>
+
+            <div class="rule">
+                <div class="title">再次提交时提示：学员上传银行卡与银行信息不符？</div>
+                <div class="anwser">
+                    1. 将新旧银行卡号，新银行卡照片，姓名，身份证号，提供给机构老师，由机构老师帮助联系<br><br>
+                    2. 学员自行发邮件，内容包括新旧银行卡号，新银行卡照片，姓名，身份证号，发送至：jinrongfuwu@kezhanwang.cn<br><br>
+                </div>
+            </div>
+            <div class="rule">
+                <div class="title">订单审核一般多长时间？</div>
+                <div class="anwser">
+                    本人与联系人均正常接听，无联系不上等特殊情况，审核时间一般为30分钟左右出结果
+                </div>
+            </div>
+            <div class="rule">
+                <div class="title">退回以后如何修改资料？</div>
+                <div class="anwser">
+                    重新提交，重新填写，操作步骤与第一次一样，在第二次提交时，将错误信息填写正确即可
+                </div>
+            </div>
+            <div class="rule">
+                <div class="title">订单被退回，是否可以再次提交？</div>
+                <div class="anwser">
+                    如备注为“综合评分不足，请勿再次提交”的字样，就无法再次提交了<br><br>
+                    如备注为其他，如“修改联系人电话”，“修改学校”等等，均可再次提交。操作步骤与第一次一样即可
+                </div>
+            </div>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>
+            还款与订单
+        </dt>
+        <dd>
+            <div class="rule">
+                <div class="title">分期成功后如何还款？</div>
+                <div class="anwser">
+                    每月15日下午2点开始（如15.16日遇到周末，会顺延到第一个工作日），银行会分批次进行划扣，划扣的银行卡就是分期办理成功时绑定的银行卡
+                </div>
+            </div>
+
+            <div class="rule">
+                <div class="title">为什么我银行有钱没有划扣成功？</div>
+                <div class="anwser">
+                    请先确定在划扣日（15日下午2点前）时，账户内有足够金额，如果没有或者过了2点以后存款，也会划扣不成功<br><br>
+                    如果确定有钱，请咨询扣款卡开户行卡片是否开通网银，若没开通，需要尽快开通。<br><br>
+                    如果有其他问题请与机构老师联系处理。<br><br>
+                </div>
+            </div>
+            <div class="rule">
+                <div class="title">已经办理了分期，能不能申请提前还款？</div>
+                <div class="anwser">
+                    可以申请提前还款，若想具体了解有两种方式<br><br>
+                    1. 学员可自行拨打400-002-9691客服热线，或发邮件咨询，jinrongfuwu@kezhanwang.cn<br><br>
+                    2. 与机构老师联系，由机构老师帮助咨询
+                </div>
+            </div>
+
+            <div class="rule">
+                <div class="title">如何取消订单？</div>
+                <div class="anwser">
+                    如果已经审核通过，等待放款，需要联系机构老师，由机构老师告知<br><br>
+                    如果审核中想取消，直接告诉审核人员即可
+                </div>
+            </div>
+
+            <div class="rule">
+                <div class="title">如学习过程中，不想学了，想取消怎么办？</div>
+                <div class="anwser">
+                    如果想办理退课，需要直接联系学习的机构，去咨询是否可以办理退课
+                </div>
+            </div>
+        </dd>
+    </dl>
+</div>
+<script type="text/javascript" src="/web/app/js/zepto_5e29df.js"></script>
+<script type="text/javascript" src="/web/app/js/fastclick_f14c61.js"></script>
+<script type="text/javascript">
+    'use strict';
+    $(function () {
+        $('.rule .title').click(function () {
+            var rule = $(this).closest('.rule');
+
+            if (rule.hasClass('active')) {
+                rule.removeClass('active');
+            } else {
+                rule.addClass('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
