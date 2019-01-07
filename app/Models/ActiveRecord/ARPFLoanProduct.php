@@ -41,7 +41,8 @@ class ARPFLoanProduct extends Model
     public static $resourceCompany = [
         RESOURCE_JCFC => RESOURCE_JCFC_COMPANY,
         RESOURCE_FCS => RESOURCE_FCS_COMPANY,
-        RESOURCE_FCS_SC => RESOURCE_FCS_SC_COMPANY
+        RESOURCE_FCS_SC => RESOURCE_FCS_SC_COMPANY,
+        RESOURCE_ZD => RESOURCE_ZD_COMPANY,
     ];
 
     /**
@@ -52,6 +53,7 @@ class ARPFLoanProduct extends Model
         RESOURCE_JCFC => RESOURCE_JCFC_COMPANY_SIMPLE,
         RESOURCE_FCS => RESOURCE_FCS_COMPANY_SIMPLE,
         RESOURCE_FCS_SC => RESOURCE_FCS_SC_COMPANY_SIMPLE,
+        RESOURCE_ZD => RESOURCE_ZD_COMPANY_SIMPLE,
     ];
 
     public static function getLoanProductByProduct($loan_product)

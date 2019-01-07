@@ -21,6 +21,7 @@ Route::group(['namespace' => 'Org'], function () {
     Route::match(['get', 'post'], '/home/logout', 'HomeController@logout');       //登出
     Route::match(['get', 'post'], '/home/msglist', 'HomeController@msglist');       //站内信
     Route::match(['get', 'post'], '/home/faq', 'HomeController@faq');       //常见问题
+    Route::match(['get', 'post'], '/home/capital', 'HomeController@capital');       //资金方信息
 
     //订单相关
     Route::match(['get', 'post'], '/order/bookinglist', 'OrderController@bookinglist');       //报名列表

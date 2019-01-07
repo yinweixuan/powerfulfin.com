@@ -14,8 +14,11 @@ $menus = [
         ['name' => '订单查询', 'url' => '/stat/list', 'class' => '', 'fa' => '',],
         ['name' => '校区统计', 'url' => '/stat/sumup', 'class' => '', 'fa' => '',],
     ]],
-    ['name' => '常见问题', 'url' => '/home/faq', 'class' => '', 'fa' => 'fa-question-circle-o', 'menus' => []],
-    ['name' => '站内信', 'url' => '/home/msglist', 'class' => '', 'fa' => 'fa-envelope-open-o', 'menus' => []],
+    ['name' => '百科', 'url' => '', 'class' => '', 'fa' => 'fa-question-circle-o', 'menus' => [
+        ['name' => '常见问题', 'url' => '/home/faq', 'class' => '', 'fa' => '',],
+        ['name' => '资金方信息', 'url' => '/home/capital', 'class' => '', 'fa' => '',],
+    ]],
+    //['name' => '站内信', 'url' => '/home/msglist', 'class' => '', 'fa' => 'fa-envelope-open-o', 'menus' => []],
     ['name' => '退出登录', 'url' => '/home/logout', 'class' => '', 'fa' => 'fa-sign-in', 'menus' => []],
 ];
 ?>

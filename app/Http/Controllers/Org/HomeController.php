@@ -91,7 +91,8 @@ class HomeController extends OrgBaseController
      */
     public function msglist()
     {
-        echo __FUNCTION__;
+        $data = [];
+        return view('org.home.msglist', $data);
     }
 
     /**
@@ -99,6 +100,14 @@ class HomeController extends OrgBaseController
      */
     public function faq()
     {
-        echo __FUNCTION__;
+        return view('org.home.faq');
+    }
+
+    /**
+     * 资金方信息
+     */
+    public function capital()
+    {
+        return view('org.home.capital');
     }
 }
