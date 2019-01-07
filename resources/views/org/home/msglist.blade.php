@@ -8,6 +8,6 @@
  * Date: 2018/12/24
  * Time: 3:42 PM
  */
-echo 11111;
 ?>
+    11111
 @endsection

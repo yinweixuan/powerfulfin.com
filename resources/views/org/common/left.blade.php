@@ -7,16 +7,16 @@
  */
 $menus = [
     ['name' => '订单审核', 'url' => '', 'class' => '', 'fa' => 'fa-cubes', 'menus' => [
-        ['name' => '报名确认', 'url' => '/order/bookinglist', 'class' => '', 'fa' => '', ],
-        ['name' => '放款确认', 'url' => '/order/confirmlist', 'class' => '', 'fa' => '',],
+        ['name' => '报名确认', 'url' => '/order/bookinglist', 'class' => '', ],
+        ['name' => '放款确认', 'url' => '/order/confirmlist', 'class' => '', ],
     ]],
     ['name' => '信息统计', 'url' => '', 'class' => '', 'fa' => 'fa-dashboard', 'menus' => [
-        ['name' => '订单查询', 'url' => '/stat/list', 'class' => '', 'fa' => '',],
-        ['name' => '校区统计', 'url' => '/stat/sumup', 'class' => '', 'fa' => '',],
+        ['name' => '订单查询', 'url' => '/stat/list', 'class' => '', ],
+        ['name' => '校区统计', 'url' => '/stat/sumup', 'class' => '', ],
     ]],
     ['name' => '百科', 'url' => '', 'class' => '', 'fa' => 'fa-question-circle-o', 'menus' => [
-        ['name' => '常见问题', 'url' => '/home/faq', 'class' => '', 'fa' => '',],
-        ['name' => '资金方信息', 'url' => '/home/capital', 'class' => '', 'fa' => '',],
+        ['name' => '常见问题', 'url' => '/home/faq', 'class' => '', ],
+        ['name' => '资金方信息', 'url' => '/home/capital', 'class' => '', ],
     ]],
     //['name' => '站内信', 'url' => '/home/msglist', 'class' => '', 'fa' => 'fa-envelope-open-o', 'menus' => []],
     ['name' => '退出登录', 'url' => '/home/logout', 'class' => '', 'fa' => 'fa-sign-in', 'menus' => []],
@@ -60,7 +60,7 @@ $menus = [
                 @if($m['menus'])
                     <ul class="sub-menu-list">
                         @foreach ($m['menus'] as $m2)
-                            <li class="{{$m2['class']}} <?php if ('/' . Request::path() == $m2['url']) echo 'active';?>"><i class="fa {{$m2['fa']}}"></i><a href="<?php if ($m2['url']) {echo $m2['url'];} else {echo 'javascript:void(0)';}?>">{{$m2['name']}}</a></li>
+                            <li class="{{$m2['class']}} <?php if ('/' . Request::path() == $m2['url']) echo 'active';?>"><a href="<?php if ($m2['url']) {echo $m2['url'];} else {echo 'javascript:void(0)';}?>">{{$m2['name']}}</a></li>
                         @endforeach
                     </ul>
                 @endif
