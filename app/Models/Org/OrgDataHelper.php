@@ -26,7 +26,7 @@ class OrgDataHelper
         if (empty($ids)) {
             return $ret;
         }
-        $sql = "SELECT l.id id,l.id lid,ur.full_name full_name,u.phone phone,ur.identity_number identity_number,o.short_name org_short_name,o.org_name org_name,oc.class_name class_name,oc.class_price class_price,l.borrow_money borrow_money,l.org_receivable org_receivable,l.create_time create_time,l.loan_time loan_time,l.resource resource, l.status status,l.loan_product loan_product, l.audit_opinion audit_opinion FROM pf_loan l left join pf_org_class oc on l.class = oc.cid left join pf_users_real ur on l.uid = ur.uid left join pf_users u on l.uid = u.id left join pf_org o on l.oid = o.id where l.id in (" . implode(',', $ids) . ")";
+        $sql = "SELECT l.id id,l.id lid,ur.full_name full_name,u.phone phone,ur.identity_number identity_number,o.short_name org_short_name,o.org_name org_name,oc.class_name class_name,oc.class_price class_price,l.borrow_money borrow_money,l.org_receivable org_receivable,l.create_time create_time,l.loan_time loan_time,l.resource resource, l.status status,l.loan_product loan_product, l.audit_opinion audit_opinion FROM pf_loan l left join pf_org_class oc on l.cid = oc.cid left join pf_users_real ur on l.uid = ur.uid left join pf_users u on l.uid = u.id left join pf_org o on l.oid = o.id where l.id in (" . implode(',', $ids) . ")";
         $result = DB::select($sql);
         $result = ArrayUtil::addKeyToArray($result, 'id');
         $ret = [];
