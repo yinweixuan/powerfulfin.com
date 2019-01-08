@@ -21,6 +21,8 @@ Route::get('/', 'HomeController@index');
  */
 Route::get('download', 'HomeController@download');
 
+Route::match(['get', 'post'], '/home/qrscan', 'HomeController@qrscan');       //二维码扫描申请
+
 /**
  * 回调路由
  */
@@ -62,8 +64,6 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 更改密码
      */
     Route::match(['get', 'post'], APP_V1 . '/login/setpassword', 'LoginController@setPassword');
-
-    Route::match(['get', 'post'], APP_V1 . '/index/qrscan', 'IndexController@qrscan');      //扫描二维码申请后的跳转
 
     /**
      * 获取用户资料配置
