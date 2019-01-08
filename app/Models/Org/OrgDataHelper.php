@@ -38,9 +38,11 @@ class OrgDataHelper
             }
             $tmp = $result[$id];
             if (array_key_exists($tmp['loan_product'], $loanTypes)) {
-                $tmp['loan_product_desc'] = $loanTypes[$tmp['loan_product']];
+                $tmp['loan_product_desc'] = $loanTypes[$tmp['loan_product']]['name'];
+                $tmp['loan_product_config'] = $loanTypes[$tmp['loan_product']];
             } else {
                 $tmp['loan_product_desc'] = '未知产品';
+                $tmp['loan_product_config'] = [];
             }
             $tmp['resource_desc'] = BULoanProduct::getResourceCompany($tmp['resource'], true);
             $tmp['status_B'] = BULoanStatus::getStatusDescriptionForB($tmp['status']);

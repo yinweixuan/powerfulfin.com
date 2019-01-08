@@ -8,6 +8,7 @@
  * Date: 2018/12/25
  * Time: 10:33 AM
  */
+use App\Components\OutputUtil;
 ?>
 <div id="pjax-content">
     <div class="panel panel-default">
@@ -163,7 +164,7 @@
                             <td>{{$l['phone']}}</td>
                             <td>{{$l['org_short_name']}}<br />{{$l['class_name']}}</td>
                             <td>{{$l['resource_desc']}}</td>
-                            <td>申请 <?php echo \App\Components\OutputUtil::echoMoney($l['borrow_money']); ?><br />放款 <?php echo \App\Components\OutputUtil::echoMoney($l['org_receivable']); ?></td>
+                            <td>申请 <?php echo OutputUtil::echoMoney($l['borrow_money']); ?><br />放款 <?php echo OutputUtil::echoMoney($l['org_receivable']); ?></td>
                             <td>{{$l['loan_product_desc']}}</td>
                             <td>申请{{$l['create_time']}}<br />放款<?php echo $l['loan_time']; ?></td>
                             <td><?php
@@ -174,7 +175,7 @@
                             <td style="color:<?php if ($l['status'] == LOAN_11100_OVERDUE) {echo "red";} ?>"><?php
                                 echo $l['status_B'];
                                 if (in_array($l['status'], array(LOAN_2100_SCHOOL_REFUSE, LOAN_3100_PF_REFUSE, LOAN_4100_P2P_REFUSE, LOAN_2000_SCHOOL_CONFIRM))) {
-                                    echo '<br />(原因:' . html_entity_decode($l['audit_opinion']) . ')';
+                                    echo '<br />(原因:' . OutputUtil::valueEscape($l['audit_opinion']) . ')';
                                 }
                                 ?></td>
                         </tr>
@@ -185,7 +186,7 @@
                         ?>
                         </tbody>
                     </table>
-                    <?= html_entity_decode($page); ?>
+                    <?php echo $page; ?>
                 </div>
             </div>
         </div>

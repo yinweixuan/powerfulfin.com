@@ -331,7 +331,7 @@ class BULoanApply
         }
         //补充机构和课程信息
         $ret['org'] = ARPFOrg::getOrgById($loan['oid']);
-        $ret['class'] = ARPFOrgClass::getById($loan['class']);
+        $ret['class'] = ARPFOrgClass::getById($loan['cid']);
         $ret['user'] = ARPfUsers::getUserInfoByID($loan['uid']);
         //补充资方,费率信息
         $ret['base']['resource_desc'] = BULoanProduct::getResourceCompany($ret['base']['resource']);
