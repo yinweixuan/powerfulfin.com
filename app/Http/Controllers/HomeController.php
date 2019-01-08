@@ -9,6 +9,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Components\HttpUtil;
+use Illuminate\Support\Facades\Input;
+
 class HomeController extends Controller {
     public function index() {
         return view('web.home.index');
@@ -40,9 +43,9 @@ class HomeController extends Controller {
     public function qrscan()
     {
         if (!HttpUtil::isSelf()) {
-            $url = "http://" . DOMAIN_WEB . "/download?f=qr";
+            $url = "http://www." . DOMAIN_WEB . "/download?f=qr";
         } else {
-            $oid = Input::get('lid');
+            $oid = Input::get('oid');
             $url = "powerfulfin://apply?oid={$oid}";
         }
         HttpUtil::goUrl($url);
