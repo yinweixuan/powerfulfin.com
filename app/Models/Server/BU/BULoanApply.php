@@ -136,7 +136,7 @@ class BULoanApply
             'uid' => $user['uid'],
             'oid' => $org['id'],
             'hid' => $orgHead['hid'],
-            'class' => $data['cid'],
+            'cid' => $data['cid'],
             'status' => LOAN_1000_CREATE,
             'borrow_money' => $data['borrow_money'],
             'loan_product' => $data['loan_product'],
