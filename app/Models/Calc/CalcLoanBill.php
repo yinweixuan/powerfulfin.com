@@ -75,7 +75,7 @@ class CalcLoanBill
      */
     public static function calcRepayNeed($loanProduct)
     {
-        switch ($loanProduct['ratetype']) {
+        switch ($loanProduct['loan_type']) {
             case ARPFLoanProduct::LOAN_TYPE_XY:
                 $times = $loanProduct['rate_time_x'] + $loanProduct['rate_time_y'];
                 break;
@@ -100,7 +100,7 @@ class CalcLoanBill
      */
     public static function calcInterest($loanProduct, $principal)
     {
-        switch ($loanProduct['ratetype']) {
+        switch ($loanProduct['loan_type']) {
             case ARPFLoanProduct::LOAN_TYPE_XY:
                 $interest = $principal * $loanProduct['rate_time_x'] * $loanProduct['rate_x'] + $principal * $loanProduct['rate_time_y'] * $loanProduct['rate_y'];
                 break;
@@ -126,7 +126,7 @@ class CalcLoanBill
      */
     public static function calcLoanBillList($principal, $loanProduct, $repay)
     {
-        switch ($loanProduct['ratetype']) {
+        switch ($loanProduct['loan_type']) {
             case ARPFLoanProduct::LOAN_TYPE_XY:
                 $item = self::calcTanxing($principal, $loanProduct, $repay);
                 break;
