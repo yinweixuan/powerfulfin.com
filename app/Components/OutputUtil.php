@@ -199,7 +199,7 @@ class OutputUtil
      * @param type $limit
      * @param type $etc
      */
-    public static function echoEscape($word, $limit = null, $etc = '...')
+    public static function echoEscape($word = '', $limit = null, $etc = '...')
     {
         echo self::valueEscape($word, $limit, $etc);
     }
@@ -288,5 +288,29 @@ class OutputUtil
         } catch (\Exception $e) {
             return '';
         }
+    }
+
+    /**
+     * 输出文件
+     * @param type $fileName
+     * @param type $filePath
+     */
+    public static function file($fileName, $filePath, $fileType = 'application/pdf')
+    {
+        if (!file_exists($filePath)) {
+            throw new PFException("{$filePath} 文件不存在");
+        }
+        // send output to a browser
+        header('Content-Type: ' . $fileType);
+        header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0, max-age=1');
+        //header('Cache-Control: public, must-revalidate, max-age=0'); // HTTP/1.1
+        header('Pragma: public');
+        header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Content-Disposition: inline; filename="' . $fileName . '"');
+        $file = fopen($filePath, "r"); // 打开文件
+        echo fread($file, filesize($filePath));
+        fclose($file);
+        return 0;
     }
 }

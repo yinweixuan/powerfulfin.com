@@ -257,4 +257,17 @@ class IndexController extends AppController {
         ];
     }
 
+    /**
+     * 申请分期二维码扫描之后的
+     */
+    public function qrscan()
+    {
+        if (!HttpUtil::isSelf()) {
+            $url = "http://" . DOMAIN_WEB . "/download?f=qr";
+        } else {
+            $oid = Input::get('lid');
+            $url = "powerfulfin://apply?oid={$oid}";
+        }
+        HttpUtil::goUrl($url);
+    }
 }

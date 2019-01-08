@@ -22,6 +22,8 @@ Route::group(['namespace' => 'Org'], function () {
     Route::match(['get', 'post'], '/home/msglist', 'HomeController@msglist');       //站内信
     Route::match(['get', 'post'], '/home/faq', 'HomeController@faq');       //常见问题
     Route::match(['get', 'post'], '/home/capital', 'HomeController@capital');       //资金方信息
+    Route::match(['get', 'post'], '/home/qr', 'HomeController@qr');       //申请二维码
+    Route::match(['get', 'post'], '/home/applyqr', 'HomeController@applyqr');       //申请二维码页面展示
 
     //订单相关
     Route::match(['get', 'post'], '/order/bookinglist', 'OrderController@bookinglist');       //报名列表

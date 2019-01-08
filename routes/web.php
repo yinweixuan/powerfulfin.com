@@ -63,6 +63,8 @@ Route::group(['namespace' => 'App\V1'], function () {
      */
     Route::match(['get', 'post'], APP_V1 . '/login/setpassword', 'LoginController@setPassword');
 
+    Route::match(['get', 'post'], APP_V1 . '/index/qrscan', 'IndexController@qrscan');      //扫描二维码申请后的跳转
+
     /**
      * 获取用户资料配置
      */

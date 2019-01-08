@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\URL;
 
 class OrgBaseController extends Controller
 {
-
     public function __construct()
     {
         parent::__construct();

@@ -9,7 +9,10 @@
 namespace App\Http\Controllers\Org;
 
 use App\Components\CookieUtil;
+use App\Components\HttpUtil;
+use App\Components\OutputUtil;
 use App\Components\PFException;
+use App\Components\QRCodeUtil;
 use App\Models\ActiveRecord\ARPFOrgUsers;
 use App\Models\Org\OrgBaseController;
 use App\Models\Org\OrgDataBus;
@@ -32,7 +35,10 @@ class HomeController extends OrgBaseController
      */
     public function index()
     {
-        return $this->view('org.home.index');
+        //return $this->view('org.home.index');
+
+
+        return $this->view('org.home.index2');
     }
 
     /**
@@ -74,7 +80,7 @@ class HomeController extends OrgBaseController
                 $data['errmsg'] = $exception->getMessage();
             }
         }
-        return view('org.home.login', $data);
+        return $this->view('org.home.login', $data);
     }
 
     /**
@@ -92,7 +98,7 @@ class HomeController extends OrgBaseController
     public function msglist()
     {
         $data = [];
-        return view('org.home.msglist', $data);
+        return $this->view('org.home.msglist', $data);
     }
 
     /**
@@ -100,7 +106,7 @@ class HomeController extends OrgBaseController
      */
     public function faq()
     {
-        return view('org.home.faq');
+        return $this->view('org.home.faq');
     }
 
     /**
@@ -108,6 +114,35 @@ class HomeController extends OrgBaseController
      */
     public function capital()
     {
-        return view('org.home.capital');
+        return $this->view('org.home.capital');
     }
+
+    /**
+     * 扫码申请的二维码的页面展示
+     */
+    public function applyqr()
+    {
+        return $this->view('org.home.applyqr');
+    }
+
+    /**
+     * 扫码申请的二维码.如果非大圣分期APP扫描的,直接跳转到下载页
+     */
+    public function qr()
+    {
+        //检查二维码路径下是否有,如果没有,生成二维码,并叠加大圣分期logo在中心
+        $oid = OrgDataBus::get('org_id');
+        $path = PATH_STORAGE . "/org_qr/";
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+        $path .= "/{$oid}.png";
+        if (true || !file_exists($path)) {
+            $url = "powerfulfin://apply?oid={$oid}";
+            $url = "http://" . DOMAIN_WEB . "/index/qrscan?f=qr&oid={$oid}";
+            QRCodeUtil::png($url, $path, QR_ECLEVEL_H);
+        }
+        OutputUtil::file("apply_{$oid}.png", $path, 'image/png');
+    }
+
 }
