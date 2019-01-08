@@ -23,6 +23,7 @@ use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\Calc\CalcResource;
 use App\Models\Server\BU\BULoanApply;
+use App\Models\Server\BU\BULoanBill;
 use App\Models\Server\BU\BULoanConfig;
 use App\Models\Server\BU\BULoanProduct;
 use App\Models\Server\BU\BULoanStatus;
@@ -43,7 +44,7 @@ class Loan
                 'lid' => $lid,
                 'uid' => $uid,
                 'status' => $loanBill['status'],
-                'status_desp' => '',
+                'status_desp' => BULoanBill::getLoanBillStatusDesp($loanBill['status']),
                 'installment' => $loanBill['installment_plan'] . '/' . $loanBill['installment'] . '期',
                 'should_repay_date' => $loanBill['should_repay_date'],
                 'repay_date' => $loanBill['repay_date'],
@@ -52,8 +53,9 @@ class Loan
                 'repay_way' => '系统划扣',
                 'repay_bank_account' => '',
                 'repay_bank_name' => '',
-                'repay_button' => 1,
-                'resource' => $loanBill['resource']
+                'repay_button' => 0,
+                'resource' => $loanBill['resource'],
+                'resource_company' => ARPFLoanProduct::$resourceCompany[$loanBill['resource']],
             ];
             $lists[] = $tmp;
         }

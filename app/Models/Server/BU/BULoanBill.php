@@ -92,4 +92,29 @@ class BULoanBill
             }
         }
     }
+
+    public static function getLoanBillStatusDesp($status)
+    {
+        switch ($status) {
+            case ARPFLoanBill::STATUS_NO_REPAY:
+                $status_desp = '待还款';
+                break;
+            case ARPFLoanBill::STATUS_REPAY:
+                $status_desp = '已结清';
+                break;
+            case ARPFLoanBill::STATUS_OVERDUE:
+                $status_desp = '已逾期';
+                break;
+            case ARPFLoanBill::STATUS_ADVANCE_REPAY:
+                $status_desp = '提前还款';
+                break;
+            case ARPFLoanBill::STATUS_WITHDRAW:
+                $status_desp = '已退课';
+                break;
+            default:
+                $status_desp = '未知';
+                break;
+        }
+        return $status_desp;
+    }
 }
