@@ -68,6 +68,7 @@ class BULoanBill
                 'loan_type' => $loanProduct['loan_type'],
                 'xy' => 0,
                 'resource' => $loan['resource'],
+                'remark' => '创建还款计划'
             );
             if ($loanProduct['loan_type'] == ARPFLoanProduct::LOAN_TYPE_XY) {
                 if ($loanProduct['rate_time_x'] >= $insert['installment_plan']) {
