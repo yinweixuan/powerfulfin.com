@@ -53,7 +53,7 @@ class ARPFLoan extends Model
             'uid' => $info['uid'],
             'oid' => $info['oid'],
             'hid' => $info['hid'],
-            'class' => $info['cid'],
+            'cid' => $info['cid'],
             'status' => $info['status'],
             'borrow_money' => $info['borrow_money'],
             'loan_product' => $info['loan_product'],
