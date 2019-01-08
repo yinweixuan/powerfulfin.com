@@ -183,7 +183,7 @@ class IndexController extends AppController {
         } elseif ($type == 4) {
             $button = [
                 'name' => '立即申请',
-                'url' => 'powerfulfin://apply?lid=' . $id,
+                'url' => 'powerfulfin://apply?oid=' . $id,
                 'style' => 1
             ];
         } elseif ($type == 5) {
