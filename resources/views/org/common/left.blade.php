@@ -18,7 +18,7 @@ $menus = [
         ['name' => '常见问题', 'url' => '/home/faq', 'class' => '', ],
         ['name' => '资金方信息', 'url' => '/home/capital', 'class' => '', ],
     ]],
-    ['name' => '扫码申请分期', 'url' => '/home/qr', 'class' => '', 'fa' => 'fa-qrcode', 'menus' => []],
+    ['name' => '扫码申请', 'url' => '/home/applyqr', 'class' => '', 'fa' => 'fa-qrcode', 'menus' => []],
     //['name' => '站内信', 'url' => '/home/msglist', 'class' => '', 'fa' => 'fa-envelope-open-o', 'menus' => []],
     //['name' => '退出登录', 'url' => '/home/logout', 'class' => '', 'fa' => 'fa-sign-in', 'menus' => []],
 ];

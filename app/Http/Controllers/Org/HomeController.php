@@ -35,10 +35,10 @@ class HomeController extends OrgBaseController
      */
     public function index()
     {
-        //return $this->view('org.home.index');
+        return $this->view('org.home.index');
 
 
-        return $this->view('org.home.index2');
+        //return $this->view('org.home.index2');
     }
 
     /**
@@ -139,7 +139,7 @@ class HomeController extends OrgBaseController
         $path .= "/{$oid}.png";
         if (true || !file_exists($path)) {
             $url = "powerfulfin://apply?oid={$oid}";
-            $url = "http://" . DOMAIN_WEB . "/index/qrscan?f=qr&oid={$oid}";
+            //$url = "http://" . DOMAIN_WEB . "/index/qrscan?f=qr&oid={$oid}";
             QRCodeUtil::png($url, $path, QR_ECLEVEL_H);
         }
         OutputUtil::file("apply_{$oid}.png", $path, 'image/png');
