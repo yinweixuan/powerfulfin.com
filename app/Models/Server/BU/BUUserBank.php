@@ -81,7 +81,7 @@ class BUUserBank
                 'env' => config('app.env')
             ];
             $binds = Epay::exec($params);
-            foreach ($binds['data'] as $bind) {
+            foreach ($binds as $bind) {
                 if ($bind['bank_account'] == $bank_account) {
                     throw new PFException("该银行卡已经签约绑定，请勿重复绑定", ERR_BANK_ACCOUNT);
                 }
@@ -98,7 +98,7 @@ class BUUserBank
             ];
             $result = Epay::exec($smsConfig);
             return array(
-                'serialnumber' => $result['data']['unique_code'],
+                'serialnumber' => $result['unique_code'],
             );
         } catch (PFException $exception) {
             throw new PFException($exception->getMessage(), $exception->getCode());
@@ -124,7 +124,7 @@ class BUUserBank
                 'env' => config('app.env')
             ];
             $binds = Epay::exec($params);
-            foreach ($binds['data'] as $bind) {
+            foreach ($binds as $bind) {
                 if ($bind['bank_account'] == $bank_account) {
                     throw new PFException("该银行卡已经签约绑定，请勿重复绑定", ERR_BANK_ACCOUNT);
                 }
@@ -138,7 +138,7 @@ class BUUserBank
             );
 
             $result = Epay::exec($bindData);
-            if (!empty($result['data']['protocol_no'])) {
+            if (!empty($result['protocol_no'])) {
                 $info = [
                     'uid' => $uid,
                     'bank_account' => $bank_account,
@@ -147,7 +147,7 @@ class BUUserBank
                     'phone' => $phone,
                     'status' => STATUS_SUCCESS,
                     'type' => 2,
-                    'protocol_no' => $result['data']['protocol_no'],
+                    'protocol_no' => $result['protocol_no'],
                     'create_time' => date('Y-m-d H:i:s'),
                 ];
 
