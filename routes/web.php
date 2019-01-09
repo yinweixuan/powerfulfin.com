@@ -106,6 +106,7 @@ Route::group(['namespace' => 'App\V1'], function () {
      */
     Route::match(['get', 'post'], APP_V1 . '/loan/config', 'LoanController@loanConfig');  //获取分期申请配置项
     Route::match(['get', 'post'], APP_V1 . '/loan/submit', 'LoanController@loanSubmit');  //申请分期
+    Route::match(['get', 'post'], APP_V1 . '/loan/calc', 'LoanController@calc');  //申请分期
     /**
      * 订单信息
      */
@@ -117,5 +118,6 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 图片
      */
     Route::match(['get', 'post'], APP_V1 . '/pic/upload', 'PicController@upload');  //app图片上传
+    Route::match(['get', 'post'], APP_V1 . '/test/index', 'TestController@index');  //app图片上传
 });
 

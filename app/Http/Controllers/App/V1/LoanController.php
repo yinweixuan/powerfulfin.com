@@ -15,6 +15,7 @@ use App\Http\Controllers\App\AppController;
 use App\Http\Controllers\App\Models\Loan;
 use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\DataBus;
+use App\Models\Server\BU\BULoanProduct;
 use Illuminate\Support\Facades\Input;
 
 class LoanController extends AppController
@@ -76,6 +77,59 @@ class LoanController extends AppController
             $data = !empty($_POST) ? $_POST : $_GET;
             $result = Loan::submitLoan($data, DataBus::getUid());
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, ['lid' => $result['id'], 'resource_company' => ARPFLoanProduct::$resourceCompany[$result['resource']]]);
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
+        }
+    }
+
+    public function calc()
+    {
+        try {
+            $info = [
+                'title' => '每月15日为还款日',
+                'content_one' => [
+                    'content' => '',
+                    'money' => '',
+                ],
+                'content_two' => [
+                    'content' => '',
+                    'money' => '',
+                ],
+            ];
+            $borrow_money = Input::get('borrow_money');
+            $loan_product = Input::get('loan_product');
+            if (empty($loan_product) || empty($borrow_money)) {
+                OutputUtil::err(ERR_OK_CONTENT, ERR_OK, $info);
+            }
+
+            $loanProducts = BULoanProduct::getLoanTypeByIds([$loan_product]);
+            if (empty($loanProducts)) {
+                throw new PFException("金融产品异常，请稍后重试", ERR_SYS_PARAM);
+            }
+            $loanProduct = array_shift($loanProducts);
+            if ($loanProduct['loan_type'] == ARPFLoanProduct::LOAN_TYPE_XY) {
+                $content_one = '前' . $loanProduct['rate_time_x'] . '期每期还款';
+                $money_one = '￥' . OutputUtil::echoMoney($borrow_money * $loanProduct['rate_x']);
+                $content_two = '后' . $loanProduct['rate_time_y'] . '期每期还款';
+                $money_two = '￥' . OutputUtil::echoMoney(($borrow_money * $loanProduct['rate_y'] + $borrow_money / $loanProduct['rate_time_y']));
+            } else if ($loanProduct['loan_type'] == ARPFLoanProduct::LOAN_TYPE_DISCOUNT) {
+                $content_one = '共' . $loanProduct['rate_time_x'] . '期每期还款';
+                $money_one = '￥' . OutputUtil::echoMoney(($borrow_money / $loanProduct['rate_time_x']));
+                $content_two = '';
+                $money_two = '';
+            } else if ($loanProduct['loan_type'] == ARPFLoanProduct::LOAN_TYPE_EQUAL) {
+                $content_one = '共' . $loanProduct['rate_time_y'] . '期每期还款';
+                $money_one = '￥' . OutputUtil::echoMoney(($borrow_money / $loanProduct['rate_time_y'] + $borrow_money * $loanProduct['rate_y']));
+                $content_two = '';
+                $money_two = '';
+            } else {
+                throw new PFException("试算失败，亲稍后重试", ERR_SYS_PARAM);
+            }
+            $info['content_one']['content'] = $content_one;
+            $info['content_one']['money'] = $money_one;
+            $info['content_two']['content'] = $content_two;
+            $info['content_two']['money'] = $money_two;
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $info);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }

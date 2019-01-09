@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/Ionicons/css/ionicons.min.css") }}">
 <!-- jvectormap -->
-<link rel="stylesheet" href="bower_components/jvectormap/jquery-jvectormap.css">
+<link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/jvectormap/jquery-jvectormap.css") }}">
 <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
@@ -113,3 +113,13 @@
     </div>
     <!-- /.col -->
 </div>
+<!-- jvectormap  -->
+{{--{{ HTML::script('/vendor/laravel-admin/jvectormap/jquery-jvectormap-1.2.2.min.js') }}--}}
+{{--{{ HTML::script('/vendor/laravel-admin/jvectormap/jquery-jvectormap-world-mill-en.js') }}--}}
+
+{{--{{ HTML }}--}}
+
+
+
+{{--<script src="{{ admin_asset("") }}"></script>--}}
+{{--<script src="{{ admin_asset("") }}"></script>--}}
