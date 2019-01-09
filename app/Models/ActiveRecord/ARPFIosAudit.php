@@ -32,7 +32,7 @@ class ARPFIosAudit {
 
     public static function getCourseList($oid) {
         $list = DB::table(ARPFOrgClass::TABLE_NAME)
-            ->select('*')
+            ->select(['cid','class_name'])
             ->limit(10)
             ->get()
             ->toArray();

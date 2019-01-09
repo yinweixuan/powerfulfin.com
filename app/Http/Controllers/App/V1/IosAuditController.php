@@ -49,15 +49,18 @@ class IosAuditController {
         }
     }
 
-    public function classList(){
+    public function classList() {
         $oid = Input::get('oid');
         $list = ARPFIosAudit::getCourseList($oid);
         OutputUtil::out($list);
     }
 
-    public function applyList(){
+    public function applyList() {
         $uid = DataBus::getUid();
         $list = ARPFIosAudit::getList($uid);
+        foreach ($list as &$item) {
+            $item['status'] = '报名沟通中';
+        }
         OutputUtil::out($list);
     }
 
