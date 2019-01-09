@@ -186,6 +186,11 @@ class BUUserInfo
             throw new PFException("该身份信息已经绑定其他账户，请更换登录账户", ERR_SYS_PARAM);
         }
 
+        $userReal = ARPFUsersReal::getInfo($user['id']);
+        if (!empty($userReal['identity_number']) && $userReal['identity_number'] != $data['identity_number']) {
+            throw new PFException("该账号已实名，请勿使用他人账号实名");
+        }
+
         $data['gender'] = CheckUtil::getSexByIDCard($data['identity_number']);
         ARPFUsersReal::updateInfo($user['id'], $data);
 

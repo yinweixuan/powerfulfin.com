@@ -11,6 +11,10 @@ namespace App\Admin\Controllers;
 
 use App\Admin\AdminController;
 use App\Admin\Models\LoanModel;
+use App\Components\AliyunOSSUtil;
+use App\Components\OutputUtil;
+use App\Models\ActiveRecord\ARPFAdminUsers;
+use App\Models\ActiveRecord\ARPFLoanLog;
 use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BULoanProduct;
 use Encore\Admin\Layout\Content;
@@ -53,6 +57,53 @@ class LoanController extends AdminController
     {
         $lid = Input::get('lid');
         $loan = BULoanApply::getDetailById($lid);
+
+        $loan['phonebook'] = OutputUtil::json_decode($loan['phonebook']['phonebook']);
+
+        $loanLog = ARPFLoanLog::getLoanLogByLid($lid);
+        foreach ($loanLog as &$log) {
+            if (!empty($log['uid_op'])) {
+                $admins = ARPFAdminUsers::getByIds([$log['uid_op']]);
+                if (!empty($admins)) {
+                    $admin = array_shift($admins);
+                    $log['username'] = $admin['name'];
+                }
+            } else {
+                $log['username'] = '';
+            }
+        }
+        $loan['loan_log'] = $loanLog;
+        $pic = ['scene_pic', 'person_pic', 'train_contract_pic', 'train_statement_pic'];
+        $picArr = [];
+        for ($i = 0; $i < count($pic); $i++) {
+            if (!empty($loan['base'][$pic[$i]])) {
+                $tmp = OutputUtil::json_decode($loan['base'][$pic[$i]]);
+                foreach ($tmp as $item) {
+                    $picArr[$pic[$i]][] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $item);
+                }
+
+            }
+        }
+
+        if (!empty($loan['real']['idcard_information_pic'])) {
+            $picArr['idcard_information_pic'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $loan['real']['idcard_information_pic']);
+        } else {
+            $picArr['idcard_information_pic'] = '';
+        }
+
+        if (!empty($loan['real']['idcard_national_pic'])) {
+            $picArr['idcard_national_pic'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $loan['real']['idcard_national_pic']);
+        } else {
+            $picArr['idcard_national_pic'] = '';
+        }
+
+        if (!empty($loan['work']['edu_pic'])) {
+            $picArr['edu_pic'] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $loan['work']['edu_pic']);
+        } else {
+            $picArr['edu_pic'] = '';
+        }
+
+        $loan['pic'] = $picArr;
         return $content->header('订单详情')
             ->description($loan['real']['full_name'])
             ->breadcrumb(

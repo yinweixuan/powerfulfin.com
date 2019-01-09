@@ -50,4 +50,13 @@ class ARPFLoanLog extends Model
         return DB::table(self::TABLE_NAME)->insertGetId($logData);
     }
 
+    public static function getLoanLogByLid($lid)
+    {
+        return DB::table(self::TABLE_NAME)
+            ->select('*')
+            ->where('lid', $lid)
+            ->orderByDesc('id')
+            ->get()->toArray();
+    }
+
 }

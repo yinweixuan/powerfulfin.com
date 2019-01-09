@@ -108,11 +108,7 @@ class ARPFUsersReal extends Model
             ->where('uid', '!=', $uid)
             ->where('identity_number', '=', $identity_number)
             ->first();
-        if (empty($data)) {
-            return true;
-        } else {
-            return false;
-        }
+        return $data;
     }
 
 }

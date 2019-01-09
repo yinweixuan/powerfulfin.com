@@ -38,8 +38,7 @@
             </ul>
             <div class="tab-content">
                 <div class="active tab-pane" id="activity">
-                    <table class="table table-hover table-bordered table-striped " id="image">
-
+                    <table class="table table-hover table-bordered table-striped ">
                         <tr>
                             <td colspan="4" align="center">分期申请</td>
                         </tr>
@@ -269,13 +268,150 @@
                     </table>
                 </div>
                 <div class="tab-pane" id="picinfo">
-                    2
+                    <table class="table table-hover table-bordered table-striped ">
+                        <tr>
+                            <td colspan="4" align="center">认证图片</td>
+                        </tr>
+                        <tr>
+                            <td>身份证正面照</td>
+                            <td>
+                                <a href="{{ $pic['idcard_information_pic'] }}"
+                                   target="_blank">
+                                    <img src="{{ $pic['idcard_information_pic'] }}"
+                                         style="width:200px">
+                                </a>
+                            <td>身份证反面照</td>
+                            <td>
+                                <a href="{{ $pic['idcard_national_pic'] }}"
+                                   target="_blank">
+                                    <img src="{{ $pic['idcard_national_pic'] }}"
+                                         style="width:200px">
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>场景照</td>
+                            <td style="cursor:pointer">
+                                <?php
+                                $a = 1;
+                                if (!empty($pic['scene_pic'])) {
+                                foreach ($pic['scene_pic'] as $n){ ?>
+                                <img data-original="{{ $n }}" src="{{ $n }}" style="width:200px" alt="场景照">
+                                <?php if ($a % 3 == 0) {
+                                    echo "<br/>";
+                                }
+                                $a++ ?>
+                                <?php }?>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>手持身份证</td>
+                            <td style="cursor:pointer">
+                                <?php
+                                $b = 1;
+                                if (!empty($pic['person_pic'])) {
+                                foreach ($pic['person_pic'] as $n){ ?>
+                                <img data-original="{{ $n }}" src="{{ $n }}" style="width:200px" alt="手持身份证">
+                                <?php if ($b % 3 == 0) {
+                                    echo "<br/>";
+                                }
+                                $b++ ?>
+                                <?php }?>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>声明</td>
+                            <td style="cursor:pointer">
+                                <?php
+                                $b = 1;
+                                if (!empty($pic['train_statement_pic'])) {
+                                foreach ($pic['train_statement_pic'] as $n){ ?>
+                                <img data-original="{{ $n }}" src="{{ $n }}" style="width:200px" alt="声明">
+                                <?php if ($b % 3 == 0) {
+                                    echo "<br/>";
+                                }
+                                $b++ ?>
+                                <?php }?>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>培训协议</td>
+                            <td style="cursor:pointer" colspan="3">
+                                <?php $i = 1;
+                                foreach ($pic['train_contract_pic'] as $value) { ?>
+                                <?php if (!empty($value)) { ?>
+                                <img data-original="{{ $value }}" src="{{ $value }}" style="width:200px" alt="培训协议">
+                                <?php if ($i % 3 == 0) {
+                                    echo "<br/>";
+                                }
+                                $i++ ?>
+                                <?php } ?>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>学生证</td>
+                            <td style="cursor:pointer">
+                                <?php if (!empty($pic['edu_pic'])) { ?>
+                                <img data-original="{{ $pic['edu_pic'] }}"
+                                     src="{{ $pic['edu_pic'] }}"
+                                     style="width:200px" alt="学生证">
+                                <?php } ?>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="tab-pane" id="phonebook">
-                    3
+                    <table class="table table-hover table-bordered table-striped ">
+                        <tr>
+                            <td colspan="4" align="center">通讯录</td>
+                        </tr>
+                        @if(!empty($phonebook))
+                            <tr>
+                                <td>name</td>
+                                <td>mobile1</td>
+                                <td>mobile2</td>
+                                <td>mobile3</td>
+                            </tr>
+                            @foreach($phonebook as $item)
+                                <tr>
+                                    <td>{{ $item['firstname'] }}{{ $item['lastname'] }}</td>
+                                    <td>{{ $item['mobile1'] }}</td>
+                                    <td>{{ $item['mobile2'] }}</td>
+                                    <td>{{ $item['mobile3'] }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </table>
                 </div>
                 <div class="tab-pane" id="timeline">
-                    4
+                    <table class="table table-hover table-bordered table-striped ">
+                        <thead>
+                        <tr style="white-space: nowrap;">
+                            <td>ID</td>
+                            <td>状态操作流程</td>
+                            <td>当前操作状态</td>
+                            <td>备注</td>
+                            <td>操作人</td>
+                            <td>创建时间</td>
+                        </tr>
+                        </thead>
+                        <?php foreach ($loan_log as $log) { ?>
+                        <tr>
+                            <td>{{ $log['id'] }}</td>
+                            <td>{{ \App\Models\Server\BU\BULoanStatus::getStatusDescriptionForAdmin($log['status_before']) }}</td>
+                            <td>{{ \App\Models\Server\BU\BULoanStatus::getStatusDescriptionForAdmin($log['status_after']) }}</td>
+                            <td>{{ $log['remark'] }}</td>
+                            <td>{{ $log['username'] }}</td>
+                            <td>{{ $log['create_time'] }}</td>
+                        </tr>
+                        <?php } ?>
+                    </table>
                 </div>
             </div>
         </div>
