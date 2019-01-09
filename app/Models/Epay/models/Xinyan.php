@@ -2,9 +2,9 @@
 
 require_once('xinyan/HttpCurl.php');
 require_once('xinyan/BaofooUtils.php');
-require_once('xinyan/Log.php');
-require_once('xinyan/BFRSA.php');
-require_once('xinyan/HttpClient.php');
+require_once('baofoo/Log.php');
+require_once('baofoo/BFRSA.php');
+require_once('baofoo/HttpClient.php');
 
 class Xinyan extends App\Models\Epay\Epay {
 
