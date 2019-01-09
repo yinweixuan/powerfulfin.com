@@ -80,13 +80,24 @@ class OutputUtil
             self::err($mixed->getMessage(), $mixed->getCode());
         } else {
             if ($str && is_array($mixed)) {
-                array_walk_recursive($mixed, function(&$val) {
+                array_walk_recursive($mixed, function (&$val) {
                     if (is_numeric($val)) {
                         $val .= '';
                     }
                 });
             }
-            self::info(ERR_OK_CONTENT, ERR_OK, $mixed);
+            //同info方法，区别是数据为空时返回[]
+            self::$msgData['code'] = ERR_OK;
+            self::$msgData['msg'] = ERR_OK_CONTENT;
+            if ($mixed === null || $mixed === false || $mixed === true) {
+                self::$msgData['data'] = [];
+            } else {
+                self::$msgData['data'] = $mixed;
+            }
+            self::$msgData['isLogin'] = DataBus::isLogin();
+            self::$msgData['time'] = DataBus::get('ctime');
+            $ret = json_encode(self::$msgData);
+            echo $ret;
         }
     }
 

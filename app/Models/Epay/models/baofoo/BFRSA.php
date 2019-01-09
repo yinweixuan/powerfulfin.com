@@ -35,14 +35,14 @@ if (!function_exists( 'hex2bin')) {
          $pkcs12 = file_get_contents($private_key_path);
          $private_key = array();
          openssl_pkcs12_read($pkcs12, $private_key, $private_key_password);
-         echo "私钥是否可用:", empty($private_key) == true ? '不可用':'可用', "\n";
+//         echo "私钥是否可用:", empty($private_key) == true ? '不可用':'可用', "\n";
          $this -> private_key = $private_key["pkey"];
 		 
         //宝付公钥
-	echo "公钥路径：", $public_key_path, "\n";
+//	echo "公钥路径：", $public_key_path, "\n";
 	$keyFile = file_get_contents($public_key_path);
 	$this->public_key = openssl_get_publickey($keyFile);
-         echo "宝付公钥是否可用:", empty($this -> public_key) == true ? '不可用':'可用', "\n";
+//         echo "宝付公钥是否可用:", empty($this -> public_key) == true ? '不可用':'可用', "\n";
         if(!$Debug){
             ob_end_clean();
         }	 

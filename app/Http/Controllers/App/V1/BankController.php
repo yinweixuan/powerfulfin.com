@@ -66,8 +66,8 @@ class BankController extends AppController
             $vcode = Input::get("vcode");
             $serialNumber = Input::get("serialnumber");
             $user = DataBus::get("user");
-            $result = BUUserBank::bindBaofu($user['uid'], $phone, $bank_account, $bank_code, $vcode, $serialNumber);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
+            BUUserBank::bindBaofu($user['id'], $phone, $bank_account, $bank_code, $vcode, $serialNumber);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }
@@ -79,7 +79,7 @@ class BankController extends AppController
             $bank_account = Input::get("bank_account");
             $user = DataBus::get("user");
             $result = BUUserBank::changeRepayCard($user['uid'], $bank_account);
-            OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
+            OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
         } catch (PFException $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode() ? $exception->getCode() : ERR_SYS_PARAM);
         }

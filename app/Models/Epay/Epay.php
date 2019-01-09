@@ -131,7 +131,7 @@ abstract class Epay {
             $channel = self::CHANNEL_DEFAULT;
         }
         if (!array_key_exists($channel, self::$channelConfig)) {
-            throw new KZException("支付渠道有误");
+            throw new \Exception("支付渠道有误");
         }
         $className = self::$channelConfig[$channel];
         $obj = new $className($scene, $config);

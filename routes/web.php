@@ -121,3 +121,12 @@ Route::group(['namespace' => 'App\V1'], function () {
     Route::match(['get', 'post'], APP_V1 . '/test/index', 'TestController@index');  //app图片上传
 });
 
+/**
+ * ios审核相关
+ */
+//报名接口
+Route::match(['get', 'post'], '/app/ios/apply', 'App\V1\IosAuditController@apply');
+//报名列表接口
+Route::match(['get', 'post'], '/app/ios/applylist', 'App\V1\IosAuditController@applyList');
+//课程列表接口
+Route::match(['get', 'post'], '/app/ios/classlist', 'App\V1\IosAuditController@classList');
