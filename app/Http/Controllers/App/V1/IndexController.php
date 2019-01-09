@@ -256,5 +256,4 @@ class IndexController extends AppController {
             'list' => $list
         ];
     }
-
 }

@@ -21,6 +21,8 @@ Route::get('/', 'HomeController@index');
  */
 Route::get('download', 'HomeController@download');
 
+Route::match(['get', 'post'], '/home/qrscan', 'HomeController@qrscan');       //二维码扫描申请
+
 /**
  * 回调路由
  */

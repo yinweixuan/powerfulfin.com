@@ -141,4 +141,44 @@ class PicUtil
         }
         return $fileInfo;
     }
+
+    /**
+     * 检查文件的真实类型
+     * @param type $filePath
+     */
+    public static function getFileType($filename)
+    {
+        $file = fopen($filename, "rb");
+        $bin = fread($file, 2);
+        fclose($file);
+        $strInfo = @unpack("C2chars", $bin);
+        $typeCode = intval($strInfo['chars1'] . $strInfo['chars2']);
+        $fileType = '';
+        switch ($typeCode) {
+            case 7790:
+                $fileType = 'exe';
+                break;
+            case 7784:
+                $fileType = 'midi';
+                break;
+            case 8297:
+                $fileType = 'rar';
+                break;
+            case 255216:
+                $fileType = 'jpg';
+                break;
+            case 7173:
+                $fileType = 'gif';
+                break;
+            case 6677:
+                $fileType = 'bmp';
+                break;
+            case 13780:
+                $fileType = 'png';
+                break;
+            default:
+                $fileType = 'unknown';
+        }
+        return $fileType;
+    }
 }

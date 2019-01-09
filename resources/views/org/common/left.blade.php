@@ -18,8 +18,9 @@ $menus = [
         ['name' => '常见问题', 'url' => '/home/faq', 'class' => '', ],
         ['name' => '资金方信息', 'url' => '/home/capital', 'class' => '', ],
     ]],
+    ['name' => '扫码申请分期', 'url' => '/home/qr', 'class' => '', 'fa' => 'fa-qrcode', 'menus' => []],
     //['name' => '站内信', 'url' => '/home/msglist', 'class' => '', 'fa' => 'fa-envelope-open-o', 'menus' => []],
-    ['name' => '退出登录', 'url' => '/home/logout', 'class' => '', 'fa' => 'fa-sign-in', 'menus' => []],
+    //['name' => '退出登录', 'url' => '/home/logout', 'class' => '', 'fa' => 'fa-sign-in', 'menus' => []],
 ];
 ?>
 <div class="left-side sticky-left-side">
@@ -53,7 +54,8 @@ $menus = [
                 }
             }
             ?>
-            <li class="menu-list {{$m['class']}} <?php if ($isActive) echo 'nav-active';?>">
+            <li class="<?php if (array_key_exists('menus', $m) && $m['menus']) { echo 'menu-list';}
+            if ($isActive) {if ('/' . Request::path() == $m['url']) { echo 'active';} else {echo 'nav-active';}} echo " {$m['class']}";?>">
                 <a href="<?php if ($m['url']) {echo $m['url'];} else {echo 'javascript:void(0)';}?>">
                     <i class="fa {{$m['fa']}}"></i> <span>{{$m['name']}}</span>
                 </a>

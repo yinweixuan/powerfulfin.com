@@ -461,6 +461,15 @@ class HttpUtil
         return $isWX;
     }
 
+    /**
+     * 是否是大圣分期
+     */
+    public static function isSelf()
+    {
+        $isSelf = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'dashengloan') !== false ? true : false);
+        return $isSelf;
+    }
+
     public static function getPhoneID()
     {
         return '';

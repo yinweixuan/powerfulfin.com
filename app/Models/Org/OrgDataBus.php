@@ -8,9 +8,12 @@
 namespace App\Models\Org;
 
 use App\Components\AreaUtil;
+use App\Components\ArrayUtil;
 use App\Components\CookieUtil;
 use App\Components\PFException;
+use App\Models\ActiveRecord\ARPFAdminUsers;
 use App\Models\ActiveRecord\ARPFOrg;
+use App\Models\ActiveRecord\ARPFOrgHead;
 use App\Models\ActiveRecord\ARPFOrgUsers;
 use App\Models\DataBus;
 use Illuminate\Support\Facades\Cookie;
@@ -65,6 +68,26 @@ class OrgDataBus extends DataBus
                 self::$data['org'] = $org;
             } else {
                 throw new PFException("校区信息不存在");
+            }
+            //获取总校信息
+            $head = ARPFOrgHead::getInfo($org['hid']);
+            if (empty($head)) {
+                throw new PFException("商户信息不存在");
+            } else {
+                self::$data['org_head'] = $head;
+            }
+            $uids = [$head['docking_business'], $head['docking_op'],];
+            $ops = ARPFAdminUsers::getByIds($uids);
+            $ops = ArrayUtil::addKeyToArray($ops, 'id');
+            if (array_key_exists($head['docking_business'], $ops)) {
+                self::$data['org_business'] = $ops[$head['docking_business']];
+            } else {
+                self::$data['org_business'] = ['name' => '未知',];
+            }
+            if (array_key_exists($head['docking_op'], $ops)) {
+                self::$data['org_op'] = $ops[$head['docking_op']];
+            } else {
+                self::$data['org_op'] = ['name' => '未知',];
             }
         }
     }

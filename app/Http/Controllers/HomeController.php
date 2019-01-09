@@ -9,6 +9,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Components\HttpUtil;
+use Illuminate\Support\Facades\Input;
+
 class HomeController extends Controller {
     public function index() {
         return view('web.home.index');
@@ -33,4 +36,19 @@ class HomeController extends Controller {
 
 
     }
+
+    /**
+     * 申请分期二维码扫描之后的
+     */
+    public function qrscan()
+    {
+        if (!HttpUtil::isSelf()) {
+            $url = "http://www." . DOMAIN_WEB . "/download?f=qr";
+        } else {
+            $oid = Input::get('oid');
+            $url = "powerfulfin://apply?oid={$oid}";
+        }
+        HttpUtil::goUrl($url);
+    }
+
 }
