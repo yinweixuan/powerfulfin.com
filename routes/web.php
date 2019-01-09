@@ -115,5 +115,6 @@ Route::group(['namespace' => 'App\V1'], function () {
      * 图片
      */
     Route::match(['get', 'post'], APP_V1 . '/pic/upload', 'PicController@upload');  //app图片上传
+    Route::match(['get', 'post'], APP_V1 . '/test/index', 'TestController@index');  //app图片上传
 });
 

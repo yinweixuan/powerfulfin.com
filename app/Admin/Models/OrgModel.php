@@ -359,6 +359,9 @@ class OrgModel
         unset($data['hid']);
         $data['security_deposit'] = CalcMoney::fenToYuan($data['security_deposit']);
         $data['credit_line'] = CalcMoney::yuanToFen($data['credit_line']);
+        if (!empty($data['loan_product'])) {
+            $data['loan_product'] = implode(',', $data['loan_product']);
+        }
         foreach ($data as $key => $val) {
             if (array_key_exists($key, $orgHead) && $val != $orgHead[$key]) {
                 $diff[$key] = $val;

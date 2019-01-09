@@ -48,7 +48,14 @@ class BULoanConfig
                 'courseOpenDefaultTime' => date('Y-m-d', strtotime('+1 day')),//开课默认时间(当前日期加一天)
 //                'statement_pic' => self::getStatementPic($org['hid']),//是否需要上传申明图片，需要 true，不需要 FALSE
                 'statement_pic' => true,//是否需要上传申明图片，需要 true，不需要 FALSE
-                'train' => self::getTrainingContract($org['hid']),   //判断是否需要培训协议
+                'train' => BULoanConfig::getTrainingContractSwitch($resource, $orgHead['hid']),
+                'course_open_time_switch' => true, //开课时间
+                'school_pic_switch' => BULoanConfig::getSchoolPic($resource), //判断资金方是否需要场景照
+                'idcard_person_pic_switch' => BULoanConfig::getIdcardPersonPic($resource),//判断资金方是否需要手持身份证照片
+                'org' => [
+                    'oid' => $org['id'],
+                    'org_name' => $org['org_name']
+                ]
             );
             $redis->set($key, json_encode($data), 86400);
             return $data;

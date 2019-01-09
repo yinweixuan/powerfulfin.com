@@ -170,16 +170,9 @@ class Loan
         $loanProducts = array_values($loanProducts);
         $data = BULoanConfig::getConfig($org, $orgHead, $class, $loanProducts, $resource);
 
-        //判断资金方是否需要手持身份证照片
-        $data['idcard_person_pic_switch'] = BULoanConfig::getIdcardPersonPic($resource);
         $data['idcard_person_pic_switch'] = true;
-        //判断资金方是否需要场景照
-        $data['school_pic_switch'] = BULoanConfig::getSchoolPic($resource);
         $data['school_pic_switch'] = true;
-        //开课时间
         $data['course_open_time_switch'] = true;
-        //重新定义是否需要培训协议照片
-        $data['train'] = BULoanConfig::getTrainingContractSwitch($resource, $orgHead['hid']);
         $data['train'] = true;
         return $data;
     }
