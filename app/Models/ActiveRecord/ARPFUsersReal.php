@@ -106,7 +106,7 @@ class ARPFUsersReal extends Model
         $data = DB::table(self::TABLE_NAME)
             ->select('*')
             ->where('uid', '!=', $uid)
-            ->where('identity_number', '!=', $identity_number)
+            ->where('identity_number', '=', $identity_number)
             ->first();
         if (empty($data)) {
             return true;
