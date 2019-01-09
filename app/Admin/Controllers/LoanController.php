@@ -14,6 +14,7 @@ use App\Admin\Models\LoanModel;
 use App\Components\AliyunOSSUtil;
 use App\Components\OutputUtil;
 use App\Models\ActiveRecord\ARPFAdminUsers;
+use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFLoanLog;
 use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BULoanProduct;
@@ -104,6 +105,19 @@ class LoanController extends AdminController
         }
 
         $loan['pic'] = $picArr;
+        if (!empty($loan['contact']['home_area'])) {
+            $home = ARPFAreas::getArea($loan['contact']['home_area']);
+            $loan['contact']['home_address'] = str_replace(',', '', $home['joinname']) . $loan['contact']['home_address'];
+        }
+        if (!empty($loan['work']['work_area'])) {
+            $work = ARPFAreas::getArea($loan['work']['work_area']);
+            $loan['work']['work_address'] = str_replace(',', '', $work['joinname']) . $loan['work']['work_address'];
+        }
+        if (!empty($loan['work']['school_area'])) {
+            $school = ARPFAreas::getArea($loan['work']['school_area']);
+            $loan['work']['school_area'] = str_replace(',', '', $school['joinname']) . $loan['work']['school_area'];
+        }
+
         return $content->header('订单详情')
             ->description($loan['real']['full_name'])
             ->breadcrumb(
