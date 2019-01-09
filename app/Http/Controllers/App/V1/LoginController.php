@@ -32,9 +32,9 @@ class LoginController extends AppController {
                 throw new PFException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
             }
             if ($vcode && $ip) {
-//                if (!VerifyCode::checkVerifyCode($phone, $ip, $vcode)) {
-//                    throw new PFException(ERR_VCODE_CHECK_CONTENT, ERR_VCODE_CHECK);
-//                }
+                if (!VerifyCode::checkVerifyCode($phone, $ip, $vcode)) {
+                    throw new PFException(ERR_VCODE_CHECK_CONTENT, ERR_VCODE_CHECK);
+                }
                 $userInfo = ARPfUsers::getUserInfoByPhone($phone);
                 if (empty($userInfo)) {
                     $info = [
