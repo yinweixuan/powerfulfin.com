@@ -113,13 +113,5 @@
     </div>
     <!-- /.col -->
 </div>
-<!-- jvectormap  -->
-{{--{{ HTML::script('/vendor/laravel-admin/jvectormap/jquery-jvectormap-1.2.2.min.js') }}--}}
-{{--{{ HTML::script('/vendor/laravel-admin/jvectormap/jquery-jvectormap-world-mill-en.js') }}--}}
-
-{{--{{ HTML }}--}}
-
-
-
-{{--<script src="{{ admin_asset("") }}"></script>--}}
-{{--<script src="{{ admin_asset("") }}"></script>--}}
+{{ \Encore\Admin\Admin::js('/vendor/laravel-admin/jvectormap/jquery-jvectormap-1.2.2.min.js') }}
+{{ \Encore\Admin\Admin::js('/vendor/laravel-admin/jvectormap/jquery-jvectormap-world-mill-en.js') }}
