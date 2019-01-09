@@ -13,9 +13,12 @@ use App\Components\HttpUtil;
 use App\Components\OutputUtil;
 use App\Components\PFException;
 use App\Components\QRCodeUtil;
+use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFOrgUsers;
+use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\Org\OrgBaseController;
 use App\Models\Org\OrgDataBus;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -35,10 +38,31 @@ class HomeController extends OrgBaseController
      */
     public function index()
     {
-        return $this->view('org.home.index');
+        $tongji = ['c_total' => 0, 'c_repay' => 0, 'm_repay' => 0,];
+        $todoList = [];
+        try {
+            //查找要处理的订单,报名确认和上课确认的.不翻页,优先展示上课确认的.
+            $sql = "select l.id lid,l.status status,u.full_name from " . ARPFLoan::TABLE_NAME . " l, " . ARPFUsersReal::TABLE_NAME . " u ";
+            $sql .= "where l.oid = " . OrgDataBus::get('org_id') . " and l.status in (" . LOAN_1100_CREATE_ACCOUNT . ", " . LOAN_4000_P2P_CONFIRM . ") and l.uid = u.uid order by l.status desc, l.create_time desc";
+            $todoList = DB::select($sql);
+            //统计当天进件情况
+            $today = date('Y-m-d');
+            $sql = "select status,count(id) c,sum(borrow_money) s from " . ARPFLoan::TABLE_NAME . " where oid = " . OrgDataBus::get('org_id') . " and create_time >= '{$today} 00:00:00' and create_time <= '{$today} 23:59:59' group by status";
+            //$sql = "select status,count(id) c,sum(borrow_money) s from " . ARPFLoan::TABLE_NAME . " where oid = " . OrgDataBus::get('org_id') . " group by status";
+            $res = DB::select($sql);
 
+            foreach ($res as $r) {
+                $tongji['c_total'] += $r['c'];
+                if ($r['status'] == LOAN_10000_REPAY) {
+                    $tongji['c_repay'] = $r['c'];
+                    $tongji['m_repay'] = $r['s'];
+                }
+            }
+        } catch (\Exception $e) {
 
-        //return $this->view('org.home.index2');
+        }
+
+        return $this->view('org.home.index', ['todo_list' => $todoList, 'tongji' => $tongji, 'today' => $today,]);
     }
 
     /**

@@ -69,7 +69,7 @@ class BULoanStatus
     {
         $info = [
             LOAN_1000_CREATE => '创建订单成功',
-            LOAN_1100_CREATE_ACCOUNT => '申请成功',
+            LOAN_1100_CREATE_ACCOUNT => '等待报名确认',
             LOAN_1200_SURE_FILE => '确认合同',
             LOAN_2000_SCHOOL_CONFIRM => '机构确认',
             LOAN_2100_SCHOOL_REFUSE => '机构拒绝',
@@ -82,7 +82,7 @@ class BULoanStatus
             LOAN_3600_PF_CREDIT_UPLOAD_SUCCESS => '审核中',
             LOAN_3700_PF_CREDIT_SEND_INFO_SUCCESS => '审核中',
             LOAN_4200_DATA_P2P_SEND => '审核中',
-            LOAN_4000_P2P_CONFIRM => '审核通过',
+            LOAN_4000_P2P_CONFIRM => '等待上课放款确认',
             LOAN_4100_P2P_REFUSE => '审核拒绝',
             LOAN_4300_SUPPLEMENT => '补充信息',
             LOAN_4400_P2P_AUTO_PASS => '审核通过',
