@@ -37,7 +37,7 @@ class Loan
         if (empty($loanBills)) {
             return [];
         }
-
+        $lists = [];
         foreach ($loanBills as $loanBill) {
             $tmp = [
                 'bill_id' => $loanBill['id'],
@@ -59,6 +59,7 @@ class Loan
             ];
             $lists[] = $tmp;
         }
+        return $lists;
     }
 
     public static function getLoanInfo($lid, $uid)

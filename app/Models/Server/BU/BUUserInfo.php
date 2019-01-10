@@ -645,6 +645,12 @@ class BUUserInfo
             $userWork['school_city'] = (string)$userWork['school_city'];
             $userWork['school_area'] = (string)$userWork['school_area'];
             $userWork['working_status'] = (string)$userWork['working_status'];
+            foreach ($userWork as $key => $value) {
+
+                if (empty($value) || $value == null) {
+                    $userWork[$key] = '';
+                }
+            }
             unset($userWork['create_time']);
             unset($userWork['update_time']);
             return $userWork;
