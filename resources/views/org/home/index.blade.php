@@ -48,7 +48,7 @@
             <?php if (isset($todo_list) && $todo_list) {?>
             <div class="col-md-4 col-lg-6 col-sm-4">
                 <p><h4>当前任务</h4></p>
-                <table class="table table-striped table-bordered table-hover">
+                <table class="table table-striped table-hover">
                     <?php
                     foreach ($todo_list as $todo) {
                         if ($todo['status'] == LOAN_1100_CREATE_ACCOUNT) {

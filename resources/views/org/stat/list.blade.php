@@ -159,7 +159,7 @@ use App\Components\OutputUtil;
                             style="background-color:<?php if ($l['status'] == LOAN_11100_OVERDUE) {
                                 echo "#44C8F4";
                             } ?>">
-                            <td><?php echo $l['id']; ?></td>
+                            <td><?php echo "<a class='btn' href='/order/detail?lid={$l['id']}' target='_blank'>{$l['id']}</a>"; ?></td>
                             <td>{{$l['full_name']}}<br/>{{$l['identity_number']}}</td>
                             <td>{{$l['phone']}}</td>
                             <td>{{$l['org_short_name']}}<br />{{$l['class_name']}}</td>

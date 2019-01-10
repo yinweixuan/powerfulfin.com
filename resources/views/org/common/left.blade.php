@@ -27,7 +27,7 @@ $menus = [
     <!--logo and iconic logo start-->
     <div class="logo">
         <a href="/" style="position: fixed;left: 34px;top: 9px;">
-            <img style="height: 25px;" src="{{ admin_asset('org/images/org-logo.png') }}" alt="">
+            <img style="height: 25px;" src="{{ admin_asset('org/images/org-logo1.png') }}" alt="">
         </a>
     </div>
 
@@ -54,8 +54,8 @@ $menus = [
                 }
             }
             ?>
-            <li class="<?php if (array_key_exists('menus', $m) && $m['menus']) { echo 'menu-list';}
-            if ($isActive) {if ('/' . Request::path() == $m['url']) { echo 'active';} else {echo 'nav-active';}} echo " {$m['class']}";?>">
+            <li class="<?php if (array_key_exists('menus', $m) && $m['menus']) { echo ' menu-list ';}
+            if ($isActive) {if ('/' . Request::path() == $m['url']) { echo 'active';} else {echo ' nav-active ';}} echo " {$m['class']} ";?>">
                 <a href="<?php if ($m['url']) {echo $m['url'];} else {echo 'javascript:void(0)';}?>">
                     <i class="fa {{$m['fa']}}"></i> <span>{{$m['name']}}</span>
                 </a>
