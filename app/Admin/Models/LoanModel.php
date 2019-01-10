@@ -11,6 +11,7 @@ namespace App\Admin\Models;
 
 use App\Components\CheckUtil;
 use App\Models\ActiveRecord\ARPFLoan;
+use App\Models\ActiveRecord\ARPFLoanBill;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\ActiveRecord\ARPFUsersBank;
@@ -84,5 +85,23 @@ class LoanModel
         $info = $query->paginate(10, ['l.id'], 'page', $data['page'])
             ->appends($data);
         return $info;
+    }
+
+    public static function getLoanBill($data)
+    {
+        if (empty($data['lid']) && empty($data['uid'])) {
+            return [];
+        }
+        $query = DB::table(ARPFLoanBill::TABLE_NAME)
+            ->select('*');
+
+        if (!empty($data['lid']) && is_numeric($data['lid'])) {
+            $query->where('lid', $data['lid']);
+        }
+
+        if (!empty($data['uid']) && is_numeric($data['uid'])) {
+            $query->where('uid', $data['uid']);
+        }
+        return $query->get()->toArray();
     }
 }

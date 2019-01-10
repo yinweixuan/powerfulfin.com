@@ -48,6 +48,20 @@ class ARPFLoanBill extends Model
     const STATUS_REPAYING = 5;
 
 
+    /**
+     * 是否转为课栈划扣
+     */
+    const PF_DEDUCTION_TRUE = 2;
+    const PF_DEDUCTION_FALSE = 1;
+
+    public static $statusDesp = [
+        self::STATUS_NO_REPAY => '待还款',
+        self::STATUS_REPAY => '已还款',
+        self::STATUS_OVERDUE => '已逾期',
+        self::STATUS_ADVANCE_REPAY => '提前还款',
+        self::STATUS_WITHDRAW => '退课'
+    ];
+
     public static function getLoanBillByLidAndUid($lid, $uid)
     {
         $lists = DB::table(self::TABLE_NAME)->select('*')

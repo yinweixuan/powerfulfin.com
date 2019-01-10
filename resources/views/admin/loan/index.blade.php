@@ -184,8 +184,12 @@
                                         <td>{{ $item['create_time'] }}</td>
                                         <td>{{ $item['loan_time'] }}</td>
                                         <td>
-                                            <a class="btn btn-sm btn-danger"
-                                               href="/admin/loan/info?lid={{ $item['id'] }}">详情</a>
+                                            <a href="/admin/loan/info?lid={{ $item['id'] }}">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                            <a href="/admin/loan/bill?lid={{ $item['id'] }}">
+                                                <i class="fa fa-bars"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

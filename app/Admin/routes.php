@@ -51,6 +51,7 @@ Route::group([
      */
     $router->any('/loan/index', 'LoanController@index');
     $router->any('/loan/info', 'LoanController@info');
+    $router->any('/loan/bill', 'LoanController@bill');
 
     /**
      * 后台公用地址选择器

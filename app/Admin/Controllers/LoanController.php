@@ -126,4 +126,21 @@ class LoanController extends AdminController
             )
             ->row(view('admin.loan.info', $loan));
     }
+
+    public function bill(Content $content)
+    {
+        $data = [
+            'lid' => Input::get('lid'),
+            'uid' => Input::get('uid'),
+        ];
+        $loanBills = LoanModel::getLoanBill($data);
+        $data['info'] = $loanBills;
+        return $content->header('还款账期')
+            ->description('还款账期详情')
+            ->breadcrumb(
+                ['text' => '订单管理', 'url' => 'loan/index'],
+                ['text' => '还款账期', 'url' => '']
+            )
+            ->row(view('admin.loan.bill', $data));
+    }
 }
