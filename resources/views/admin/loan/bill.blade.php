@@ -10,9 +10,7 @@
     <div class="box-header with-border">
         <h3 class="box-title">搜索</h3>
     </div>
-    <form name='form1' action="/admin/astat/loanbill" method="get" role="form">
-        <input type="hidden" name="query" value="1"/>
-        <input type="hidden" name="excel" value="0"/>
+    <form name='form1' method="get" role="form">
         <!-- /.box-header -->
         <div class="box-body">
             <div class="row">
