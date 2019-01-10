@@ -34,8 +34,23 @@ class TestController extends AppController
 //        $loanBill = CalcLoanBill::createLoanBill($loan['loan_product'], $loan['loan_time'], $loan['borrow_money']);
 //        BULoanBill::createLoanBill($lid);
 
-        $uid = '1000017';
-        $result = BUUserInfo::getUserStatus($uid);
-        OutputUtil::info(0, 0, $result);
+//        $uid = '1000017';
+//        $result = BUUserInfo::getUserStatus($uid);
+//        OutputUtil::info(0, 0, $result);
+
+
+        $user['id'] = 1000000;
+        $data=[
+            'full_name' => '姓名',
+            'identity_number' => '131102199105270218',
+            'start_date' => '2018-02-23',
+            'end_date' => '2038-02-23',
+            'address' => '河北衡水xxxx',
+            'idcard_information_pic' => 'simg/xxxxxxxx',
+            'idcard_national_pic' => 'simg/xxxxxxxx',
+            'nationality' => '回',
+            'issuing_authority' => '衡水市桃城区'
+        ];
+        BUUserInfo::userReal($data, $user);
     }
 }

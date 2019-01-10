@@ -47,9 +47,9 @@ class ARPFUsersContact extends Model
             $columns = Schema::getColumnListing(self::TABLE_NAME);
 
             $update = [];
-            foreach ($info as $key => $value) {
-                if (array_key_exists($key, $columns)) {
-                    $update[$key] = $value;
+            foreach ($columns as $key) {
+                if (array_key_exists($key, $info) && $info[$key] != $userContact[$key]) {
+                    $update[$key] = $info[$key];
                 }
             }
             if (empty($update)) {
