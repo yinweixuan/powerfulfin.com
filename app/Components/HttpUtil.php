@@ -117,6 +117,7 @@ class HttpUtil
      * @param string $ip 要指定的ip
      * @param bool $needReturn
      * @return string
+     * @throws PFException
      */
     public static function transfer($url, $host = '', $ip = '', $needReturn = false)
     {
@@ -172,7 +173,10 @@ class HttpUtil
      *              'request'=>'a=11&b=22'
      *              'header'=>array
      *              )
+     * @param bool $needThrow
+     * @param bool $needRetry
      * @return string
+     * @throws PFException
      * @PFException PFException cur
      */
     public static function doPost($url, $optArr = array(), $needThrow = true, $needRetry = true)
@@ -255,7 +259,9 @@ class HttpUtil
      * @param array $optionArray (
      *              'proxy'=>"http://proxy.xxx:80"
      *              )
+     * @param bool $needRetry
      * @return string
+     * @throws PFException
      * @PFException PFException cur
      */
     public static function doGet($url, $optionArray = array(), $needRetry = true)

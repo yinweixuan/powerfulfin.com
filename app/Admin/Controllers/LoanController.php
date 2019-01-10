@@ -13,11 +13,14 @@ use App\Admin\AdminController;
 use App\Admin\Models\LoanModel;
 use App\Components\AliyunOSSUtil;
 use App\Components\OutputUtil;
+use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFAdminUsers;
 use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFLoanLog;
+use App\Models\Calc\CalcContract;
 use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BULoanProduct;
+use Encore\Admin\Exception\Handler;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
 
@@ -143,4 +146,20 @@ class LoanController extends AdminController
             )
             ->row(view('admin.loan.bill', $data));
     }
+
+    public function contract()
+    {
+        try {
+            $lid = Input::get('lid');
+            $loan = BULoanApply::getDetailById($lid);
+            if (empty($loan['base']['loan_contract'])) {
+                throw new PFException('暂无分期合同', ERR_SYS_PARAM);
+            }
+            $path = CalcContract::getOssLoanContract($loan['base']['resource'], $loan['base']['hid'], $lid);
+            OutputUtil::file(basename($path), $path);
+        } catch (PFException $exception) {
+            return Handler::error('合同异常', $exception->getMessage());
+        }
+    }
+
 }

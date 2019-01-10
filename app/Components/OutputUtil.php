@@ -218,8 +218,9 @@ class OutputUtil
     /**
      * 获得展示的内容,不输出
      * @param type $word
-     * @param type $limit,截字
-     * @param type $etc, 截字后加上后面的内容
+     * @param type $limit ,截字
+     * @param string $etc , 截字后加上后面的内容
+     * @return string
      */
     public static function valueEscape($word, $limit = null, $etc = '...')
     {
@@ -241,6 +242,7 @@ class OutputUtil
     /**
      * 展示手机类型
      * @param $type
+     * @return string
      */
     public static function valuePhoneType($type)
     {
@@ -264,6 +266,7 @@ class OutputUtil
     /**
      * 展示工作状态
      * @param $workStatus
+     * @return string
      */
     public static function valueWorkStatus($workStatus)
     {
@@ -284,6 +287,7 @@ class OutputUtil
     /**
      * 获取图片展示地址
      * @param $object
+     * @return string
      */
     public static function valueImg($object, $bucket = null)
     {
@@ -305,6 +309,9 @@ class OutputUtil
      * 输出文件
      * @param type $fileName
      * @param type $filePath
+     * @param string $fileType
+     * @return int
+     * @throws PFException
      */
     public static function file($fileName, $filePath, $fileType = 'application/pdf')
     {
