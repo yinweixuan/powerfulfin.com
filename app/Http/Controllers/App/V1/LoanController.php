@@ -78,9 +78,16 @@ class LoanController extends AppController
             $data = !empty($_POST) ? $_POST : $_GET;
             $result = Loan::submitLoan($data, DataBus::getUid());
             $info = OutputUtil::json_decode($result['supply_info']);
+            $bankInfo = [];
+            foreach ($info['bank'] as $item) {
+                if ($item['type'] == 1 && $item['status'] == STATUS_SUCCESS) {
+                    $bankInfo = $item;
+                    break;
+                }
+            }
             $bank = [
-                'bank_account' => $info['bank']['bank_account'],
-                'bank_name' => $info['bank']['bank_name']
+                'bank_account' => $bankInfo['bank_account'],
+                'bank_name' => $bankInfo['bank_name']
             ];
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, [
                 'lid' => $result['id'],
