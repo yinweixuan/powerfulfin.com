@@ -46,6 +46,12 @@ class BankController extends AppController
             $bank_account = Input::get("bank_account");
             $bank_code = Input::get("bank_code");
             $phone = Input::get("phone");
+            $params = ['bank_account', 'bank_code', 'phone'];
+            foreach ($params as $param) {
+                if (empty($$param)) {
+                    throw new PFException(ERR_SYS_PARAM_CONTENT . ':' . $param, ERR_SYS_PARAM);
+                }
+            }
             $user = DataBus::get("user");
             $result = BUUserBank::bindSmsBaofu($user['id'], $phone, $bank_account, $bank_code);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $result);
@@ -66,6 +72,13 @@ class BankController extends AppController
             $vcode = Input::get("vcode");
             $serialNumber = Input::get("serialnumber");
             $user = DataBus::get("user");
+            $params = ['bank_account', 'bank_code', 'phone', 'vcode', 'serialnumber'];
+            foreach ($params as $param) {
+                if (empty($$param)) {
+                    throw new PFException(ERR_SYS_PARAM_CONTENT . ':' . $param, ERR_SYS_PARAM);
+                }
+            }
+
             BUUserBank::bindBaofu($user['id'], $phone, $bank_account, $bank_code, $vcode, $serialNumber);
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK);
         } catch (PFException $exception) {
