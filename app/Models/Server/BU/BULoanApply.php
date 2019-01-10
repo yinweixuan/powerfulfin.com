@@ -293,7 +293,7 @@ class BULoanApply
     {
         $ret = [];
         $ret['real'] = ARPFUsersReal::getInfo($uid);
-        $ret['bank'] = ARPFUsersBank::getUserBanksByUid($uid);
+        $ret['bank'] = ARPFUsersBank::getUserRepayBankByUid($uid);
         $ret['contact'] = ARPFUsersContact::getContractInfo($uid);
         $ret['work'] = ARPFUsersWork::getUserWork($uid);
         $ret['location'] = ARPFUsersLocation::getUserLocation($uid);
@@ -323,7 +323,7 @@ class BULoanApply
         } else {
             $ret['info_from'] = 'table';
             $ret['real'] = ARPFUsersReal::getInfo($loan['uid']);
-            $ret['bank'] = ARPFUsersBank::getUserBanksByUid($loan['uid']);
+            $ret['bank'] = ARPFUsersBank::getUserRepayBankByUid($loan['uid']);
             $ret['contact'] = ARPFUsersContact::getContractInfo($loan['uid']);
             $ret['work'] = ARPFUsersWork::getUserWork($loan['uid']);
             $ret['location'] = ARPFUsersLocation::getUserLocation($loan['uid']);

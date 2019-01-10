@@ -81,10 +81,10 @@ use App\Components\OutputUtil;
                     <tr>
                         <td>银行</td>
                         <td><?php
-                            echo \App\Models\Server\BU\BUBanks::getBankName($bank[0]['bank_code']);
+                            echo \App\Models\Server\BU\BUBanks::getBankName($bank['bank_code']);
                             ?></td>
                         <td>银行卡号</td>
-                        <td><?php OutputUtil::echoEscape($bank[0]['bank_account']); ?></td>
+                        <td><?php OutputUtil::echoEscape($bank['bank_account']); ?></td>
                     </tr>
                     <tr>
                         <td>学历</td>
