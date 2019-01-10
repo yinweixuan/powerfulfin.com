@@ -675,7 +675,14 @@ class BUUserInfo
             'user_contact' => self::checkUserContact($uid),
             'user_work' => self::checkUserWork($uid),
             'user_phonebook' => self::checkUserPhoneBook($uid),
+            'user_loaning' => false
         ];
+
+        try {
+            BULoanApply::checkDoingLoan($uid);
+        } catch (PFException $exception) {
+            $info['user_loaning'] = true;
+        }
 
         return $info;
     }

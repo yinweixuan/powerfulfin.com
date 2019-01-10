@@ -190,6 +190,9 @@
                                             <a href="/admin/loan/bill?lid={{ $item['id'] }}">
                                                 <i class="fa fa-bars"></i>
                                             </a>
+                                            <a href="/admin/loan/bill?lid={{ $item['id'] }}">
+                                                <i class="fa fa-cloud-download"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -34,8 +34,8 @@ class TestController extends AppController
 //        $loanBill = CalcLoanBill::createLoanBill($loan['loan_product'], $loan['loan_time'], $loan['borrow_money']);
 //        BULoanBill::createLoanBill($lid);
 
-        $uid = '1000008';
-        $result = BUUserInfo::getUserWork($uid);
+        $uid = '1000017';
+        $result = BUUserInfo::getUserStatus($uid);
         OutputUtil::info(0, 0, $result);
     }
 }
