@@ -215,7 +215,7 @@ class UserController extends AppController
                 'idcard_information_pic' => '',
                 'idcard_national_pic_url' => '',
                 'idcard_national_pic' => ''];
-            $data = ARPFUsersAuthLog::getInfoTrueByOrder($orderId);
+            $data = ARPFUsersAuthLog::getInfoByOrder($orderId);
             if (empty($data)) {
                 throw new PFException(ERR_UPLOAD_CONTENT . ':错误订单号:' . $orderId, ERR_UPLOAD);
             }
