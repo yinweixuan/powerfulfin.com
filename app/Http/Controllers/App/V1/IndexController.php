@@ -138,6 +138,18 @@ class IndexController extends AppController {
                 $data_detail['remark'] = '您已逾期，请尽快偿还';
                 $data_detail['is_overdue'] = '1';
             }
+        } elseif ($step == 6) {
+            //已结清
+            $data_detail = [
+                'status' => '1',
+                'status_img_2x' => 'http://www.powerfulfin.com/img/loan/end2x.png',
+                'status_img_3x' => 'http://www.powerfulfin.com/img/loan/end3x.png',
+                'status_desp' => '已结清',
+                'remark' => '您的分期已结清',
+                'buttons' => [
+                    $this->getButton(1, $lid)
+                ]
+            ];
         } else {
             $data_detail = $this->getRecommend($mac);
         }

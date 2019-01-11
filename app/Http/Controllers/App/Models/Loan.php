@@ -276,9 +276,7 @@ class Loan
                         LOAN_10100_REFUSE,
                         LOAN_10200_REVOCATION,
                         LOAN_11500_BAD,
-                        LOAN_11000_FINISH,
                         LOAN_12000_DROP,
-                        LOAN_13000_EARLY_FINISH,
                     ]
                 )) {
                     //已终止
@@ -308,6 +306,13 @@ class Loan
                     )) {
                         $data['is_overdue'] = 1;
                     }
+                } elseif (in_array($loan['status'], [
+                        LOAN_11000_FINISH,
+                        LOAN_13000_EARLY_FINISH,
+                    ]
+                )) {
+                    //已结清
+                    $data['step'] = 6;
                 } else {
                     //审核中
                     $data['step'] = 1;
