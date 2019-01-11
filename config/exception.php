@@ -49,10 +49,10 @@ define('ERR_REGISTER_CONTENT', '注册失败，请稍后重试');
  * 手机号格式异常
  */
 define('ERR_PHONE_FORMAT', 6);
-define('ERR_PHONE_FORMAT_CONTENT', '手机号格式异常');
+define('ERR_PHONE_FORMAT_CONTENT', '手机号格式错误');
 
 define('ERR_VERIFY_CODE', 7);
-define('ERR_VERIFY_CODE_CONTENT', '短信验证码异常');
+define('ERR_VERIFY_CODE_CONTENT', '短信验证码错误');
 
 define('ERR_VCODE_CHECK', 8);
 define('ERR_VCODE_CHECK_CONTENT', '验证码校验失败');

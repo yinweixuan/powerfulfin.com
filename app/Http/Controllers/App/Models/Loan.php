@@ -251,6 +251,7 @@ class Loan
                 ->first();
             if (!empty($loan)) {
                 $data['id'] = $loan['id'];
+                $data['data'] = $loan;
                 if (in_array($loan['status'], [
                         LOAN_1200_SURE_FILE,
                         LOAN_4500_STUDENT_SURE

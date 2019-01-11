@@ -147,7 +147,7 @@ class LoginController extends AppController {
             if (!$password_new) {
                 throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
             }
-            if (strlen($password_new) < 8 || strlen($password_new) > 20) {
+            if (!preg_match('/^[a-zA-Z0-9]{8,20}$/',$password_new)) {
                 throw new PFException(ERR_PASSWORD_FORMAT_CONTENT, ERR_PASSWORD_FORMAT);
             }
             $user = ARPfUsers::getUserInfoByID($uid);

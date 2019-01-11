@@ -104,7 +104,8 @@ class IndexController extends AppController {
                 'status_desp' => '已拒绝',
                 'remark' => '您的分期已被拒绝',
                 'buttons' => [
-                    $this->getButton(1, $lid)
+                    $this->getButton(1, $lid),
+                    $this->getButton(6, $loan['data']['oid'])
                 ]
             ];
         } elseif ($step == 4) {
@@ -203,6 +204,12 @@ class IndexController extends AppController {
                 'name' => '扫码申请',
                 'url' => 'powerfulfin://qrapply',
                 'style' => 2
+            ];
+        } elseif ($type == 6) {
+            $button = [
+                'name' => '再次申请',
+                'url' => 'powerfulfin://apply?oid=' . $id,
+                'style' => 1
             ];
         } else {
             $button = [];
