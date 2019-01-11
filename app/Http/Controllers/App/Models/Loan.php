@@ -293,7 +293,7 @@ class Loan
                     $loan_bill = ARPFLoanBill::getLoanBillByLidAndUid($loan['id'], $uid);
                     $bill_date = '';
                     foreach ($loan_bill as $bill) {
-                        if (in_array($bill['status'], [0, 2]) && $bill['bill_date'] < $bill_date) {
+                        if (in_array($bill['status'], [ARPFLoanBill::STATUS_NO_REPAY, ARPFLoanBill::STATUS_OVERDUE]) && ($bill['bill_date'] < $bill_date || !$bill_date)) {
                             $data['repay_date'] = date('Y-m-d', strtotime($bill['bill_date'] . '15'));
                             $data['repay_money'] = $bill['miss_total'];
                             $bill_date = $bill['bill_date'];
