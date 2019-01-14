@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="{{ config('app.company_name') }}"/>
-    <meta name="keywords" content="{{ config('app.company_name') }}，{{ config("app.name") }}">
+    <meta name="keywords" content="教育培训,招生辅助,培训周边">
     <title>@yield('title')</title>
     <link rel="icon" href="{{ URL::asset('web/img/favicon.ico') }}" />
     <!-- css -->
