@@ -19,22 +19,15 @@ use Illuminate\Support\Facades\Input;
 class IndexController extends AppController {
 
     public function index() {
-//        $version = mt_rand(0, 3);
-//        $mac = mt_rand(0, 1) == 1 ? '' : 'AA:AA:AA:AA:AA:AA';
-//        $loan = [
-//            'id' => 123,
-//            'step' => mt_rand(0, 5),
-//            'is_overdue' => mt_rand(0, 1),
-//            'repay_date' => '2019-02-15',
-//            'repay_money' => mt_rand(10000, 500000) / 100,
-//            'can_repay' => mt_rand(0, 1),
-//        ];
+        $header = getallheaders();
+        $ds_ua = explode('|', urldecode($header['Ds-User-Agent']));
+        $bundle_identifier = $ds_ua[2];
         $version = Input::get('version');
         $mac = Input::get('school_mac');
         $uid = DataBus::getUid();
         $loan = Loan::getHomeLoanInfo($uid);
         $data = [];
-        $data['audit'] = $this->getAppStoreAudit($version);
+        $data['audit'] = $this->getAppStoreAudit($version, $bundle_identifier);
         $data['banner'] = $this->getBanner();
         $data['customer_service'] = $this->getCustomerService();
         $data['notice'] = $this->getNotice();
@@ -254,10 +247,12 @@ class IndexController extends AppController {
     /**
      * 首页ios审核信息
      */
-    public function getAppStoreAudit($version = null) {
+    public function getAppStoreAudit($version = null, $bundle_identifier = null) {
         $flag = '0';
         $list = [];
-        if (config('index.ios_audit_version') && $version == config('index.ios_audit_version')) {
+        $is_audit_version = config('index.ios_audit_version') && $version == config('index.ios_audit_version');
+        $is_audit_bundle = config('index.ios_audit_bundle_identifier') && $bundle_identifier == config('index.ios_audit_bundle_identifier');
+        if ($is_audit_version || $is_audit_bundle) {
             $flag = '1';
             $data = AliyunOpenSearchUtil::searchSchool('恒企');
             if (!empty($data['list'])) {
