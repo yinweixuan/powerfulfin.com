@@ -73,7 +73,7 @@ define('ERR_AREA', 13);
 define('ERR_AREA_CONTENT', '暂未获取地址数据，请稍后重试');
 
 define('ERR_LOGIN', 14);
-define('ERR_LOGIN_CONTENT', '登录失败，用户名或密码错误');
+define('ERR_LOGIN_CONTENT', '手机号和密码不匹配，请重新输入');
 
 define('ERR_USER_EXIST', 15);
 define('ERR_USER_EXIST_CONTENT', '您未设置密码，请使用短信验证码登录');
