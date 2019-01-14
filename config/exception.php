@@ -79,7 +79,7 @@ define('ERR_USER_EXIST', 15);
 define('ERR_USER_EXIST_CONTENT', '您未设置密码，请使用短信验证码登录');
 
 define('ERR_PASSWORD', 16);
-define('ERR_PASSWORD_CONTENT', '密码错误');
+define('ERR_PASSWORD_CONTENT', '旧密码输入错误，请重新操作');
 
 define('ERR_PASSWORD_FORMAT', 17);
 define('ERR_PASSWORD_FORMAT_CONTENT', '密码格式错误');
