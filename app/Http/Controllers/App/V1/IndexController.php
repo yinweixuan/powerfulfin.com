@@ -122,7 +122,7 @@ class IndexController extends AppController {
                 'repay_money' => $repay_money,
                 'is_overdue' => '0',
                 'buttons' => [
-                    $this->getButton(1, $lid)
+                    $this->getButton(7, $lid)
                 ]
             ];
             if ($can_repay) {
@@ -203,6 +203,12 @@ class IndexController extends AppController {
                 'name' => '再次申请',
                 'url' => 'powerfulfin://apply?oid=' . $id,
                 'style' => 1
+            ];
+        } elseif ($type == 7) {
+            $button = [
+                'name' => '订单详情',
+                'url' => 'powerfulfin://repaylist?lid=' . $id,
+                'style' => '1'
             ];
         } else {
             $button = [];
