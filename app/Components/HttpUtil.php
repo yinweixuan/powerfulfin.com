@@ -472,7 +472,7 @@ class HttpUtil
      */
     public static function isSelf()
     {
-        $isSelf = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'dashengloan') !== false ? true : false);
+        $isSelf = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'dasheng') !== false ? true : false);
         return $isSelf;
     }
 

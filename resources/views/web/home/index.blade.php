@@ -1,5 +1,5 @@
 @extends('web.common.base')
-@section('title',  '首页-大圣分期-北京中宇育达科技有限公司')
+@section('title',  '首页-大圣-教育培训助手')
 @section('content')
     <!-- end header -->
     <section id="banner">
@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="aligncenter">
-                        <h2 class="aligncenter">{{ config('app.name') }}</h2>
+                        <h2 class="aligncenter">有大圣,无所不能</h2>
                     </div>
                     <br/>
                 </div>
