@@ -157,10 +157,11 @@ class BULoanApply
             'person_pic' => $data['person_pic'],
             'train_contract_pic' => $data['train_contract_pic'],
             'train_statement_pic' => $data['train_statement_pic'],
-            'phone_id' => '',
+            'phone_id' => $phoneid,
             'version' => $data['version'],
             'create_time' => DataBus::get('ctime'),
             'supply_info' => self::getDetailByUidForCreateLoan($user['id']),
+            'phone_type' => self::getPhoneType(),
         );
 
         return array_merge($data, $info);
@@ -356,6 +357,25 @@ class BULoanApply
             $ret['base']['loan_product_desc'] = '未知';
         }
         return $ret;
+    }
+
+    public static function getPhoneType()
+    {
+        $plat = DataBus::get('plat');
+        switch ($plat) {
+            case 1:
+                $phoneType = PHONE_TYPE_IOS;
+                break;
+            case 2:
+                $phoneType = PHONE_TYPE_ANDROID;
+                break;
+            case 3:
+                $phoneType = 'OTHER';
+                break;
+            default:
+                $phoneType = 'UNKONW';
+        }
+        return $phoneType;
     }
 
 }
