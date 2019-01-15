@@ -263,14 +263,13 @@ class Loan
                         LOAN_2100_SCHOOL_REFUSE,
                         LOAN_3100_PF_REFUSE,
                         LOAN_4100_P2P_REFUSE,
+                        LOAN_5100_SCHOOL_REFUSE,
                         LOAN_14000_FOREVER_REFUSE,
-                        LOAN_10200_REVOCATION,
                     ]
                 )) {
                     //已拒绝
                     $data['step'] = 3;
                 } elseif (in_array($loan['status'], [
-                        LOAN_5100_SCHOOL_REFUSE,
                         LOAN_5200_SCHOOL_STOP,
                         LOAN_5400_CHANGE_RESOURCE,
                         LOAN_5500_PAY_TIME_OUT,
@@ -314,6 +313,13 @@ class Loan
                 )) {
                     //已结清
                     $data['step'] = 6;
+                } elseif (in_array($loan['status'], [
+                        LOAN_6000_NOTICE_MONEY,
+                        LOAN_6300_SUPPLY_INFO
+                    ]
+                )) {
+                    //待放款
+                    $data['step'] = 7;
                 } else {
                     //审核中
                     $data['step'] = 1;

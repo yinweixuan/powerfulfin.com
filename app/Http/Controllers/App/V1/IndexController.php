@@ -90,12 +90,21 @@ class IndexController extends AppController {
             ];
         } elseif ($step == 3) {
             //已拒绝
+            if ($loan['data']['audit_opinion']) {
+                $remark = $loan['data']['audit_opinion'];
+            } elseif (in_array($loan['data']['status'], [LOAN_2100_SCHOOL_REFUSE, LOAN_5100_SCHOOL_REFUSE])) {
+                $remark = '培训机构拒绝了该订单';
+            } elseif (in_array($loan['data']['status'], [LOAN_3100_PF_REFUSE])) {
+                $remark = '平台拒绝了该订单';
+            } elseif (in_array($loan['data']['status'], [LOAN_4100_P2P_REFUSE, LOAN_14000_FOREVER_REFUSE])) {
+                $remark = '资金方拒绝了该订单';
+            }
             $data_detail = [
                 'status' => '1',
                 'status_img_2x' => 'http://www.powerfulfin.com/img/loan/refused2x.png',
                 'status_img_3x' => 'http://www.powerfulfin.com/img/loan/refused3x.png',
                 'status_desp' => '已拒绝',
-                'remark' => '您的分期已被拒绝',
+                'remark' => $remark,
                 'buttons' => [
                     $this->getButton(1, $lid),
                     $this->getButton(6, $loan['data']['oid'])
@@ -108,16 +117,17 @@ class IndexController extends AppController {
                 'status_img_2x' => 'http://www.powerfulfin.com/img/loan/end2x.png',
                 'status_img_3x' => 'http://www.powerfulfin.com/img/loan/end3x.png',
                 'status_desp' => '已终止',
-                'remark' => '您的分期已终止',
+                'remark' => '您的分期订单已终止',
                 'buttons' => [
                     $this->getButton(1, $lid)
                 ]
             ];
         } elseif ($step == 5) {
             //还款中
+            $nday = floor(abs(strtotime($repay_date) - strtotime(date('Y-m-d'))) / 86400);
             $data_detail = [
                 'status' => '2',
-                'remark' => '请你按时还款',
+                'remark' => '距离还款日还有' . $nday . '天，请合理安排还款',
                 'repay_date' => $repay_date,
                 'repay_money' => $repay_money,
                 'is_overdue' => '0',
@@ -129,7 +139,7 @@ class IndexController extends AppController {
                 $data_detail['buttons'][] = $this->getButton(3, $lid);
             }
             if ($is_overdue) {
-                $data_detail['remark'] = '您已逾期，请尽快偿还';
+                $data_detail['remark'] = '您已逾期' . $nday . '天，将影响个人信用记录，请尽快处理';
                 $data_detail['is_overdue'] = '1';
             }
         } elseif ($step == 6) {
@@ -139,7 +149,19 @@ class IndexController extends AppController {
                 'status_img_2x' => 'http://www.powerfulfin.com/img/loan/end2x.png',
                 'status_img_3x' => 'http://www.powerfulfin.com/img/loan/end3x.png',
                 'status_desp' => '已结清',
-                'remark' => '您的分期已结清',
+                'remark' => '恭喜您还款完成，再来学习吧',
+                'buttons' => [
+                    $this->getButton(1, $lid)
+                ]
+            ];
+        } elseif ($step == 7) {
+            //待放款
+            $data_detail = [
+                'status' => '1',
+                'status_img_2x' => 'http://www.powerfulfin.com/img/loan/audit2x.png',
+                'status_img_3x' => 'http://www.powerfulfin.com/img/loan/audit3x.png',
+                'status_desp' => '审核中',
+                'remark' => '信用审核已通过，正在进行放款确认',
                 'buttons' => [
                     $this->getButton(1, $lid)
                 ]
