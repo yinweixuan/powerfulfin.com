@@ -224,7 +224,7 @@ class IndexController extends AppController {
             $button = [
                 'name' => '再次申请',
                 'url' => 'powerfulfin://apply?oid=' . $id,
-                'style' => 1
+                'style' => 2
             ];
         } elseif ($type == 7) {
             $button = [
