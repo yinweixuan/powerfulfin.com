@@ -46,7 +46,7 @@ class BULoanApply
 
 
         //检查用户手机设备是否有他人进行分期申请
-        $phoneid = HttpUtil::getPhoneID();
+        $phoneid = $data['phoneid'];
         if ($phoneid) {
             self::checkPhoneID($phoneid, $user['id']);
         }

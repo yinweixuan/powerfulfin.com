@@ -47,7 +47,7 @@ class Loan
                 'status_desp' => BULoanBill::getLoanBillStatusDesp($loanBill['status']),
                 'installment' => $loanBill['installment_plan'] . '/' . $loanBill['installment'] . '期',
                 'should_repay_date' => $loanBill['should_repay_date'],
-                'repay_date' => $loanBill['repay_date'],
+                'repay_date' => !empty($loanBill['repay_date']) ? $loanBill['repay_date'] : "",
                 'repay_need' => $loanBill['total'],
                 'repaid' => $loanBill['repay_total'],
                 'repay_way' => '系统划扣',
@@ -105,7 +105,7 @@ class Loan
             'bank_name' => $userBank['bank_name'],
             'loan_product' => $loanProduct['name'],
             'contract' => '',
-            'audit_opinion' => $loanInfo['audit_opinion']
+            'audit_opinion' => !empty($loanInfo['audit_opinion']) ? $loanInfo['audit_opinion'] : "",
         ];
 
         return $info;
