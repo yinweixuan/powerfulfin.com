@@ -250,10 +250,17 @@ class IndexController extends AppController {
                 $this->getButton(5)
             ]
         ];
+
         if ($mac) {
             $wifi = \App\Models\ActiveRecord\ARPFOrgWifi::getByMac($mac);
-            if ($wifi['sid']) {
-                $school = \App\Models\ActiveRecord\ARPFOrg::getOrgById($wifi['sid']);
+            if (empty($wifi)) {
+                $std_mac = preg_replace('/^[0-9a-fA-F](?=:)|(?<=:)[0-9a-fA-F](?=:)|(?<=:)[0-9a-fA-F]$/', '0$0', $mac);
+                if ($std_mac != $mac) {
+                    $wifi = \App\Models\ActiveRecord\ARPFOrgWifi::getByMac($std_mac);
+                }
+            }
+            if ($wifi['oid']) {
+                $school = \App\Models\ActiveRecord\ARPFOrg::getOrgById($wifi['oid']);
                 if ($school['id']) {
                     $recommend = [
                         'status' => '0',
