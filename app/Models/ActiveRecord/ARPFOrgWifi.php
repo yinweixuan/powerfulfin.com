@@ -2,6 +2,7 @@
 
 namespace App\Models\ActiveRecord;
 
+use App\Components\ArrayUtil;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -22,6 +23,16 @@ class ARPFOrgWifi extends Model
             ->orderBy('update_time', 'desc')
             ->first();
         return $row;
+    }
+
+    public static function addMac($info)
+    {
+        $info = ArrayUtil::trimArray($info);
+        if (empty($info)) {
+            return false;
+        }
+
+        return DB::table(self::TABLE_NAME)->insertGetId($info);
     }
 
 }

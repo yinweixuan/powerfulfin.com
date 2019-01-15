@@ -18,6 +18,7 @@ use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
+use App\Models\ActiveRecord\ARPFOrgWifi;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersContact;
 use App\Models\ActiveRecord\ARPFUsersLocation;
@@ -142,6 +143,7 @@ class BULoanApply
         //检查开课时间
         self::checkCourseInfo($data);
 
+        self::addOrgWifi($data['oid'], $data['school_mac'], $data['ssid']);
         //添加分期申请附属信息
         $info = array(
             'uid' => $user['uid'],
@@ -376,6 +378,35 @@ class BULoanApply
                 $phoneType = 'UNKONW';
         }
         return $phoneType;
+    }
+
+    public static function addOrgWifi($oid, $schoolMac, $ssid)
+    {
+        if (empty($schoolMac)) {
+            return true;
+        }
+        $schoolMacArr = explode(':', $schoolMac);
+        foreach ($schoolMacArr as $key => $item) {
+            if ($item == '0') {
+                $schoolMacArr[$key] = "00";
+            }
+        }
+
+        $schoolMac = implode(':', $schoolMacArr);
+        $check = DB::table(ARPFOrgWifi::TABLE_NAME)->select('*')
+            ->where('oid', $oid)
+            ->where('mac', $schoolMac)
+            ->first();
+        if (empty($check)) {
+            $info = [
+                'mac' => $schoolMac,
+                'ip' => DataBus::get('ip'),
+                'oid' => $oid,
+                'ssid' => $ssid,
+                'create_time' => date('Y-m-d H:i:s')
+            ];
+            ARPFOrgWifi::addMac($info);
+        }
     }
 
 }
