@@ -380,7 +380,7 @@ class BULoanApply
         return $phoneType;
     }
 
-    public static function addOrgWifi($oid, $schoolMac, $ssid)
+    public static function addOrgWifi($oid, $schoolMac = '', $ssid = '')
     {
         if (empty($schoolMac)) {
             return true;

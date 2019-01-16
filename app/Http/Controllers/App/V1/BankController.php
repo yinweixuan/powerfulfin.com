@@ -72,7 +72,7 @@ class BankController extends AppController
             $vcode = Input::get("vcode");
             $serialNumber = Input::get("serialnumber");
             $user = DataBus::get("user");
-            $params = ['bank_account', 'bank_code', 'phone', 'vcode', 'serialnumber'];
+            $params = ['bank_account', 'bank_code', 'phone', 'vcode', 'serialNumber'];
             foreach ($params as $param) {
                 if (empty($$param)) {
                     throw new PFException(ERR_SYS_PARAM_CONTENT . ':' . $param, ERR_SYS_PARAM);
