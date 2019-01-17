@@ -310,6 +310,7 @@ class BUUserInfo
         if ($data['contact_person_phone'] == $userReal['phone']) {
             throw new PFException("contact_person_phone:联系人电话不能是本人电话", ERR_SYS_PARAM);
         }
+        $data['marital_status'] = $data['marriage_status'];
 
         return ARPFUsersContact::updateInfo($user['id'], $data);
     }
