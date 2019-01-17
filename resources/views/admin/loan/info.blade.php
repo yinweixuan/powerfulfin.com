@@ -337,8 +337,8 @@
                             <td>培训协议</td>
                             <td style="cursor:pointer" colspan="3">
                                 <?php $i = 1;
+                                if (!empty($pic['train_contract_pic'])) {
                                 foreach ($pic['train_contract_pic'] as $value) { ?>
-                                <?php if (!empty($value)) { ?>
                                 <img data-original="{{ $value }}" src="{{ $value }}" style="width:200px" alt="培训协议">
                                 <?php if ($i % 3 == 0) {
                                     echo "<br/>";
