@@ -331,7 +331,7 @@ class BUUserInfo
         } catch (PFException $exception) {
             throw new PFException("存在贷中订单，请不要更改个人信息，谢谢！", ERR_SYS_PARAM);
         }
-        $params = array('highest_education' => '学历', 'profession' => '工作描述', 'working_status' => '工作状态');
+        $params = array('highest_education' => '学历', 'profession' => '工作描述', 'working_status' => '工作状态', 'edu_pic' => '学历证明', 'monthly_income' => '月收入',);
         self::supplyUserStepCheckParams($params, $data);
         switch ($data['working_status']) {
             case ARPFUsersWork::WORKING_CONDITION_WORKING:
@@ -343,7 +343,7 @@ class BUUserInfo
                     'work_address' => '单位详细地址',
                     'work_contact' => '单位联系电话',
                     'work_profession' => '职位名称',
-                    'monthly_income' => '月收入',
+
                     'work_entry_time' => '入职时间'
                 );
                 break;
@@ -358,7 +358,6 @@ class BUUserInfo
                     'school_major' => '专业名称',
                     'education_system' => '学制',
                     'edu_pic' => '学生证',
-                    'monthly_income' => '家庭月收入'
                 );
 
                 if (!array_key_exists('school_contact', $data) || !CheckUtil::phone($data['school_contact'])) {
@@ -376,8 +375,6 @@ class BUUserInfo
             case ARPFUsersWork::WORKING_CONDITION_UNEMPLOYED:
                 $params2 = array(
                     'train_contact' => '机构联系电话',
-                    'monthly_income' => '家庭月收入'
-
                 );
                 if (!array_key_exists('train_contact', $data) || !CheckUtil::phone($data['train_contact'])) {
                     throw new PFException('请正确填写机构联系电话');

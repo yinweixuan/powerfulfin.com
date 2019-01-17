@@ -116,7 +116,6 @@ class BULoanApply
 
         //支持多张协议照片，向下兼容
         $trainingSchool = BULoanConfig::getTrainingContractSwitch($loanProduct['resource'], $orgHead['hid']);
-        $trainingSchool = true;
         if ($trainingSchool) {
             if (!array_key_exists('train_contract_pic', $data)) {
                 throw new PFException("请上传协议照片", ERR_SYS_PARAM);
