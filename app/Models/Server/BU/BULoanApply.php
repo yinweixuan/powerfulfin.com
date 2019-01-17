@@ -28,6 +28,7 @@ use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\ActiveRecord\ARPFUsersWork;
 use App\Models\DataBus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BULoanApply
 {
@@ -116,6 +117,7 @@ class BULoanApply
 
         //支持多张协议照片，向下兼容
         $trainingSchool = BULoanConfig::getTrainingContractSwitch($loanProduct['resource'], $orgHead['hid']);
+        $trainingSchool = true;
         if ($trainingSchool) {
             if (!array_key_exists('train_contract_pic', $data)) {
                 throw new PFException("请上传协议照片", ERR_SYS_PARAM);
@@ -164,7 +166,7 @@ class BULoanApply
             'supply_info' => self::getDetailByUidForCreateLoan($user['id']),
             'phone_type' => self::getPhoneType(),
         );
-
+        Log::info(json_encode($info));
         return array_merge($data, $info);
     }
 

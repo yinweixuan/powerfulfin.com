@@ -60,6 +60,7 @@ class ARPFLoan extends Model
             'resource' => $info['resource'],
             'class_start_date' => $info['class_start_date'],
             'supply_info' => $info['supply_info'],
+            'phone_type' => $info['phone_type'],
             'create_time' => date('Y-m-d H:i:s'),
             'update_time' => date('Y-m-d H:i:s'),
         ];
