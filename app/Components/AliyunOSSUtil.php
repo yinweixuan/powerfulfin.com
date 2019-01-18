@@ -13,22 +13,22 @@ class AliyunOSSUtil {
     /**
      * 订单信息bucket
      */
-    const BUCKET_LOAN = 'kz-loan';
+    const BUCKET_LOAN = 'zyyd-res';
 
     /**
      * 测试bucket
      */
-    const BUCKET_TEST = 'hx-emr-dev';
+    const BUCKET_TEST = 'zyyd-test';
 
     /**
      * 访问域名（外网）
      */
-    const ENDPOINT_PUBLIC = 'http://oss-cn-beijing.aliyuncs.com';
+    const ENDPOINT_PUBLIC = 'http://oss-cn-zhangjiakou.aliyuncs.com';
 
     /**
      * 访问域名（内网)
      */
-    const ENDPOINT_INNER = 'http://oss-cn-beijing-internal.aliyuncs.com';
+    const ENDPOINT_INNER = 'http://oss-cn-zhangjiakou-internal.aliyuncs.com';
 
     public static $oss_client = null;
 
