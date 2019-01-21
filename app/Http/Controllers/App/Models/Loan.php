@@ -87,6 +87,7 @@ class Loan
         $org = ARPFOrg::getOrgById($loanInfo['oid']);
         $userReal = ARPFUsersReal::getInfo($uid);
         $userBank = ARPFUsersBank::getUserRepayBankByUid($uid);
+
         $info = [
             'lid' => (string)$loanInfo['id'],   //订单号
             'status' => $loanInfo['status'],    //状态
@@ -107,6 +108,19 @@ class Loan
             'contract' => '',
             'audit_opinion' => !empty($loanInfo['audit_opinion']) ? $loanInfo['audit_opinion'] : "",
         ];
+        $info['repay_now'] = '';
+        if (in_array($loanInfo['status'], [LOAN_10000_REPAY, LOAN_11100_OVERDUE])) {
+            $bill = DB::table(ARPFLoanBill::TABLE_NAME)
+                ->select('*')
+                ->where('lid', $lid)
+                ->where('uid', $uid)
+                ->whereIn('status', [ARPFLoanBill::STATUS_NO_REPAY, ARPFLoanBill::STATUS_OVERDUE])
+                ->orderBy('installment_plan')
+                ->first();
+            if (!empty($bill)) {
+                $info['repay_now'] = '当前待还' . $bill['installment_plan'] . '期';
+            }
+        }
 
         return $info;
     }
