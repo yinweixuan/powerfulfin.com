@@ -144,7 +144,7 @@ class BULoanApply
         //检查开课时间
         self::checkCourseInfo($data);
 
-        self::addOrgWifi($data['oid'], $data['school_mac'], $data['ssid']);
+        self::addOrgWifi($data['oid'], $data['mac'], $data['ssid']);
         //添加分期申请附属信息
         $info = array(
             'uid' => $user['uid'],

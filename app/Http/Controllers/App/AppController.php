@@ -39,7 +39,7 @@ class AppController extends Controller
         $this->isWX = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'micromessenger') !== false ? true : false);
         $this->isAppcan = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'appcan') !== false ? true : false);
         $this->mobileModel();
-        Log::info(json_encode(Input::get()));
+        Log::info($_SERVER['REQUEST_URI'] . ':' . json_encode(Input::get()));
     }
 
     /**
