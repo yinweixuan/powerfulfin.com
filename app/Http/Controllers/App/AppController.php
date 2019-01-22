@@ -11,12 +11,12 @@ require PATH_VENDOR . '/autoload.php';
 
 use App\Components\OutputUtil;
 use App\Http\Controllers\Controller;
+use App\Models\ActiveRecord\ARPFAppRequestLog;
 use App\Models\DataBus;
 use App\Models\Server\BU\BUAppMobile;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 
-use Symfony\Component\HttpKernel\Log\Logger;
 
 class AppController extends Controller
 {
@@ -29,17 +29,15 @@ class AppController extends Controller
     {
 
         parent::__construct();
-        config("app.env");
 
-        env("DB_CONNECTION");
+        $this->addRequst();
 
         $detect = new \Mobile_Detect();
         $this->isAndroid = $detect->isAndroidOS();
-        $this->isIOS = $detect->isIOS();
+        $this->isIOS = $detect->is('iphone');
         $this->isWX = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'micromessenger') !== false ? true : false);
         $this->isAppcan = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'appcan') !== false ? true : false);
         $this->mobileModel();
-        Log::info($_SERVER['REQUEST_URI'] . ':' . json_encode(Input::get()));
     }
 
     /**
@@ -62,7 +60,7 @@ class AppController extends Controller
      */
     public function mobileModel()
     {
-        if ($this->isIOS || $this->isKZIOS()) {
+        if ($this->isIOS || $this->isPFIOS()) {
             BUAppMobile::ios();
         } elseif ($this->isAndroid) {
             BUAppMobile::android();
@@ -75,12 +73,35 @@ class AppController extends Controller
      * IosAPP 返回UA中有部分 不符合大众模式，所以单独判断IOS设备类型
      * @return boolean
      */
-    public function isKZIOS()
+    public function isPFIOS()
     {
         $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         if (strpos($ua, 'iPhone') && strpos($ua, 'iOS')) {
             return true;
         }
         return false;
+    }
+
+    public function addRequst()
+    {
+        $info = [
+            'request_url' => $_SERVER['REQUEST_URI'],
+            'version' => Input::get('version'),
+            'phone_type' => DataBus::get('plat'),
+            'request' => json_encode(Input::get()),
+            'create_time' => date('Y-m-d H:i:s')
+        ];
+        $plat = DataBus::get('plat');
+        Log::info($plat);
+        if ($plat == 2) {
+            $info['phone_type'] = PHONE_TYPE_ANDROID;
+        } else if ($plat == 1) {
+            $info['phone_type'] = PHONE_TYPE_IOS;
+        } else if ($this->isWX) {
+            $info['phone_type'] = 'WeChat';
+        } else {
+            $info['phone_type'] = 'UNKnow';
+        }
+        ARPFAppRequestLog::addInfo($info);
     }
 }

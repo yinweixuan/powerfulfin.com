@@ -37,7 +37,7 @@ class DataBus
         $detect = new Mobile_Detect();
         if ($detect->isAndroidOS()) {
             self::$data['plat'] = 2;
-        } else if ($detect->isIOS()) {
+        } else if ($detect->isiOS()) {
             self::$data['plat'] = 1;
         } else if ($detect->isMobile()) {
             self::$data['plat'] = 3;

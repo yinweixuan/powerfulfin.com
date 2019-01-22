@@ -28,7 +28,6 @@ Route::group(['domian' => DOMAIN_APP], function () {
     include __DIR__ . '/app.php';
 });
 
-
 Route::group(['domian' => DOMAIN_INNER], function () {
-    include __DIR__ . '/inner.php.php';
+    include __DIR__ . '/inner.php';
 });

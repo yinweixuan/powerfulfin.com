@@ -151,7 +151,7 @@ class UserController extends AppController
 
             if ($this->isAndroid) {
                 $phone_type = PHONE_TYPE_ANDROID;
-            } elseif ($this->isKZIOS()) {
+            } elseif ($this->isPFIOS()) {
                 $phone_type = PHONE_TYPE_IOS;
             } else {
                 $phone_type = 'Other';
