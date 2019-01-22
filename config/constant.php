@@ -19,16 +19,25 @@ define('PATH_LIBRARIES', PATH_APP . '/Libraries');
 
 if (config("app.env") == 'local') {
     define('DOMAIN_WEB', 'powerfulfin.com');                //官网域名
-    define('DOMAIN_INNER', 'devinner.powerfulfin.com');        //内部调用域名
-    define('DOMAIN_ORG', 'o.powerfulfin.com');              //机构管理后台域名
+    define('DOMAIN_WWW', 'test.powerfulfin.com');                //官网域名
+    define('DOMAIN_INNER', 'test.inner.powerfulfin.com');        //内部调用域名
+    define('DOMAIN_ORG', 'test.o.powerfulfin.com');              //机构管理后台域名
+    define('DOMAIN_ADMIN', 'test.oa.powerfulfin.com');           //管理后台域名
+    define('DOMAIN_APP', 'test.app.powerfulfin.com');           //APP域名
 } else if (config("app.env") == 'dev') {
-    define('DOMAIN_WEB', 'powerfulfin.kezhanwang.cn');                //官网域名
-    define('DOMAIN_INNER', 'inner.powerfulfin.kezhanwang.cn');        //内部调用域名
-    define('DOMAIN_ORG', 'o.powerfulfin.kezhanwang.cn');              //机构管理后台域名
-} else {
     define('DOMAIN_WEB', 'powerfulfin.com');                //官网域名
-    define('DOMAIN_INNER', 'inner.powerfulfin.com');        //内部调用域名
-    define('DOMAIN_ORG', 'o.powerfulfin.com');              //机构管理后台域名
+    define('DOMAIN_WWW', 'test.powerfulfin.com');                //官网域名
+    define('DOMAIN_INNER', 'test.inner.powerfulfin.com');        //内部调用域名
+    define('DOMAIN_ORG', 'test.o.powerfulfin.com');              //机构管理后台域名
+    define('DOMAIN_ADMIN', 'test.oa.powerfulfin.com');           //管理后台域名
+    define('DOMAIN_APP', 'test.app.powerfulfin.com');           //APP域名
+} else {
+    define('DOMAIN_WEB', 'powerfulfin.com');                 //官网域名
+    define('DOMAIN_WWW', 'www.powerfulfin.com');                //官网域名
+    define('DOMAIN_INNER', 'inner.powerfulfin.com');             //内部调用域名
+    define('DOMAIN_ORG', 'o.powerfulfin.com');                   //机构管理后台域名
+    define('DOMAIN_ADMIN', 'oa.powerfulfin.com');                //管理后台域名
+    define('DOMAIN_APP', 'app.powerfulfin.com');           //APP域名
 }
 
 
