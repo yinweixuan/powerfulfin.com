@@ -162,7 +162,7 @@ class UserController extends AppController
                 'phonebook_count' => count($rows),
                 'phonebook' => OutputUtil::json_encode($rows),
                 'phone_type' => $phone_type,
-                'phone_id' => BUAppMobile::getPhoneID()
+                'phone_id' => Input::get('phoneid', 0)
             ];
 
             ARPFUsersPhonebook::addUserPhoneBook($info);

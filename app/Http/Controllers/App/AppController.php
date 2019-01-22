@@ -79,7 +79,7 @@ class AppController extends Controller
             'phone_type' => DataBus::get('plat'),
             'request' => json_encode($_REQUEST),
             'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],
-            'ds_user_agent' => $_SERVER['HTTP_DS_USER_AGENT'],
+            'ds_user_agent' => urldecode($_SERVER['HTTP_DS_USER_AGENT']),
             'create_time' => date('Y-m-d H:i:s')
         ];
         $plat = DataBus::get('plat');
