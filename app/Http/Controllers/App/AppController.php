@@ -37,7 +37,6 @@ class AppController extends Controller
         $this->isIOS = $detect->is('iphone');
         $this->isWX = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'micromessenger') !== false ? true : false);
         $this->isAppcan = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'appcan') !== false ? true : false);
-        $this->mobileModel();
     }
 
     /**
@@ -52,20 +51,6 @@ class AppController extends Controller
     {
         if (!$this->isLogin()) {
             OutputUtil::err(ERR_NOLOGIN_CONTENT, ERR_NOLOGIN);
-        }
-    }
-
-    /**
-     * 计算手机分布情况
-     */
-    public function mobileModel()
-    {
-        if ($this->isIOS || $this->isPFIOS()) {
-            BUAppMobile::ios();
-        } elseif ($this->isAndroid) {
-            BUAppMobile::android();
-        } else {
-
         }
     }
 
@@ -86,13 +71,16 @@ class AppController extends Controller
     {
         $info = [
             'request_url' => $_SERVER['REQUEST_URI'],
+            'request_method' => $_SERVER['REQUEST_METHOD'],
+            'server_addr' => $_SERVER['SERVER_ADDR'],
             'version' => Input::get('version'),
             'phone_type' => DataBus::get('plat'),
-            'request' => json_encode(Input::get()),
+            'request' => json_encode($_REQUEST),
+            'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],
+            'ds_user_agent' => $_SERVER['Ds_USER_AGENT'],
             'create_time' => date('Y-m-d H:i:s')
         ];
         $plat = DataBus::get('plat');
-        Log::info($plat);
         if ($plat == 2) {
             $info['phone_type'] = PHONE_TYPE_ANDROID;
         } else if ($plat == 1) {

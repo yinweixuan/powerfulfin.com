@@ -59,8 +59,48 @@ class MsgSMS
         return $ret;
     }
 
-    const SMS_PLAT = 1;//1 昊博
+    /**
+     * 数米渠道发送短信
+     * @param type $mobile
+     * @param type $content
+     * @param string $sign
+     * @return int|string
+     * @throws PFException
+     */
+    public static function sendShumi($mobile, $content, $sign = '大圣分期')
+    {
 
+        if (strpos($content, "【{$sign}】") === false) {
+            $content = "【{$sign}】" . $content;
+        }
+        if (strpos($content, "退订") === false) {
+            $content .= " 退订回复N";
+        }
+        $content = str_replace(array("[{$sign}]",), array("【{$sign}】",), $content);
+        $time = date('YmdHis');
+        $password = env('SHUMI_PASSWORD');
+        $post_data = array(
+            'userid' => env('SHUMI_USER'),
+            'timespan' => $time,
+            'pwd' => strtoupper(md5("{$password}{$time}")),
+            'mobile' => $mobile,
+            'msgfmt' => 'UTF8',
+            'content' => base64_encode($content),
+        );
+        $tmpArr = array();
+        foreach ($post_data as $k => $v) {
+            $tmpArr[] = "{$k}={$v}";
+        }
+
+        try {
+            $ret = HttpUtil::doPost(env('SHUMI_URL'), array('request' => implode('&', $tmpArr)), false);
+        } catch (\Exception $e) {
+            $ret = ERR_SMS_FAIL;
+        }
+        \Yii::log("sms-shumi.\nreceiver:{$mobile}.\ncontent:{$content}\nreturn:" . print_r($ret, true), 'trace', 'sms.mail');
+        return $ret;
+    }
+    
     /**
      * 短信发送
      * @param $phone
@@ -71,11 +111,14 @@ class MsgSMS
     public static function sendSMS($phone, $content)
     {
         try {
-            if (self::SMS_PLAT == 1) {
+            $smsPlat = env('SMS_PLAT', 2);
+            if ($smsPlat == 1) {
                 $ret = self::sendHaobo($phone, $content);
-                if ($ret == ERR_SMS_FAIL) {
-                    throw new PFException("发送失败:" . $ret, ERR_SYS_PARAM);
-                }
+            } elseif ($smsPlat == 2) {
+                $ret = self::sendShumi($phone, $content);
+            }
+            if ($ret == ERR_SMS_FAIL) {
+                throw new PFException("发送失败:" . $ret, ERR_SYS_PARAM);
             }
             return $ret;
         } catch (PFException $exception) {
