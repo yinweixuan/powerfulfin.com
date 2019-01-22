@@ -44,7 +44,7 @@ class PicController extends AppController
             }
 
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $urls);
-        } catch (PFException $exception) {
+        } catch (\Exception $exception) {
             OutputUtil::err($exception->getMessage(), $exception->getCode());
         }
     }

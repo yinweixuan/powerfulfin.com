@@ -173,7 +173,7 @@ class MsgInit
             try {
                 $result = ARPFSms::createNewSMS($data['uid'], $data['device'], $data['content']);
                 MsgSMS::sendSMS($data['device'], $data['content']);
-                ARPFSms::_update($result, array('status' => STATUS_SUCCESS, 'plat' => MsgSMS::SMS_PLAT));
+                ARPFSms::_update($result, array('status' => STATUS_SUCCESS, 'plat' => env('SMS_PLAT')));
             } catch (PFException $exception) {
                 throw new PFException($exception->getMessage());
             }
