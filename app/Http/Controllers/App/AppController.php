@@ -70,14 +70,16 @@ class AppController extends Controller
     public function addRequst()
     {
         $info = [
+            'http_host' => $_SERVER['HTTP_HOST'],
             'request_url' => $_SERVER['REQUEST_URI'],
             'request_method' => $_SERVER['REQUEST_METHOD'],
             'server_addr' => $_SERVER['SERVER_ADDR'],
+            'remote_addr' => $_SERVER['REMOTE_ADDR'],
             'version' => Input::get('version'),
             'phone_type' => DataBus::get('plat'),
             'request' => json_encode($_REQUEST),
             'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],
-            'ds_user_agent' => $_SERVER['Ds_USER_AGENT'],
+            'ds_user_agent' => $_SERVER['HTTP_DS_USER_AGENT'],
             'create_time' => date('Y-m-d H:i:s')
         ];
         $plat = DataBus::get('plat');
