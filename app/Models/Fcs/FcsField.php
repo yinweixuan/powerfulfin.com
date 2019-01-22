@@ -2,13 +2,6 @@
 
 namespace App\Models\Fcs;
 
-use App\Models\Fcs\FcsCommon;
-use App\Models\Fcs\FcsContract;
-use App\Models\Fcs\FcsField;
-use App\Models\Fcs\FcsFtp;
-use App\Models\Fcs\FcsHttp;
-use App\Models\Fcs\FcsLoan;
-use App\Models\Fcs\FcsQueue;
 use App\Models\Fcs\FcsSoap;
 
 class FcsField {
