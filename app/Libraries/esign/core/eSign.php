@@ -38,12 +38,12 @@ class eSign
     /**
      * 版本号
      */
-    const VERSION = '2.0.12';
+    const VERSION = '2.0.16';
 
     /**
      * 发送渠道
      */
-    const CHANNEL = 'phptechsdk2.0.12';
+    const CHANNEL = 'phptechsdk2.0.16';
 
     /**
      * 配置文件
@@ -165,10 +165,10 @@ class eSign
             'http_type' => empty(self::$_CONFIG['http_type']) ? 'HTTPS' : self::$_CONFIG['http_type']
         );
 
-        //检测错误是否发生
-        $res = HttpUtils::request()->urlencodeRequest(
+        //初始化请求
+        $res = HttpUtils::request()->noSignHttpPost(
             self::$_CONFIG['open_api_url'],
-            $keysArr,
+            http_build_query($keysArr),
             $postJson = false,
             $proxy = true
         );
@@ -267,10 +267,7 @@ class eSign
         if (empty($idNo)) {
             return ErrorConstant::$PERSON_IDNO_NULLPOINTER;
         }
-        if ($personarea === '' ||
-            is_null($personarea) ||
-            !in_array($personarea, PersonArea::getArray())
-        ) {
+        if ($personarea === '' || is_null($personarea) ) {
             return ErrorConstant::$LEGAL_AREA_INVALIDATE;
         }
 
@@ -358,12 +355,12 @@ class eSign
                 $account[$key] = $val;
             }
             //$psesonArea
-            /*if ($key == 'personArea') {
+            if ($key == 'personArea') {
                 $val = (int)$val;
-                if (!in_array($val, PersonArea::getArray())) {
+                /*if (!in_array($val, PersonArea::getArray())) {
                     return ErrorConstant::$PERSON_AREA_ILLEGAL;
-                }
-            }*/
+                }*/
+            }
             if (in_array($key, $personFields)) {
                 $person[$key] = $val;
             }
@@ -469,16 +466,13 @@ class eSign
             return ErrorConstant::$ORGAN_TYPE_INVALIDATE;
         }
         //地区
-        if ($legalArea === '' ||
-            is_null($legalArea) ||
-            !in_array($legalArea, PersonArea::getArray())
-        ) {
+        if ($legalArea === '' ||  is_null($legalArea) ) {
             return ErrorConstant::$LEGAL_AREA_INVALIDATE;
         }
         //证件类型判断
-        if (!in_array($regType, OrganRegType::getArray())) {
+        /*if (!in_array($regType, OrganRegType::getArray())) {
             $regType = OrganRegType::NORMAL;
-        }
+        }*/
         if (!in_array($userType, UserType::getArray())) {
             $userType = UserType::USER_DEFAULT;
         }
@@ -1292,6 +1286,24 @@ class eSign
         $res = $this->withSignHttpPost(self::GET_ACCOUNT_INFO_URL, $keysArr);
         $result = new Result($res);
         return $result->getData();
+    }
+
+    /**
+     * 根据本地模板生成PDF
+     * @param array $tmpFile
+     * @param $isFlat
+     * @param array $txtFields
+     * @param $isStream
+     * @return array|mixed
+     */
+    public function createFromTemplate(array $tmpFile, $isFlat, array $txtFields, $isStream) {
+        if (!is_array($tmpFile) or !is_array($txtFields)) {
+            return ErrorConstant::$PARAM_NULLPOINTER;
+        }
+        if (empty($tmpFile['srcFileUrl'])) {
+            return array('errCode' => 10003, 'msg' => '文档不存在', 'errShow' => true);
+        }
+        return $this->javaComm->createFromTemplate($tmpFile, $isFlat, $txtFields, $isStream);
     }
 
     /**

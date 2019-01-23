@@ -19,6 +19,7 @@ class OrganRegType
     // 工商注册号
     const REGCODE = '2';
 
+    const OTHER = '23';
 
     //注册证件类型
     public static function getArray()

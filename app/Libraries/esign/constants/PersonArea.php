@@ -23,6 +23,8 @@ class PersonArea
     /// 外籍
     const FOREIGN = '4';
 
+    const OTHER = '23';
+
     /// 用户地区
     public static function  getArray()
     {
@@ -32,6 +34,7 @@ class PersonArea
             self::MACAO,
             self::TAIWAN,
             self::FOREIGN,
+            self::OTHER
         );
     }
 

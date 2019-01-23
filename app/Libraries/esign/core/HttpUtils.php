@@ -147,7 +147,7 @@ class HttpUtils
      * @return array|mixed
      * @throws Exception
      */
-    public function noSignHttpPost($url, $data, $postJson, $proxy, $formData = true)
+    public function noSignHttpPost($url, $data, $postJson, $proxy)
     {
         if (empty($url)) {
             return array(
@@ -157,20 +157,19 @@ class HttpUtils
             );
         }
 
+        //构建请求头
+        $header = $this->requestHeader;
+
         //请求参数提交方式
         if ($postJson === true) {
             $contentType = 'Content-Type:' . self::CONTENT_TYPE_JSON . ";charset=UTF-8";
             $postStr = Util::jsonEncode($data);
-        } else if ($formData === true) {
-            $contentType = 'Content-Type:' . self::CONTENT_TYPE_FORM_DATA . ";charset=UTF-8";
-            $postStr = $data;
+            $header[] = $contentType;
         } else {
-            $contentType = 'Content-Type:' . self::CONTENT_TYPE_FORM_URLENCODE . ";charset=UTF-8";
-            $postStr = $this->toQueryString($data);
+            //$contentType = 'Content-Type:' . self::CONTENT_TYPE_FORM_DATA . ";charset=UTF-8";
+            $postStr = $data;
         }
-        //构建请求头
-        $header = $this->requestHeader;
-        $header[] = $contentType;
+
         //不输出响应头
         $this->outHeader = false;
         //发送请求
@@ -182,9 +181,6 @@ class HttpUtils
         return $this->getResult($url);
     }
 
-    public function urlencodeRequest($url, $data, $postJson, $proxy) {
-        return $this->noSignHttpPost($url, $data, $postJson, $proxy, false);
-    }
 
     /**
      * 解析请求结果，不需要验证服务端返回的签名信息
@@ -264,8 +260,9 @@ class HttpUtils
     public function sendHttpRequestPost($url, $postStr, $requestHeader = array(), $proxy = array())
     {
         $result = '';
-        for ($i = 0; $i < self::TRY_NUMBER; $i++) {
+        $requestHeader[] = 'Expect:';
 
+        for ($i = 0; $i < self::TRY_NUMBER; $i++) {
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//SSL证书认证
@@ -279,7 +276,6 @@ class HttpUtils
                 //curl_setopt($curl, CURLOPT_HTTPPROXYTUNNEL, true);
                 curl_setopt($curl, CURLOPT_PROXY, $host);
             }
-            $requestHeader[] = 'Expect:';
             curl_setopt($curl, CURLOPT_POST, true); // post传输数据
             curl_setopt($curl, CURLOPT_POSTFIELDS, $postStr);// post传输数据
             curl_setopt($curl, CURLOPT_HTTPHEADER, $requestHeader);
@@ -317,7 +313,7 @@ class HttpUtils
         //$ret = json_decode($this->responseBody, true);
         //$isError = (isset($ret['errCode']) && $ret['errCode'] === 0) ? true : false;
         //if (ESIGN_DEBUGE && ($isError || $this->responseStatus !== 200)) {
-        if (ESIGN_DEBUGE ) {
+        if (ESIGN_DEBUGE) {
             $str = PHP_EOL . '【请求地址】：' . $url;
             $str .= PHP_EOL . '【请求参数】：' . (is_array($postStr) ? Util::jsonEncode($postStr) : $postStr);
             $str .= PHP_EOL . '【请求头】：' . json_encode($requestHeader);
@@ -333,7 +329,6 @@ class HttpUtils
      */
     public function getRealFileIgnore($filePath)
     {
-        return '@' . $filePath;
         if (class_exists('\CURLFile')) {
             return new \CURLFile($filePath);
 

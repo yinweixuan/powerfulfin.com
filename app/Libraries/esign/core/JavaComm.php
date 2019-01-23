@@ -36,8 +36,10 @@ class JavaComm
         'simpleStreamSignUrl' => '/tech-sdkwrapper/timevale/sign/simpleStreamSign',//简约签，平台用户文件流签署
         'tgFileSign' => '/tech-sdkwrapper/timevale/sign/tgFileSign', //天谷证明章
         'tgStreamSign' => '/tech-sdkwrapper/timevale/sign/tgStreamSign', //天谷证明章 文件流方式
-        'addPersonTemplate' => '/tech-sdkwrapper/timevale/seal/addPersonSealWithContent', //创建个人本地印章
-        'addOfficialTemplateSeal' => '/tech-sdkwrapper/timevale/seal/addOrganizeWithContent' //创建个人本地印章
+        'addPersonTemplate' => '/tech-sdkwrapper/timevale/seal/createPersonalTemplateSeal', //创建个人本地印章
+        'addOfficialTemplateSeal' => '/tech-sdkwrapper/timevale/seal/createOfficialTemplateSeal', //创建企业本地印章
+        'createFromTemplate' => '/tech-sdkwrapper/timevale/doc/file/createFromTemplate', //本地pdf模板生成
+        'createFromTemplateStream' => '/tech-sdkwrapper/timevale/doc/stream/createFromTemplate', //本地pdf模板生成,文件流
     );
 
     public function __construct($serverName)
@@ -120,7 +122,9 @@ class JavaComm
                 'qrcodeSign' => (isset($signPos['isQrcodeSign'])
                     && $signPos['isQrcodeSign'] === true) ? true : false,
                 'cacellingSign ' => (isset($signPos['cacellingSign'])
-                    && $signPos['cacellingSign'] === true) ? true : false
+                    && $signPos['cacellingSign'] === true) ? true : false,
+                'addSignTime' => (!empty($signPos['addSignTime'])
+                    && $signPos['addSignTime'] === true) ? true : false //是否显示签署时间
             ),
             'signType' => $signType,
             'certId' => $certId,
@@ -166,7 +170,9 @@ class JavaComm
             'qrcodeSign' => (isset($signPos['isQrcodeSign'])
                 && $signPos['isQrcodeSign'] === true) ? true : false,
             'cacellingSign ' => (isset($signPos['cacellingSign'])
-                && $signPos['cacellingSign'] === true) ? true : false
+                && $signPos['cacellingSign'] === true) ? true : false,
+             'addSignTime' => (!empty($signPos['addSignTime'])
+            && $signPos['addSignTime'] === true) ? true : false //是否显示签署时间
         );
         $keysArr = array(
             'signPos' => Util::jsonEncode($pos),
@@ -202,7 +208,7 @@ class JavaComm
     public function selfSignPDF(array $signFile, array $signPos, $sealId, $signType)
     {
         $keysArr = $this->buildRequest($signFile, $signPos, $signType, false);
-        $keysArr['sealId'] = $sealId;
+        $keysArr['sealId'] = (int)$sealId;
         $response = $this->postJson('selfFileSignUrl', $keysArr);
         return $response;
     }
@@ -219,7 +225,7 @@ class JavaComm
     public function selfSignPDFStream(array $signFile, array $signPos, $sealId, $signType)
     {
         $keysArr = $this->buildRequest($signFile, $signPos, $signType, true);
-        $keysArr['sealId'] = $sealId;
+        $keysArr['sealId'] = (int)$sealId;
         $response = $this->post('selfStreamSignUrl', $keysArr);
         //$ret = new Result($response);
         //$res = $ret->getData();
@@ -465,6 +471,49 @@ class JavaComm
         return $response;
     }
 
+
+    /**
+     * 本地文档模板生成pdf
+     * @param $tmpFile
+     * @param $isFlat
+     * @param $txtFields
+     * @param $isStream
+     * @return array|mixed
+     */
+    public function createFromTemplate($tmpFile, $isFlat, $txtFields, $isStream)
+    {
+        $keysArr = array(
+            'ownerPassword' => isset($tmpFile['ownerPassword']) ? $tmpFile['ownerPassword'] : '',
+            'flatten' =>  (!empty($isFlat) && $isFlat === true) ? true : false
+        );
+        $isStream = (!empty($isStream) && $isStream === true) ? true : false;
+        if ($isStream === true) {
+            //var_dump($keysArr);
+            if (!empty($txtFields)) {
+                $keysArr['txtFields'] = Util::jsonEncode($txtFields);
+            }
+            $keysArr['file'] = HttpUtils::request()->getRealFileIgnore(Util::encodePath($tmpFile['srcFileUrl']));
+            
+            $response = $this->post('createFromTemplateStream', $keysArr);
+
+            /*if ($response['errCode'] == 0 && !empty($tmpFile['dstFileUrl'])) {
+                $s = file_put_contents(Util::encodePath($tmpFile['dstFileUrl']), base64_decode($response['stream']));
+                $response['dstFileUrl'] = $tmpFile['dstFileUrl'];
+            }*/
+            return $response;
+        } else {
+            if (!empty($txtFields)) {
+                $keysArr['txtFields'] = $txtFields;
+            }
+            $keysArr['srcFileUrl'] = $tmpFile['srcFileUrl'];
+            $keysArr['dstFileUrl'] = $tmpFile['dstFileUrl'];
+            $response = $this->postJson('createFromTemplate', $keysArr);
+        }
+        return $response;
+    }
+
+
+
     /**
      * 构建签署的请求参数
      * @param $signFile
@@ -490,7 +539,9 @@ class JavaComm
             'qrcodeSign' => (!empty($signPos['isQrcodeSign'])
                 && $signPos['isQrcodeSign'] === true) ? true : false,//签章二维码
             'cacellingSign' => (!empty($signPos['cacellingSign'])
-                && $signPos['cacellingSign'] === true) ? true : false //作废签
+                && $signPos['cacellingSign'] === true) ? true : false, //作废签
+            'addSignTime' => (!empty($signPos['addSignTime'])
+                && $signPos['addSignTime'] === true) ? true : false //是否显示签署时间
         );
         $keysArr = array(
             'signType' => $signType
@@ -542,6 +593,60 @@ class JavaComm
     {
         $authUrl = $this->serverName . self::$serverUrl[$urlKey];
         $response = HttpUtils::request()->noSignHttpPost($authUrl, $keysArr, false, false);
+        //$response = $this->postFile($authUrl, $keysArr);
         return $response;
     }
+
+    private function postFile($url, array $keysArr = array())
+    {
+        // invalid characters for "name" and "filename"
+        static $disallow = array("\0", "\"", "\r", "\n");
+
+        $body = array();
+        // build normal parameters
+        foreach ($keysArr as $k => $v) {
+            if ($k == 'file') {
+                $file = $v->name;
+                // build file parameters
+                $data = file_get_contents($file);
+                $body[] = implode("\r\n", array(
+                    "Content-Disposition: form-data; name=\"file\"; filename=\"{$file}\"",
+                    "Content-Type: application/octet-stream",
+                    "",
+                    $data,
+                ));
+            }
+
+            $k = str_replace($disallow, "_", $k);
+            $body[] = implode("\r\n", array(
+                "Content-Disposition: form-data; name=\"{$k}\"",
+                "",
+                filter_var($v),
+            ));
+        }
+
+        // generate safe boundary
+        do {
+            $boundary = "---------------------" . md5(mt_rand() . microtime());
+        } while (preg_grep("/{$boundary}/", $body));
+
+        // add boundary for each parameters
+        array_walk($body, function (&$part) use ($boundary) {
+            $part = "--{$boundary}\r\n{$part}";
+        });
+
+        // add final boundary
+        $body[] = "--{$boundary}--";
+        $body[] = "";
+
+        HttpUtils::request()->sendHttpRequestPost(
+            $url,
+            implode("\r\n", $body),
+            $header = array(
+                "Content-Type: multipart/form-data; boundary={$boundary}",
+            )
+        );
+        return json_decode(HttpUtils::request()->responseBody, TRUE);
+    }
+
 }

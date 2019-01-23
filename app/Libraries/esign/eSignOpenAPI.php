@@ -1,5 +1,4 @@
 <?php
-
 /**
  * e签宝PHP SDK 入口文件
  * 支持命名空间,需php>= 5.3,php7
@@ -17,15 +16,14 @@ define("ESIGN_CLASS_PATH", ESIGN_ROOT . "/core/");
 define('ESIGN_DEBUGE', false);
 
 //日志文件目录
-define("ESIGN_LOG_DIR", realpath(ESIGN_ROOT . '/../../') . "/runtime/");
-if (ESIGN_DEBUGE && !is_dir(ESIGN_LOG_DIR)) {
-    mkdir(ESIGN_LOG_DIR, 0777);
-}
+define("ESIGN_LOG_DIR", realpath(ESIGN_ROOT . '/../'). "/logs/");
+if (ESIGN_DEBUGE && !is_dir(ESIGN_LOG_DIR)) mkdir(ESIGN_LOG_DIR, 0777);
 //define("ESIGN_LOG_DIR", ESIGN_ROOT . "/logs/");
-define('INC_DAT_PATH', ESIGN_ROOT . "/comm/inc.dat");
+define('INC_DAT_PATH', ESIGN_ROOT .  "/comm/inc.dat");
 
 //项目ID等配置文件
 //require_once(ESIGN_ROOT . "/comm/initConfig.php");
+
 //sdk类文件自动加载
 spl_autoload_register(function ($class) {
     $class_path = str_replace('tech\\', '', $class);
