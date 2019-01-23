@@ -11,6 +11,10 @@
   |
  */
 
+if (strpos($_SERVER['REQUEST_URI'], '/admin') !== false) {
+    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('请检查访问路径');
+}
+
 /**
  * 机构访问
  */
@@ -36,14 +40,13 @@ Route::group(['namespace' => 'Org'], function () {
     Route::match(['get', 'post'], '/stat/sumup', 'StatController@sumup');       //统计
 
 
-
     Route::match(['get', 'post'], '/test/test1', 'TestController@test1');       //测试
 });
 
 /**
  * 机构管理后台域名,o.powerfulfin.com
  */
-Route::match(['get', 'post'], '/res/{img?}', function($img = '') {
+Route::match(['get', 'post'], '/res/{img?}', function ($img = '') {
     //专属素材应放在org目录下.其他public下的属于公用.
     $file = PATH_BASE . '/public/' . $img;
     if (!file_exists($file)) {

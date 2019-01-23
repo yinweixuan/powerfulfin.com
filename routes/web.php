@@ -12,6 +12,11 @@
  */
 
 if ($_SERVER['SERVER_NAME'] == DOMAIN_WWW) {
+
+    if (strpos($_SERVER['REQUEST_URI'], '/admin') !== false) {
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('请检查访问路径');
+    }
+
     /**
      * 官网
      */
@@ -33,6 +38,9 @@ if ($_SERVER['SERVER_NAME'] == DOMAIN_APP) {
 }
 
 if ($_SERVER['SERVER_NAME'] == DOMAIN_INNER) {
+    if (strpos($_SERVER['REQUEST_URI'], '/admin') !== false) {
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('请检查访问路径');
+    }
     Route::group(['domain' => DOMAIN_INNER], function () {
         include __DIR__ . '/inner.php';
     });
