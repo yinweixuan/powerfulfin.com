@@ -4,6 +4,8 @@ namespace App\Components;
 
 require_once __DIR__ . '/../Libraries/aliyun-opensearch-3.1.0/OpenSearch/Autoloader/Autoloader.php';
 
+use App\Models\ActiveRecord\ARPFOrg;
+use OpenSearch\Client\DocumentClient;
 use OpenSearch\Client\OpenSearchClient;
 use OpenSearch\Client\SearchClient;
 use OpenSearch\Util\SearchParamsBuilder;
@@ -23,7 +25,12 @@ class AliyunOpenSearchUtil {
     /**
      * 机构搜索
      */
-    const APP_SCHOOL = 'kz_school';
+    const APP_SCHOOL = 'os_pf_org';
+
+    /**
+     * @var null
+     */
+    const TABLE_SCHOOL = 'pf_org';
 
     public static $client = null;
     public static $search_client = null;
@@ -32,11 +39,11 @@ class AliyunOpenSearchUtil {
      * 获取访问域名
      */
     public static function getHost() {
-        if (config('app.env') == 'local') {
+//        if (config('app.env') == 'local') {
             return self::HOST_PUBLIC;
-        } else {
-            return self::HOST_INNER;
-        }
+//        } else {
+//            return self::HOST_INNER;
+//        }
     }
 
     /**
@@ -83,11 +90,12 @@ class AliyunOpenSearchUtil {
     }
 
     public static function searchSchool($keyword, $lng = null, $lat = null, $page = 1, $pagesize = 10) {
-        $query = 'id:"' . $keyword . '"';
+        $query = '(id:"' . $keyword . '"';
         $keyword_array = explode(' ', $keyword);
         foreach ($keyword_array as $word) {
-            $query .= ' OR default:"' . $word . '"';
+            $query .= ' OR default:"' . $word . '")';
         }
+        $query .= ' AND status:"SUCCESS" AND can_loan:"SUCCESS"';
         if ($lng > 1 && $lat > 1) {
             $query .= '&&sort=+distance(lng,lat,"' . $lng . '","' . $lat . '");-RANK';
         }
@@ -99,6 +107,50 @@ class AliyunOpenSearchUtil {
         $school_list['pagesize'] = $pagesize;
         $school_list['list'] = empty($result['result']['items']) ? [] : $result['result']['items'];
         return $school_list;
+    }
+
+    public static function pushOrgData($oid1, $oid2 = null) {
+        if (config('app.env') == 'local') {
+            return null;
+        }
+        if (!$oid2) {
+            $oid2 = $oid1;
+        }
+        $document_client = new DocumentClient(self::getClient());
+        $op = 'ADD';//测试add也有更新功能
+        $limit = 1000;//不知道最大限是多少，差不多就是1000了。
+        $data = ARPFOrg::getSearchList($oid1, $oid2);
+        $docs_to_upload = array();
+        $i = 0;
+        foreach ($data as $k => $org) {
+            $item = array();
+            $item['cmd'] = $op;
+            $item['fields'] = array(
+                'id' => $org['id'],
+                'name' => $org['org_name'],
+                'lat' => $org['org_lat'],
+                'lng' => $org['org_lng'],
+                'address' => $org['org_address'],
+                'hid' => $org['hid'],
+                'status' => $org['status'],
+                'can_loan' => $org['can_loan'],
+                'province' => $org['org_province'],
+                'city' => $org['org_city'],
+                'area' => $org['org_area'],
+                'short_name' => $org['short_name'],
+                'create_time' => $org['create_time'],
+                'update_time' => $org['update_time'],
+            );
+            $docs_to_upload[] = $item;
+            $i++;
+            if ($i >= $limit || $k == count($data) - 1) {
+                $json = json_encode($docs_to_upload);
+                $document_client->push($json, self::APP_SCHOOL, self::TABLE_SCHOOL);
+                $docs_to_upload = array();
+                $i = 0;
+            }
+        }
+        return count($data);
     }
 
 }
