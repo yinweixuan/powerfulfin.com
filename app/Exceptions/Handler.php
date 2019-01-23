@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Components\OutputUtil;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -49,7 +50,12 @@ class Handler extends ExceptionHandler
     {
         $info = parent::render($request, $exception);
         if ($_SERVER['SERVER_NAME'] == DOMAIN_APP) {
-            OutputUtil::err('地址错误', 404);
+            /* 错误页面 */
+            if ($exception instanceof NotFoundHttpException) {
+                $code = $exception->getStatusCode();
+
+                OutputUtil::err(ERR_SYS_UNKNOWN_CONTENT, $code);
+            }
         } else {
             return $info;
         }
