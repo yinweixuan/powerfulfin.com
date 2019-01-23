@@ -39,11 +39,11 @@ class AliyunOpenSearchUtil {
      * 获取访问域名
      */
     public static function getHost() {
-        if (config('app.env') == 'local') {
+//        if (config('app.env') == 'local') {
             return self::HOST_PUBLIC;
-        } else {
-            return self::HOST_INNER;
-        }
+//        } else {
+//            return self::HOST_INNER;
+//        }
     }
 
     /**
