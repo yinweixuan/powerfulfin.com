@@ -95,7 +95,7 @@ class AliyunOpenSearchUtil {
         foreach ($keyword_array as $word) {
             $query .= ' OR default:"' . $word . '")';
         }
-        $query .= ' AND status="SUCCESS" AND can_loan="SUCCESS"';
+        $query .= ' AND status:"SUCCESS" AND can_loan:"SUCCESS"';
         if ($lng > 1 && $lat > 1) {
             $query .= '&&sort=+distance(lng,lat,"' . $lng . '","' . $lat . '");-RANK';
         }
