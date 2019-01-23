@@ -89,14 +89,8 @@ class TestController extends AppController
 //            $lists[] = $tmp;
 //        }
 //        OutputUtil::info(0, 0, $lists);
-//        try{
-//            throw new PFException(111,111);
-//        }catch (PFException $exception){
-//            echo $exception->getCode().':'.$exception->getMessage();
-//        }
-            var_dump($this->isWX);
-            var_dump($this->isIOS);
-            var_dump($this->isAndroid);
-            var_dump(DataBus::get('plat'));
+
+        throw new PFException(111, 111);
+
     }
 }

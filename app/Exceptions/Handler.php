@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Components\OutputUtil;
+use App\Components\PFException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -55,6 +56,10 @@ class Handler extends ExceptionHandler
                 $code = $exception->getStatusCode();
 
                 OutputUtil::err(ERR_SYS_UNKNOWN_CONTENT, $code);
+            } elseif ($exception instanceof PFException) {
+                OutputUtil::err($exception->getMessage(), $exception->getCode());
+            } else {
+                OutputUtil::err(ERR_SYS_UNKNOWN_CONTENT, ERR_SYS_UNKNOWN);
             }
         } else {
             return $info;
