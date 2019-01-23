@@ -91,7 +91,7 @@ class BUUserInfo
         return $data = array(
             'key' => env('UDCREDIT_MERCHANT_KEY'),
             'order' => $order,
-            'notify_url' => 'http://www.' . DOMAIN_WEB . '/inner/udcredit/notify',
+            'notify_url' => 'http://' . DOMAIN_INNER . '/inner/udcredit/notify',
             'user_id' => ARPFUsersAuthLog::USER_ID_SUFFIX . self::$user['id'],
             'safe_mode' => ARPFUsersAuthLog::SAFE_MODE_HIGH,
             'verified' => $verified,

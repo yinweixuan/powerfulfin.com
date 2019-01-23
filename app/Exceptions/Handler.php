@@ -54,7 +54,6 @@ class Handler extends ExceptionHandler
             /* 错误页面 */
             if ($exception instanceof NotFoundHttpException) {
                 $code = $exception->getStatusCode();
-
                 OutputUtil::err(ERR_SYS_UNKNOWN_CONTENT, $code);
             } elseif ($exception instanceof PFException) {
                 OutputUtil::err($exception->getMessage(), $exception->getCode());
