@@ -85,4 +85,15 @@ class ARPFOrg extends Model
         $update['update_time'] = date('Y-m-d H:i:s');
         return DB::table(self::TABLE_NAME)->where('id', $id)->update($update);
     }
+
+    public static function getSearchList($oid1, $oid2 = null) {
+        if (!$oid2) {
+            $oid2 = $oid1;
+        }
+        $list = DB::table(self::TABLE_NAME)
+            ->select()
+            ->where([['id', '>=', $oid1], ['id', '<=', $oid2]])
+            ->get()->toArray();
+        return $list;
+    }
 }
