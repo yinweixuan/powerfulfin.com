@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Components\OutputUtil;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -29,7 +30,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
      * @return void
      */
     public function report(Exception $exception)
@@ -40,12 +41,17 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Exception $exception
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        $info = parent::render($request, $exception);
+        if ($_SERVER['SERVER_NAME'] == DOMAIN_APP) {
+            OutputUtil::err('地址错误', 404);
+        } else {
+            return $info;
+        }
     }
 }
