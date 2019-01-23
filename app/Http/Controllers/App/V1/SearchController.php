@@ -24,7 +24,7 @@ class SearchController {
         $page = Input::get('page', '1');
         $pagesize = Input::get('pagesize', '10');
         try {
-            if (!$lng < 1 || $lat < 1) {
+            if ($lng < 1 || $lat < 1) {
                 $ip = \App\Models\DataBus::get('ip');
                 if ($ip) {
                     $ip = $ip == 2130706433 ? null : $ip;
