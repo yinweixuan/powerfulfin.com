@@ -50,6 +50,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         $info = parent::render($request, $exception);
+        pflog('error', $exception->getMessage());
         if ($_SERVER['SERVER_NAME'] == DOMAIN_APP) {
             /* 错误页面 */
             if ($exception instanceof NotFoundHttpException) {
