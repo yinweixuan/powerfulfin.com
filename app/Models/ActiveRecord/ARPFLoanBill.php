@@ -75,6 +75,7 @@ class ARPFLoanBill extends Model
     {
         $lists = DB::table(self::TABLE_NAME)->select('*')
             ->where('lid', $lid)
+            ->orderBy('installment_plan')
             ->get()->toArray();
         return $lists;
     }
@@ -103,5 +104,11 @@ class ARPFLoanBill extends Model
 
         }
         return $ar->getAttributes();
+    }
+
+    public static function _update($id, $update)
+    {
+        return DB::table(self::TABLE_NAME)->where('id', $id)
+            ->update($update);
     }
 }

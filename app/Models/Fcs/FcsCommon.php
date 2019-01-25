@@ -2,18 +2,10 @@
 
 namespace App\Models\Fcs;
 
-use App\Models\Fcs\FcsCommon;
-use App\Models\Fcs\FcsContract;
-use App\Models\Fcs\FcsField;
-use App\Models\Fcs\FcsFtp;
-use App\Models\Fcs\FcsHttp;
-use App\Models\Fcs\FcsLoan;
-use App\Models\Fcs\FcsQueue;
-use App\Models\Fcs\FcsSoap;
+use App\Models\ActiveRecord\ARPFLoan;
+use App\Models\ActiveRecord\ARPFLoanBill;
 
 class FcsCommon {
-
-    const THE_LID = 206697;
 
     /**
      * 计算是否可以主动还款
@@ -26,7 +18,7 @@ class FcsCommon {
      * 获取合同
      */
     public static function getContract($lid, $contract_type) {
-        
+
     }
 
     /**
@@ -56,10 +48,10 @@ class FcsCommon {
             $time = time();
         }
         $loan = Yii::app()->db->createCommand()
-                ->select()
-                ->from(ARLoan::TABLE_NAME)
-                ->where('resource in (5,8) and status in (100,111) and id=:id', array(':id' => $lid))
-                ->queryRow();
+            ->select()
+            ->from(ARLoan::TABLE_NAME)
+            ->where('resource in (5,8) and status in (100,111) and id=:id', array(':id' => $lid))
+            ->queryRow();
         if (!$loan) {
             throw new Exception('不满足计算条件（富登）');
         }
@@ -78,10 +70,10 @@ class FcsCommon {
             $bill_date = date('Ym', $time);
         }
         $bill = Yii::app()->db->createCommand()
-                ->select()
-                ->from(ARPayLoanBill::TABLE_NAME)
-                ->where('status in (0,2) and lid=:lid', array(':lid' => $lid))
-                ->queryAll();
+            ->select()
+            ->from(ARPayLoanBill::TABLE_NAME)
+            ->where('status in (0,2) and lid=:lid', array(':lid' => $lid))
+            ->queryAll();
         $data = array();
         $data['principal_left'] = 0;
         $data['miss_principal'] = 0;
@@ -166,7 +158,7 @@ class FcsCommon {
             $timestamp = time();
         }
         if (is_numeric($billorid)) {
-            $bill = ARPayLoanBill::getBillById($billorid);
+            $bill = ARPFLoanBill::getLoanBillByLid($billorid);
         } elseif (is_array($billorid)) {
             $bill = $billorid;
         }
@@ -192,7 +184,7 @@ class FcsCommon {
         }
         if ($is_overdue || self::isOverdue($bill['bill_date'])) {
             $overdue_days = self::calOverdueDays($bill, $timestamp, $is_overdue);
-            if ($bill['lid'] > self::THE_LID) {
+            if ($bill['lid'] > config('fcs.the_lid')) {
                 $fine_interest_rate = 0.0001;
             } else {
                 $fine_interest_rate = 0.001;
@@ -207,7 +199,7 @@ class FcsCommon {
      */
     public static function getOverdueFee($lid) {
         $overdue_fee = 0;
-        if ($lid > self::THE_LID) {
+        if ($lid > config('fcs.the_lid')) {
             $overdue_fee = 1;
         } else {
             $overdue_fee = 20;
@@ -220,27 +212,17 @@ class FcsCommon {
      */
     public static function isOverdue($bill_date) {
         $overdue = false;
-        $overdue_map = array();
-        $overdue_map['201809'] = '20180919';
-        $overdue_map['201810'] = '20181017';
-        $overdue_map['201811'] = '20181117';
-        $overdue_map['201812'] = '20181219';
-        $overdue_map['201901'] = '20190117';
-        $overdue_map['201902'] = '20190219';
-        $overdue_map['201903'] = '20190319';
-        $overdue_map['201904'] = '20190417';
-        $overdue_map['201905'] = '20190517';
-        $overdue_map['201906'] = '20190619';
-        $overdue_map['201907'] = '20190717';
-        $overdue_map['201908'] = '20190817';
-        $overdue_map['201909'] = '20190918';
+        $overdue_map = config('fcs.overdue_date');
         $today = date('Ymd');
         $overdue_day = $overdue_map[$bill_date];
         if ($overdue_day) {
-            if ($today >= $overdue_day) {
-                $overdue = true;
-            }
-        } elseif ($today >= $bill_date . '25') {
+            //没有明确指定逾期日期的情况只考虑周末
+            $repay_time = strtotime($bill_date . config('fcs.repay_day'));
+            $index = date('N', $repay_time);
+            $day = config('fcs.repay_day') + 2 + 2 * floor($index / 5) - floor($index / 7);
+            $overdue_day = $bill_date . $day;
+        }
+        if ($today >= $overdue_day) {
             $overdue = true;
         }
         return $overdue;
@@ -250,19 +232,15 @@ class FcsCommon {
      * 本地生成还款计划表
      */
     public static function genLoanBill($lid, $overwrite = false) {
-        $loan = Yii::app()->db->createCommand()
-                ->select()
-                ->from(ARLoan::TABLE_NAME)
-                ->where('id=:id', array(':id' => $lid))
-                ->queryRow();
+        $loan = ARPFLoan::getLoanById($lid);
         if (!$loan['pay_time'] || $loan['pay_time'] == '0000-00-00 00:00:00') {
             return;
         }
         $loantype_info = Yii::app()->db->createCommand()
-                ->select()
-                ->from(ARPayLoanType::TABLE_NAME)
-                ->where('rateid=:rateid', array(':rateid' => $loan['loan_type']))
-                ->queryRow();
+            ->select()
+            ->from(ARPayLoanType::TABLE_NAME)
+            ->where('rateid=:rateid', array(':rateid' => $loan['loan_type']))
+            ->queryRow();
         if (empty($loantype_info)) {
             return;
         }
@@ -270,7 +248,7 @@ class FcsCommon {
         if ($old_loan_bill) {
             if ($overwrite) {
                 Yii::app()->db->createCommand()
-                        ->delete(ARPayLoanBill::TABLE_NAME, 'lid=:lid', array(':lid' => $lid));
+                    ->delete(ARPayLoanBill::TABLE_NAME, 'lid=:lid', array(':lid' => $lid));
             } else {
                 return;
             }

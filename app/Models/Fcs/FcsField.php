@@ -2,7 +2,12 @@
 
 namespace App\Models\Fcs;
 
+<<<<<<< Updated upstream
 use App\Models\Fcs\FcsSoap;
+=======
+use App\Components\CheckUtil;
+use App\Components\MapUtil;
+>>>>>>> Stashed changes
 
 class FcsField {
 
@@ -10,8 +15,117 @@ class FcsField {
     const MANAGER_CD = 'VRO0005';
     const REGION_CQ = '重庆直销部';
     const REGION_CD = '成都直销部';
-    const PRODUCT = '课栈教育分期合作方案';
-    const CUST_CHANNEL = '北京弟傲思时代信息技术有限公司';
+
+
+    public static function checkApplyParams($data) {
+        //年龄：财会，学历：18-40，语言：18-45
+        $age = CheckUtil::getAgeByIdCard($data['identity_number']);
+        if ($age < 18 || $age > 45) {
+            throw new \Exception('年龄超过资金方要求');
+        }
+        if (in_array($data['business_type'], array('财会', '学历'))) {
+            if ($age > 40) {
+                throw new \Exception('年龄超过资金方要求');
+            }
+        }
+        if (in_array($data['business_type'], array('IT'))) {
+            if ($age > 35) {
+                throw new \Exception('年龄超过资金方要求');
+            }
+        }
+        //最低学历要求：高中/中专
+        if ($data['highest_education'] == '初中及以下') {
+            throw new \Exception('学历低于资金方要求');
+        }
+        //月收入大于2000元
+        if ($data['monthly_income'] < 2000) {
+            throw new \Exception('收入低于资金方要求');
+        }
+        //不要学生
+        if ($data['working_status'] == 2 || $data['profession'] == '学生') {
+            throw new \Exception('在校学生无法在该资金方进行申请');
+        }
+        //身份证有效期：必须在有效期内；
+        if ($data['end_date'] < date('Y-m-d H:i:s')) {
+            throw new \Exception('身份证不在有效期内');
+        }
+        //人脸识别必须通过
+        if ($data['face_recognition'] != STATUS_SUCCESS) {
+            throw new \Exception('未通过人脸识别,请调整光线并露出全脸后重试');
+        }
+        //限制分校
+        $school_arr = config('fcs.available_branch_school');
+        foreach ($school_arr as $hid => $sid_arr) {
+            if ($data['hid'] == $hid) {
+                if (!in_array($data['sid'], $sid_arr)) {
+                    throw new \Exception('非资金方支持机构');
+                }
+            }
+        }
+        //关闭的分校
+        $closed_school = config('fcs.closed_branch_school');
+        if (!in_array($data['sid'], $closed_school)) {
+            throw new \Exception('非资金方支持机构');
+        }
+        //判断永久被拒
+        $refused_loan = FcsDB::getRefusedLoan($data['uid']);
+        if ($refused_loan) {
+            throw new \Exception('资金方不接受该用户申请');
+        }
+        //gps白名单
+        $gps_whitelist = config('fcs.gps_whitelist');
+        //现场授课的订单判断距离
+        if ($data['teach_type'] == 1) {
+            //检查经纬度，没有的使用ip补全
+            if (!$data['lng'] || !$data['lat'] || $data['lng'] == '5e-324' || $data['lat'] == '5e-324') {
+                $position = MapUtil::getPosByIp($data['ip']);
+                if ($position['lng'] && $position['lat']) {
+                    $data['lng'] = round($position['lng'], 6);
+                    $data['lat'] = round($position['lat'], 6);
+                    $stu_update = array();
+                    $stu_update['lat'] = $data['lat'];
+                    $stu_update['lng'] = $data['lng'];
+//                    ARStuAddition::_update($data['id'], $stu_update);
+                    \Yii::log('补充gps：' . $data['id'] . PHP_EOL . print_r($stu_update, true), 'fcs_gps.op');
+                }
+            }
+            //检测距离（米）
+            $max_distance = config('fcs.max_distance');
+            $distance = MapUtil::getDistance($data['s_lng'], $data['s_lat'], $data['lng'], $data['lat']);
+            if ($distance > 500) {
+                $log = array();
+                $log['lid'] = $data['id'];
+                $log['uid'] = $data['uid'];
+                $log['sid'] = $data['sid'];
+                $log['school_lat'] = $data['s_lat'];
+                $log['school_lng'] = $data['s_lng'];
+                $log['old_lat'] = $data['lat'];
+                $log['old_lng'] = $data['lng'];
+                $log['old_distance'] = $distance;
+                if ($distance <= $max_distance || in_array($data['sid'], $gps_whitelist)) {
+                    $range = MapUtil::getNearPoint($data['s_lng'], $data['s_lat'], 0.4);
+                    $new_lat = round(mt_rand($range['left-bottom']['lat'] * 1000000, $range['right-top']['lat'] * 1000000) / 1000000, 6);
+                    $new_lng = round(mt_rand($range['left-bottom']['lng'] * 1000000, $range['right-top']['lng'] * 1000000) / 1000000, 6);
+                    $stu_update = array();
+                    $stu_update['lat'] = $new_lat;
+                    $stu_update['lng'] = $new_lng;
+//                    ARStuAddition::_update($data['id'], $stu_update);
+                    $data['lng'] = $new_lng;
+                    $data['lat'] = $new_lat;
+                    $distance = MapUtil::getDistance($data['s_lng'], $data['s_lat'], $new_lng, $new_lat);
+                    $log['new_lat'] = $new_lat;
+                    $log['new_lng'] = $new_lng;
+                    $log['new_distance'] = $distance;
+                    \Yii::log(print_r($log, true), 'fcs_gps.op');
+                } else {
+                    $log['remark'] = '距离超过限制:' . $max_distance;
+                    \Yii::log(print_r($log, true), 'fcs_gps.op');
+                    throw new \Exception('请在校区进行申请');
+                }
+            }
+        }
+        return $data;
+    }
 
     /**
      * 进件接口字段转化
@@ -129,7 +243,7 @@ class FcsField {
         //富登参数
         $fcs_params = array();
         //资金方信息
-        if ($data['resource'] == ARPayLoanType::RESOURCE_FCS_SC) {
+        if ($data['resource'] == RESOURCE_FCS_SC) {
             $fcs_params['manager'] = self::MANAGER_CD;
             $fcs_params['region'] = self::REGION_CD;
         } else {
@@ -137,94 +251,18 @@ class FcsField {
             $fcs_params['region'] = self::REGION_CQ;
         }
         //固定字段
-        $fcs_params['channel'] = FcsLoan::CHANNEL;
-        $fcs_params['custChannel'] = self::CUST_CHANNEL;
-        $fcs_params['appProduct'] = self::PRODUCT;
-        $fcs_params['intendProduct'] = self::PRODUCT;
+        $fcs_params['channel'] = config('fcs.channel');
+        $fcs_params['custChannel'] = config('fcs.cust_channel');
+        $fcs_params['appProduct'] = config('fcs.product');
+        $fcs_params['intendProduct'] = config('fcs.product');
         //性别
         $fcs_params['gender'] = $data['sex'] == 2 ? '女' : '男';
-        //gps白名单
-        $gps_whitelist = array(
-            11192, 11104, 11251, 11166, 11101, 11088, 11161, 11066, 300424,
-            11090, 11164, 11191, 11252, 11262, 11095, 11195, 11196, 11060,
-            300278, 12415, 13106, 11198, 300029, 11163, 11058, 11160, 11096,
-            11056, 300081, 300027, 300265, 11097, 11055, 11057, 11265, 11059,
-            300547, 300026, 11162, 11100, 300404, 300277, 11266, 11256, 300646,
-            11207, 11098, 11236, 13079, 11133, 11139, 11240, 300647, 300213,
-            11074, 300085, 11082, 11151, 300409, 11146, 11167, 11089, 11193,
-            300022, 11112, 11246, 11203, 11080, 11099, 11084, 11185, 11201,
-            11073, 11134, 11092, 300035, 11206, 11234, 11241, 11255, 11168,
-            11105, 11086, 11063, 11085, 300030, 300446, 11259, 11094, 11260,
-            300648, 300441, 11194, 11202, 11065, 11070, 11071, 11271, 11204,
-            11108, 11235, 11054, 11093, 11199, 300222, 11268, 11153, 11143,
-            11102, 300574, 300202, 11132, 300033, 11214, 11087, 12780, 300032,
-            11249, 11091, 11264, 11225, 11075, 11243, 300425, 11141, 11233,
-            11062, 11205, 300378, 11064, 300384, 11182, 11178, 300369, 300411,
-            11226, 11149, 12858, 11140, 11254, 11144, 11263, 11209, 11142, 11107,
-            11137, 11117, 11109, 300418, 11269, 11175, 11145, 11217, 11267, 300018,
-            11111, 11169, 11152, 11067, 300080, 11258, 300037, 11197, 300025,
-            11113, 300298, 300031, 300028, 11222, 11110, 11061, 11216, 11221,
-            12450, 11238, 11272, 11115, 11173, 11077, 300268, 300234, 11106,
-            11253, 11227, 11076, 11118, 11190, 11116, 11237, 11078, 11125, 11239,
-            11069, 11261, 11126, 11079, 300382, 11119, 11218, 11184, 11208,
-            11179, 11083, 11131, 13069, 11174, 11219, 11257, 300241, 11148,
-        );
-        //现场授课的订单判断距离
-        if ($data['teach_type'] == 1) {
-            //检查经纬度，没有的使用ip补全
-            if (!$data['lng'] || !$data['lat'] || $data['lng'] == '5e-324' || $data['lat'] == '5e-324') {
-                $position = MapUtil::getPosByIp($data['ip']);
-                if ($position['lng'] && $position['lat']) {
-                    $data['lng'] = round($position['lng'], 6);
-                    $data['lat'] = round($position['lat'], 6);
-                    $stu_update = array();
-                    $stu_update['lat'] = $data['lat'];
-                    $stu_update['lng'] = $data['lng'];
-                    ARStuAddition::_update($data['id'], $stu_update);
-                    \Yii::log('补充gps：' . $data['id'] . PHP_EOL . print_r($stu_update, true),  'fcs_gps.op');
-                }
-            }
-            //检测距离（米）
-            $max_distance = 20000;
-            $distance = Nearby::getDistance($data['s_lng'], $data['s_lat'], $data['lng'], $data['lat']);
-            if ($distance > 500) {
-                $log = array();
-                $log['lid'] = $data['id'];
-                $log['uid'] = $data['uid'];
-                $log['sid'] = $data['sid'];
-                $log['school_lat'] = $data['s_lat'];
-                $log['school_lng'] = $data['s_lng'];
-                $log['old_lat'] = $data['lat'];
-                $log['old_lng'] = $data['lng'];
-                $log['old_distance'] = $distance;
-                if ($distance <= $max_distance || in_array($data['sid'], $gps_whitelist)) {
-                    $range = Nearby::getNearPoint($data['s_lng'], $data['s_lat'], 0.4);
-                    $new_lat = round(mt_rand($range['left-bottom']['lat'] * 1000000, $range['right-top']['lat'] * 1000000) / 1000000, 6);
-                    $new_lng = round(mt_rand($range['left-bottom']['lng'] * 1000000, $range['right-top']['lng'] * 1000000) / 1000000, 6);
-                    $stu_update = array();
-                    $stu_update['lat'] = $new_lat;
-                    $stu_update['lng'] = $new_lng;
-                    ARStuAddition::_update($data['id'], $stu_update);
-                    $data['lng'] = $new_lng;
-                    $data['lat'] = $new_lat;
-                    $distance = Nearby::getDistance($data['s_lng'], $data['s_lat'], $new_lng, $new_lat);
-                    $log['new_lat'] = $new_lat;
-                    $log['new_lng'] = $new_lng;
-                    $log['new_distance'] = $distance;
-                    \Yii::log(print_r($log, true),  'fcs_gps.op');
-                } else {
-                    $log['remark'] = '距离超过限制:' . $max_distance;
-                    \Yii::log(print_r($log, true),  'fcs_gps.op');
-                    throw new Exception('请在校区进行申请', FcsLoan::CODE_KZ_REFUSE);
-                }
-            }
-        }
         //申请时地理位置
         $fcs_params['applyPosition'] = round($data['lng'], 6) . ',' . round($data['lat'], 6);
         //机构地理位置
         $fcs_params['mechanismPosition'] = round($data['s_lng'], 6) . ',' . round($data['s_lat'], 6);
         //定位距离
-        $fcs_params['locationDistance'] = $distance;
+        $fcs_params['locationDistance'] = $data['distance'];
         //人脸识别是否通过
         $fcs_params['passFlag'] = $data['result_auth'] == 2 ? '是' : '否';
         //月收入
@@ -299,10 +337,10 @@ class FcsField {
         }
         //贷款类型
         $loan_type = Yii::app()->db->createCommand()
-                ->select()
-                ->from(ARPayLoanType::TABLE_NAME)
-                ->where('rateid=:rateid', array(':rateid' => $data['loan_type']))
-                ->queryRow();
+            ->select()
+            ->from(ARPayLoanType::TABLE_NAME)
+            ->where('rateid=:rateid', array(':rateid' => $data['loan_type']))
+            ->queryRow();
         if ($loan_type['ratetype'] == 2) {
             //贴息
             $fcs_params['KZType'] = '01';
@@ -397,28 +435,29 @@ class FcsField {
             'schoolSystem' => 'education_system', //学制
         );
         foreach ($map as $fcs_k => $kz_k) {
-            if (isset($data[$kz_k])) {
-                $fcs_params[$fcs_k] = $data[$kz_k];
-            } else {
-                $fcs_params[$fcs_k] = '';
+            if (!isset($fcs_params[$fcs_k])) {
+                if (isset($data[$kz_k])) {
+                    $fcs_params[$fcs_k] = $data[$kz_k];
+                } else {
+                    $fcs_params[$fcs_k] = '';
+                }
             }
         }
-        $params = array_merge($data, $fcs_params);
-        //如果第二联系人，默认填写课栈
-        $params['emergCon2Relation'] = '朋友';
-        $params['emergCon2Name'] = '课栈';
-        $params['emergCon2Phone'] = '13800138000';
+        //第二联系人，默认填写大圣
+        $fcs_params['emergCon2Relation'] = '朋友';
+        $fcs_params['emergCon2Name'] = '大圣';
+        $fcs_params['emergCon2Phone'] = '13800138000';
         //兼容富登（不必要的必填字段给默认值）
         $fcs_keys = array(
             'workUnit', 'unitAddressProvience', 'unitAddressCity',
             'unitAddressBorough', 'unitDetailAddress', 'Position'
         );
-        foreach ($params as $key => $val) {
-            if (!$val && in_array($key, $fcs_keys)) {
-                $params[$key] = '无';
+        foreach ($fcs_keys as $k) {
+            if (!$fcs_params[$k]) {
+                $fcs_params[$k] = '无';
             }
         }
-        return $params;
+        return $fcs_params;
     }
 
 }

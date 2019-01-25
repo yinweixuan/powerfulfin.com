@@ -17,7 +17,7 @@ class EsignUtil {
     const TEMPLATE_CATE_SCHOOL = 2;
     const TEMPLATE_CATE_PERSON = 3;
     const SEAL_WIDTH = 90;
-    const KZ_SID = 8888;
+    const KZ_SID = 2;
 
     /**
      * e签宝签章
@@ -252,10 +252,10 @@ class EsignUtil {
         if ($template_cate == self::TEMPLATE_CATE_PERSON) {
             $template_type = \tech\constants\PersonTemplateType::SQUARE;
             $user = \Illuminate\Support\Facades\DB::table(\App\Models\ActiveRecord\ARPFUsersReal::TABLE_NAME)
-                    ->select(['identity_number'])
+                    ->select(['full_name'])
                     ->where('esign_id', $account_id)
                     ->first();
-            if (mb_strlen($user['identity_number'], 'utf8') > 4) {
+            if (mb_strlen($user['full_name'], 'utf8') > 4) {
                 $template_type = \tech\constants\PersonTemplateType::RECTANGLE;
             }
         } elseif ($template_cate == self::TEMPLATE_CATE_SCHOOL) {

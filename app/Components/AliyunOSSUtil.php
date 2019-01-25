@@ -106,16 +106,22 @@ class AliyunOSSUtil {
         } elseif (is_array($files)) {
             $file_list = $files;
         } else {
-            return;
+            return null;
         }
+        $obj_list = [];
         foreach ($file_list as $file) {
             if (!is_file($file)) {
                 continue;
             }
             $object = self::getObjectPrefix($resource, $sbid, $lid) . '/' . basename($file);
+            $obj_list[] = $object;
             self::upload(self::getLoanBucket(), $object, $file, $overwrite);
         }
-        return;
+        if (is_string($files)) {
+            return $obj_list[0];
+        } elseif (is_array($files)) {
+            return $obj_list;
+        }
     }
 
     /**
@@ -123,7 +129,7 @@ class AliyunOSSUtil {
      */
     public static function uploadLoanContract($resource, $sbid, $lid, $file, $overwrite = false) {
         if (!is_file($file)) {
-            return;
+            return null;
         }
         $object = self::getObjectPrefix($resource, $sbid, $lid) . '/signed_loan_contract.pdf';
         $r = self::upload(self::getLoanBucket(), $object, $file, $overwrite);
@@ -181,7 +187,7 @@ class AliyunOSSUtil {
             $oss_client = self::getOSSClient();
             $result = $oss_client->getObject($bucket, $object, $options);
         } catch (\OSS\Core\OssException $ex) {
-            
+
         }
         return $result;
     }
