@@ -8,8 +8,6 @@
 
 namespace App\Models\Server\BU;
 
-use App\Components\RedisUtil;
-use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFOrg;
 use Illuminate\Support\Facades\DB;
 
@@ -23,6 +21,7 @@ class BUOrgStat
     /**
      * 统计校区大体情况,各状态的情况,放款,逾期等
      * @param $oids
+     * @return array
      */
     public static function orgGeneral($oids)
     {
@@ -39,7 +38,7 @@ class BUOrgStat
                 $ret[$s['oid']] = ['total' => 0, 'total_money' => 0,
                     'audit' => 0, 'audit_money' => 0,        //审核中
                     'repayed' => 0, 'repayed_money' => 0,                   //已放款
-                    'repaying' => 0,'repaying_money' => 0,                  //等待放款
+                    'repaying' => 0, 'repaying_money' => 0,                  //等待放款
                     'delay' => 0, 'delay_money' => 0,                       //逾期
                     'total' => 0, 'total_money' => 0,                       //总计
                     'done_principal' => 0, 'overdue_principal' => 0, 'doing_principal' => 0,        //剩余本金
@@ -48,7 +47,7 @@ class BUOrgStat
                     'delayInfo' => [],      //逾期
                     'mInfo' => [],          //逾期M
                     'baseInfo' => [],       //基本信息
-                    ];
+                ];
             }
             $ret[$s['oid']]['baseInfo'] = ARPFOrg::getOrgById($s['oid']);
             $ret[$s['oid']]['statusInfo'][$s['status']] = $s;
@@ -107,14 +106,14 @@ class BUOrgStat
 
     /**
      * 统计总校大体情况,各状态的情况,放款,逾期等
-     * @param array $hid
+     * @param $ids
+     * @param bool $withChild
+     * @return array
      */
     public static function headGeneral($ids, $withChild = false)
     {
         return self::orgGeneral($ids);
     }
-
-
 
 
 }
