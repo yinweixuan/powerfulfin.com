@@ -81,7 +81,6 @@ class BULoanApply
 
         //判断机构是否为需要声明照片机构
         $statementPic = BULoanConfig::getStatementPic($org['hid']);
-        $statementPic = true;
         if ($statementPic) {
             if (!array_key_exists('train_statement_pic', $data) || trim($data['train_statement_pic']) === '') {
                 throw new PFException("请上传声明照片", ERR_SYS_PARAM);
@@ -116,7 +115,6 @@ class BULoanApply
 
         //支持多张协议照片，向下兼容
         $trainingSchool = BULoanConfig::getTrainingContractSwitch($loanProduct['resource'], $orgHead['hid']);
-        $trainingSchool = true;
         if ($trainingSchool) {
             if (!array_key_exists('train_contract_pic', $data)) {
                 throw new PFException("请上传协议照片", ERR_SYS_PARAM);
