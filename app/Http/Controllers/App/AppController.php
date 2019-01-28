@@ -11,6 +11,7 @@ require PATH_VENDOR . '/autoload.php';
 
 use App\Components\OutputUtil;
 use App\Http\Controllers\Controller;
+use App\Jobs\AppRequestInfo;
 use App\Models\ActiveRecord\ARPFAppRequestLog;
 use App\Models\DataBus;
 use App\Models\Server\BU\BUAppMobile;
@@ -69,29 +70,33 @@ class AppController extends Controller
 
     public function addRequst()
     {
-        $info = [
-            'http_host' => $_SERVER['HTTP_HOST'],
-            'request_url' => $_SERVER['REQUEST_URI'],
-            'request_method' => $_SERVER['REQUEST_METHOD'],
-            'server_addr' => $_SERVER['SERVER_ADDR'],
-            'remote_addr' => $_SERVER['REMOTE_ADDR'],
-            'version' => Input::get('version'),
-            'phone_type' => DataBus::get('plat'),
-            'request' => json_encode($_REQUEST),
-            'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],
-            'ds_user_agent' => urldecode($_SERVER['HTTP_DS_USER_AGENT']),
-            'create_time' => date('Y-m-d H:i:s')
-        ];
-        $plat = DataBus::get('plat');
-        if ($plat == 2) {
-            $info['phone_type'] = PHONE_TYPE_ANDROID;
-        } else if ($plat == 1) {
-            $info['phone_type'] = PHONE_TYPE_IOS;
-        } else if ($this->isWX) {
-            $info['phone_type'] = 'WeChat';
-        } else {
-            $info['phone_type'] = 'UNKnow';
+        try {
+            $info = [
+                'http_host' => $_SERVER['HTTP_HOST'],
+                'request_url' => $_SERVER['REQUEST_URI'],
+                'request_method' => $_SERVER['REQUEST_METHOD'],
+                'server_addr' => $_SERVER['SERVER_ADDR'],
+                'remote_addr' => $_SERVER['REMOTE_ADDR'],
+                'version' => Input::get('version'),
+                'phone_type' => DataBus::get('plat'),
+                'request' => json_encode($_REQUEST),
+                'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],
+                'ds_user_agent' => urldecode($_SERVER['HTTP_DS_USER_AGENT']),
+                'create_time' => date('Y-m-d H:i:s')
+            ];
+            $plat = DataBus::get('plat');
+            if ($plat == 2) {
+                $info['phone_type'] = PHONE_TYPE_ANDROID;
+            } else if ($plat == 1) {
+                $info['phone_type'] = PHONE_TYPE_IOS;
+            } else if ($this->isWX) {
+                $info['phone_type'] = 'WeChat';
+            } else {
+                $info['phone_type'] = 'UNKnow';
+            }
+            dispatch(new AppRequestInfo($info));
+        } catch (\Exception $exception) {
+            Log::error($exception->getCode() . ':' . $exception->getMessage());
         }
-        ARPFAppRequestLog::addInfo($info);
     }
 }
