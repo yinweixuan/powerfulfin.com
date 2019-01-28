@@ -184,11 +184,6 @@ class Loan
 
         $loanProducts = array_values($loanProducts);
         $data = BULoanConfig::getConfig($org, $orgHead, $class, $loanProducts, $resource);
-
-        $data['idcard_person_pic_switch'] = true;
-        $data['school_pic_switch'] = true;
-        $data['course_open_time_switch'] = true;
-        $data['train'] = true;
         return $data;
     }
 
