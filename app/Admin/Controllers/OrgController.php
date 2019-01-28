@@ -12,16 +12,15 @@ namespace App\Admin\Controllers;
 use App\Admin\AdminController;
 use App\Admin\Models\OrgModel;
 use App\Components\PFException;
-use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFOrg;
-use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
 use App\Models\Server\BU\BULoanProduct;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Redis;
 
 class OrgController extends AdminController
 {
@@ -40,14 +39,13 @@ class OrgController extends AdminController
         ];
         $info = OrgModel::getOrgList($data);
         $data['info'] = $info;
-        $redis = RedisUtil::getInstance();
         $key = "PF_PROVINCE";
-        $redisProvinceData = $redis->get($key);
-        if ($redisProvinceData) {
-            $province = json_decode($redisProvinceData, true);
+        if (Redis::exists($key)) {
+            $data = Redis::get($key);
+            $province = json_decode($data, true);
         } else {
             $province = ARPFAreas::getAreas(0);
-            $redis->set($key, json_encode($province), 86400);
+            Redis::set($key, json_encode($province), 86400);
         }
         $data['province'] = $province;
         admin_toastr('查询成功...', 'success');
@@ -223,14 +221,13 @@ class OrgController extends AdminController
             }
             $type = Input::get('type', '');
 
-            $redis = RedisUtil::getInstance();
             $key = "PF_PROVINCE";
-            $data = $redis->get($key);
-            if ($data) {
+            if (Redis::exists($key)) {
+                $data = Redis::get($key);
                 $province = json_decode($data, true);
             } else {
                 $province = ARPFAreas::getAreas(0);
-                $redis->set($key, json_encode($province), 86400);
+                Redis::set($key, json_encode($province), 86400);
             }
 
             $view = $content->header('新增分校')
@@ -267,15 +264,15 @@ class OrgController extends AdminController
             }
             $org = OrgModel::getOrgInfo($oid);
 
-            $redis = RedisUtil::getInstance();
             $key = "PF_PROVINCE";
-            $data = $redis->get($key);
-            if ($data) {
+            if (Redis::exists($key)) {
+                $data = Redis::get($key);
                 $province = json_decode($data, true);
             } else {
                 $province = ARPFAreas::getAreas(0);
-                $redis->set($key, json_encode($province), 86400);
+                Redis::set($key, json_encode($province), 86400);
             }
+
             $view = $content->header('更新分校')
                 ->description('更新分校信息')
                 ->breadcrumb(

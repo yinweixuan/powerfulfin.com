@@ -10,10 +10,8 @@ namespace App\Models\Server\BU;
 
 
 use App\Components\ArrayUtil;
-use App\Components\HttpUtil;
 use App\Components\OutputUtil;
 use App\Components\PFException;
-use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFOrgClass;
@@ -29,6 +27,7 @@ use App\Models\ActiveRecord\ARPFUsersWork;
 use App\Models\DataBus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class BULoanApply
 {
@@ -288,13 +287,12 @@ class BULoanApply
         try {
             //用redis做个防止重入
             $entryKey = 'pf_loan_create_' . $user['id'];
-            $redis = RedisUtil::getInstance();
-            $redisRes = $redis->exists($entryKey);
+            $redisRes = Redis::exists($entryKey);
             if ($redisRes) {
                 \Yii::log('[' . __CLASS__ . '][' . __FUNCTION__ . '][' . __LINE__ . ']:redis lock for uid:' . $user['uid'], self::YII_LOAN_NAME);
                 throw new PFException("系统处理中,请勿重复提交", ERR_SYS_PARAM);
             } else {
-                $redis->setex($entryKey, 10, DataBus::get('curtime'));
+                Redis::setex($entryKey, 10, DataBus::get('curtime'));
             }
             $loan = BULoanUpdate::createLoan($info);
             return $loan;

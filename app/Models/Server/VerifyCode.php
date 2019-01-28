@@ -11,7 +11,6 @@ namespace App\Models\Server;
 
 use App\Components\CheckUtil;
 use App\Components\PFException;
-use App\Components\RedisUtil;
 use App\Models\Message\MsgInit;
 use Illuminate\Support\Facades\Redis;
 
@@ -40,12 +39,11 @@ class VerifyCode
      */
     public static function checkVerifyCode($phone, $ip, $code)
     {
-        $redis = RedisUtil::getInstance();
         $redisKey = 'PHONE_CODE_' . $phone . '_' . md5(ip2long($ip));
-        if (!$redis->exists($redisKey)) {
+        if (!Redis::exists($redisKey)) {
             throw new PFException(ERR_VERIFY_CODE_CONTENT . ':已失效', ERR_VERIFY_CODE);
         }
-        $data = $redis->get($redisKey);
+        $data = Redis::get($redisKey);
         if ($data) {
             $params = json_decode($data, true);
             if ($params['code'] == $code) {
@@ -69,27 +67,26 @@ class VerifyCode
         if (!CheckUtil::checkPhone($phone)) {
             throw new PFException(ERR_PHONE_FORMAT_CONTENT, ERR_PHONE_FORMAT);
         }
-        $redis = RedisUtil::getInstance();
         $limitKey = 'PHONE_CODE_LIMIT_' . $phone . '_' . md5(ip2long($ip));
-        if ($redis->exists($limitKey)) {
+        if (Redis::exists($limitKey)) {
             throw new PFException(ERR_VERIFY_CODE_CONTENT . ":", ERR_VERIFY_CODE);
         }
         $redisKey = 'PHONE_CODE_' . $phone . '_' . md5(ip2long($ip));
-        if ($redis->exists($redisKey)) {
-            $params = json_decode($redis->get($redisKey), true);
+        if (Redis::exists($redisKey)) {
+            $params = json_decode(Redis::get($redisKey), true);
             if ($params['number'] > 5) {
-                $redis->set($limitKey, 1, 30 * 60);
+                Redis::set($limitKey, 1, 30 * 60);
                 throw new PFException(ERR_VERIFY_CODE_CONTENT, ERR_VERIFY_CODE);
             } else {
                 $params['number']++;
-                $redis->set($redisKey, json_encode($params), 5 * 60);
+                Redis::set($redisKey, json_encode($params), 5 * 60);
             }
         } else {
             $params = [
                 'code' => self::createCode(),
                 'number' => 1
             ];
-            $redis->set($redisKey, json_encode($params), 5 * 60);
+            Redis::set($redisKey, json_encode($params), 5 * 60);
         }
         try {
             MsgInit::sendMsgQueue(MsgInit::SEND_MSG_TYPE_SMS, $uid, $phone, 'verify_code', [], [$params['code']]);

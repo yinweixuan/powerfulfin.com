@@ -9,9 +9,9 @@
 namespace App\Models\ActiveRecord;
 
 
-use App\Components\RedisUtil;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class ARPFLoanProduct extends Model
 {
@@ -70,10 +70,9 @@ class ARPFLoanProduct extends Model
     public static function getLoanProductAll($isMemcache = false, $status)
     {
         if ($isMemcache) {
-            $redis = RedisUtil::getInstance();
             $key = "PF_LOAN_TYPE_ALL";
-            if ($redis) {
-                $data = $redis->get($key);
+            if (Redis::exists($key)) {
+                $data = Redis::get($key);
                 if ($data) {
                     return json_decode($data, true);
                 }
@@ -90,9 +89,7 @@ class ARPFLoanProduct extends Model
         }
 
         if ($isMemcache) {
-            if ($redis) {
-                $redis->set($key, json_encode($result), 1800);
-            }
+            Redis::set($key, json_encode($result), 1800);
         }
         return $result;
     }

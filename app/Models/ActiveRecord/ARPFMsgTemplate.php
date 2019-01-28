@@ -9,9 +9,9 @@
 namespace App\Models\ActiveRecord;
 
 
-use App\Components\RedisUtil;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class ARPFMsgTemplate extends Model
 {
@@ -31,10 +31,9 @@ class ARPFMsgTemplate extends Model
             return false;
         }
 
-        $redis = RedisUtil::getInstance();
         $redisKey = "PF-MSG-TEMPLATE-" . $scenes . '-' . $key;
-        $data = $redis->get($redisKey);
-        if (!empty($data)) {
+        if (Redis::exists($redisKey)) {
+            $data = Redis::get($redisKey);
             return json_decode($data, true);
         }
 
@@ -43,7 +42,7 @@ class ARPFMsgTemplate extends Model
             return array();
         } else {
             $result = array_shift($result);
-            $redis->set($redisKey, json_encode($result), 86400);
+            Redis::set($redisKey, json_encode($result), 86400);
             return $result;
         }
     }

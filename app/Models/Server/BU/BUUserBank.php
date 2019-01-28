@@ -9,13 +9,12 @@
 namespace App\Models\Server\BU;
 
 
-use App\Components\CheckUtil;
 use App\Components\PFException;
-use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
 use App\Models\Epay\Epay;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class BUUserBank
 {
@@ -28,7 +27,6 @@ class BUUserBank
      */
     public static function checkBankAccount($userInfo, $phone, $bank_account)
     {
-        $redis = RedisUtil::getInstance();
         $params = array(
             'idcard_name' => $userInfo['full_name'],
             'idcard_number' => $userInfo['identity_number'],
@@ -39,7 +37,7 @@ class BUUserBank
             'env' => config('app.env')
         );
         $redisKey = 'PF_BANK_CHECK_' . md5(json_encode($params));
-        $bankCheckData = $redis->get($redisKey);
+        $bankCheckData = Redis::get($redisKey);
         if ($bankCheckData) {
             $result = json_decode($bankCheckData, true);
             throw new PFException("支付机构检查结果：" . $result['data']['org_desc'], ERR_BANK_ACCOUNT);
@@ -48,7 +46,7 @@ class BUUserBank
             $result = Epay::exec($params);
             if ($result['success'] == true && !empty($result['data'])) {
                 if ($result['data']['code'] != 0) {
-                    $redis->set($redisKey, json_encode($result), 1800);
+                    Redis::set($redisKey, json_encode($result), 1800);
                     throw new PFException("支付机构验核：" . $result['data']['org_desc'], ERR_BANK_ACCOUNT);
                 }
             } else {
