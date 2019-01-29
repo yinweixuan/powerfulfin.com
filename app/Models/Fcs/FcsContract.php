@@ -13,14 +13,6 @@ class FcsContract {
 
     const TITLE = 'powerfulfin.com';
 
-    public static function getFileDir($lid) {
-        $file_dir = PATH_STORAGE . '/data/fcs/' . (floor($lid / 10000)) . '/' . $lid;
-        if (!file_exists($file_dir)) {
-            mkdir($file_dir, 0755, true);
-        }
-        return $file_dir;
-    }
-
     public static function getContractTemplateDir() {
         return __DIR__ . '/contract';
     }
@@ -61,7 +53,7 @@ class FcsContract {
      * 生成征信授权书
      */
     public static function signCredit($lid) {
-        $file_dir = self::getFileDir($lid);
+        $file_dir = FcsFtp::getLocalFileDir($lid);
         $file_path_signed = $file_dir . '/credit_contract_' . $lid . '.pdf';
         $file_path = $file_path_signed . '.raw.pdf';
         if (is_file($file_path_signed)) {
@@ -96,7 +88,7 @@ class FcsContract {
      * 生成代扣协议文件
      */
     public static function signWithhold($lid) {
-        $file_dir = self::getFileDir($lid);
+        $file_dir = FcsFtp::getLocalFileDir($lid);
         $file_path_signed = $file_dir . '/withhold_contract_' . $lid . '.pdf';
         $file_path = $file_path_signed . '.raw.pdf';
         if (is_file($file_path_signed)) {
@@ -134,7 +126,7 @@ class FcsContract {
      */
     public static function signLoan($lid) {
         set_time_limit(0);
-        $file_dir = self::getFileDir($lid);
+        $file_dir = FcsFtp::getLocalFileDir($lid);
         $file_path_signed = $file_dir . '/loan_contract_' . $lid . '.pdf';
         $file_path = $file_path_signed . '.raw.pdf';
         if (is_file($file_path_signed)) {

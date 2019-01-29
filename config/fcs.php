@@ -14,7 +14,7 @@ return [
     //罚息分界单号，之前是千一，之后是万一
     'the_lid' => 206697,
     //距离判定允许的最远距离（米）
-    'max_distance' => 20000,
+    'max_distance' => 2000000000,
     //规定距离限制（米）
     'rule_distance' => 500,
     //ftp服务器
@@ -27,6 +27,8 @@ return [
     'ftp_root' => '/Kezhanw/',
     //富登取ftp文件地址前缀
     'fcs_ftp_prefix' => '//ecsvm-winftp.semmchina.com/ftproot',
+    //白色的占位图（富登ftp上文件的地址）
+    'blank_pic' => '//ecsvm-winftp.semmchina.com/ftproot/blank.jpg',
     //产品
     'product' => '课栈教育分期合作方案',
     //渠道号

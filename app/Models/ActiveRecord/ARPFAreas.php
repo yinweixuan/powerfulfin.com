@@ -43,4 +43,17 @@ class ARPFAreas extends Model
             ->where('areaid', $areaId)
             ->first();
     }
+
+    public static function getAreasByIds($ids) {
+        if (is_numeric($ids)) {
+            $ids = [$ids];
+        } elseif (is_string($ids)) {
+            $ids = explode(',', $ids);
+        }
+        $list = DB::table(self::TABLE_NAME)
+            ->select()
+            ->whereIn('areaid', $ids)
+            ->get()->toArray();
+        return $list;
+    }
 }

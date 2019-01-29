@@ -39,7 +39,7 @@ class FcsLoan {
         }
         try {
             //生成征信授权书
-            $data['contract_credit'] = FcsContract::signCredit($lid);
+            $data['contract_credit'] = FcsFtp::upload($lid, FcsContract::signCredit($lid));
             //获取富登的参数
             $params = FcsField::getApplyParams($data);
         } catch (\Exception $ex) {

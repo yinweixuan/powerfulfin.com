@@ -2,6 +2,8 @@
 
 namespace App\Models\Fcs;
 
+use App\Components\AliyunOSSUtil;
+
 class FcsFtp {
 
     public static $conn;
@@ -26,6 +28,14 @@ class FcsFtp {
         return floor($lid / 10000) . '/' . $lid;
     }
 
+    public static function getLocalFileDir($lid) {
+        $file_dir = PATH_STORAGE . '/data/fcs/' . (floor($lid / 10000)) . '/' . $lid;
+        if (!file_exists($file_dir)) {
+            mkdir($file_dir, 0755, true);
+        }
+        return $file_dir;
+    }
+
     /**
      * 获取ftp连接
      */
@@ -45,6 +55,9 @@ class FcsFtp {
      * 上传文件，不支持Windows
      */
     public static function upload($lid, $file) {
+        if (!is_file($file)) {
+            return '';
+        }
         $conn = self::getConnection();
         $upload_dir = self::getUploadDir($lid);
         @ftp_mkdir($conn, $upload_dir);
@@ -57,11 +70,26 @@ class FcsFtp {
         $r = ftp_put($conn, $remote_file, $file, FTP_BINARY);
         if ($r) {
             $root_path = self::getRootPath();
-            return str_replace('/', '\\', config('fcs.fcs_ftp_prefix') . $root_path . $remote_file);
+            return self::parsePath($root_path . $remote_file);
         } else {
             //上传失败
             throw new \Exception('文件上传失败');
         }
+    }
+
+    public static function parsePath($remote_file) {
+        return str_replace('/', '\\', config('fcs.fcs_ftp_prefix') . $remote_file);
+    }
+
+    /**
+     * oss文件上传富登ftp
+     */
+    public static function uploadFromOss($lid, $oss_object) {
+        $local_file_dir = self::getLocalFileDir($lid);
+        $local_file = $local_file_dir . '/' . basename($oss_object);
+        AliyunOSSUtil::download(AliyunOSSUtil::getLoanBucket(), $oss_object, $local_file);
+        $fcs_filename = self::upload($lid, $local_file);
+        return $fcs_filename;
     }
 
     /**

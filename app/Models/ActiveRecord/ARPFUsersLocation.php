@@ -53,4 +53,10 @@ class ARPFUsersLocation extends Model
             ->orderByDesc('id')
             ->first();
     }
+
+    public static function _update($id, $update) {
+        return DB::table(self::TABLE_NAME)
+            ->where('id', $id)
+            ->update($update);
+    }
 }

@@ -7,6 +7,9 @@ use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\ActiveRecord\ARPFOrg;
 use App\Models\ActiveRecord\ARPFOrgClass;
 use App\Models\ActiveRecord\ARPFOrgHead;
+use App\Models\ActiveRecord\ARPfUsers;
+use App\Models\ActiveRecord\ARPFUsersAuthLog;
+use App\Models\ActiveRecord\ARPFUsersLocation;
 use Illuminate\Support\Facades\DB;
 use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFUsersReal;
@@ -24,20 +27,27 @@ class FcsDB {
      */
     public static function getApplyData($lid) {
         $data = DB::table(ARPFLoan::TABLE_NAME . ' as l')
+            ->join(ARPfUsers::TABLE_NAME . ' as u', 'u.id', '=', 'l.uid')
             ->join(ARPFUsersReal::TABLE_NAME . ' as ur', 'ur.uid', '=', 'l.uid')
             ->join(ARPFUsersBank::TABLE_NAME . ' as ub', 'ub.uid', '=', 'l.uid')
             ->join(ARPFUsersWork::TABLE_NAME . ' as uw', 'uw.uid', '=', 'l.uid')
             ->join(ARPFUsersContact::TABLE_NAME . ' as uc', 'uc.uid', '=', 'l.uid')
+            ->join(ARPFUsersLocation::TABLE_NAME . ' as ul', 'ul.uid', '=', 'l.uid')
+            ->join(ARPFUsersAuthLog::TABLE_NAME . ' as ua', 'ua.uid', '=', 'l.uid')
+            ->join(ARPFOrg::TABLE_NAME . ' as o', 'o.id', '=', 'l.oid')
             ->join(ARPFOrgHead::TABLE_NAME . ' as oh', 'oh.hid', '=', 'l.hid')
             ->join(ARPFOrgClass::TABLE_NAME . ' as oc', 'oc.cid', '=', 'l.cid')
-            ->select(['*', 'l.id', 'l.id as lid'])
+            ->join(ARPFLoanProduct::TABLE_NAME . ' as lp', 'lp.loan_product', '=', 'l.loan_product')
+            ->select([
+                '*', 'l.id', 'l.id as lid', 'oh.full_name as org_full_name',
+                'ur.full_name as full_name', 'l.status as status', 'ul.id as location_id'
+            ])
             ->where('l.id', $lid)
             ->whereRaw('l.resource in(' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') and ub.type=1 '
                 . 'and (l.resource_loan_id="" or l.resource_loan_id is null) ')
+            ->orderByDesc('location_id')
             ->first();
         if (!empty($data)) {
-            //风险提示信息
-            $data['otherRiskInfo'] = '无';
             //历史拒绝次数
             $reject_count = DB::table(ARPFLoan::TABLE_NAME)
                 ->select(DB::raw('count(*) as c'))
