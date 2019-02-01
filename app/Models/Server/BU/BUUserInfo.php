@@ -344,7 +344,6 @@ class BUUserInfo
                     'work_address' => '单位详细地址',
                     'work_contact' => '单位联系电话',
                     'work_profession' => '职位名称',
-
                     'work_entry_time' => '入职时间'
                 );
                 break;
@@ -426,7 +425,7 @@ class BUUserInfo
             'channel' => '',
             'address' => '',
             'org_name' => '',
-            'oid' => $oid,
+            'oid' => !empty($oid) ? $oid : 0,
         ];
         try {
             $gps = MapUtil::getPosInfo($lng, $lat);
