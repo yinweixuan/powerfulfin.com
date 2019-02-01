@@ -26,8 +26,12 @@ class MapUtil {
      */
     public static function getPosInfo($lng, $lat) {
         $url = self::URL_POS_INFO . "&ak=" . self::getAccessKey() . "&location={$lat},{$lng}";
-        $res = HttpUtil::doGet($url);
-        $res = OutputUtil::json_decode($res);
+        try {
+            @$res = HttpUtil::doGet($url);
+            @$res = OutputUtil::json_decode($res);
+        } catch (\Exception $e) {
+            $res = ['status' => -1, 'result' => []];
+        }
         if (!isset($res['status']) || $res['status'] != 0 || !isset($res['result'])) {
             throw new PFException("获取地图信息错误");
         }
@@ -52,8 +56,12 @@ class MapUtil {
             return null;
         }
         $url = self::URL_IP_TO_POS . "&ak=" . self::getAccessKey() . "&ip={$ip}";
-        $res = HttpUtil::doGet($url);
-        $res = OutputUtil::json_decode($res);
+        try {
+            @$res = HttpUtil::doGet($url);
+            @$res = OutputUtil::json_decode($res);
+        } catch (\Exception $e) {
+            $res = ['status' => -1, 'result' => []];
+        }
         if (!isset($res['status']) || $res['status'] != 0 || !isset($res['content'])) {
             return null;
         }
