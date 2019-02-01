@@ -8,7 +8,7 @@
 
 namespace App\Models\Server\BU;
 
-use Illuminate\Support\Facades\Redis;
+use App\Components\RedisUtil;
 
 /**
  * 银行卡业务处理
@@ -23,12 +23,13 @@ class BUBanks
      */
     public static function getBanksInfo()
     {
+        $redis = RedisUtil::getInstance();
         $redisKey = 'PF_BANKS_INFO';
-        if (Redis::exists($redisKey)) {
-            return json_decode(Redis::get($redisKey), true);
+        if ($redis->exists($redisKey)) {
+            return json_decode($redis->get($redisKey), true);
         } else {
             $banks = config('bank');
-            Redis::set($redisKey, json_encode($banks));
+            $redis->set($redisKey, json_encode($banks));
             return $banks;
         }
     }
