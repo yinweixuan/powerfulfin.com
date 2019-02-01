@@ -12,9 +12,9 @@ namespace App\Admin\Controllers;
 use App\Admin\AdminController;
 use App\Components\OutputUtil;
 use App\Components\PFException;
+use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPFAreas;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redis;
 
 class AreaController extends AdminController
 {
@@ -26,13 +26,14 @@ class AreaController extends AdminController
     public function province()
     {
         try {
+            $redis = RedisUtil::getInstance();
             $key = "PF_PROVINCE";
-            if (Redis::exists($key)) {
-                $data = Redis::get($key);
+            $data = $redis->get($key);
+            if ($data) {
                 $list = json_decode($data, true);
             } else {
                 $list = ARPFAreas::getAreas(0);
-                Redis::set($key, json_encode($list), 86400);
+                $redis->set($key, json_encode($list), 86400);
             }
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $list);
         } catch (\Exception $exception) {
@@ -48,13 +49,14 @@ class AreaController extends AdminController
                 throw new PFException("提交参数错误");
             }
 
+            $redis = RedisUtil::getInstance();
             $key = "PF_CITY_BY_PROVINCE_" . $province;
-            if (Redis::exists($key)) {
-                $data = Redis::get($key);
+            $data = $redis->get($key);
+            if ($data) {
                 $list = json_decode($data, true);
             } else {
                 $list = ARPFAreas::getAreas($province);
-                Redis::set($key, json_encode($list), 86400);
+                $redis->set($key, json_encode($list), 86400);
             }
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $list);
         } catch (PFException $exception) {
@@ -69,14 +71,16 @@ class AreaController extends AdminController
             if (empty($city) || !is_numeric($city)) {
                 throw new PFException("提交参数错误");
             }
+            $redis = RedisUtil::getInstance();
             $key = "PF_GET_AREA_BY_CITY_" . $city;
-            if (Redis::exists($key)) {
-                $data = Redis::get($key);
+            $data = $redis->get($key);
+            if ($data) {
                 $list = json_decode($data, true);
             } else {
                 $list = ARPFAreas::getAreas($city);
-                Redis::set($key, json_encode($list), 86400);
+                $redis->set($key, json_encode($list), 86400);
             }
+
             OutputUtil::info(ERR_OK_CONTENT, ERR_OK, $list);
         } catch (PFException $exception) {
             OutputUtil::err(ERR_AREA_CONTENT, ERR_AREA);
