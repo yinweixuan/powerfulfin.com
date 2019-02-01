@@ -23,6 +23,9 @@ class AreaController extends AdminController
         parent::__construct();
     }
 
+    /**
+     *
+     */
     public function province()
     {
         try {
@@ -41,6 +44,9 @@ class AreaController extends AdminController
         }
     }
 
+    /**
+     *
+     */
     public function city()
     {
         try {
