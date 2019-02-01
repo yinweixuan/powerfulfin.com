@@ -16,6 +16,11 @@ class ARPFAreas extends Model
 {
     protected $table = "pf_areas";
     const TABLE_NAME = 'pf_areas';
+
+    protected $casts = [
+        'areaid' => 'int'
+    ];
+
     public $timestamps = false;
 
     public static function getAreas($parent_id = -1, $id = 0)
@@ -44,7 +49,8 @@ class ARPFAreas extends Model
             ->first();
     }
 
-    public static function getAreasByIds($ids) {
+    public static function getAreasByIds($ids)
+    {
         if (is_numeric($ids)) {
             $ids = [$ids];
         } elseif (is_string($ids)) {
