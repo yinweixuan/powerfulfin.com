@@ -19,19 +19,31 @@ use Illuminate\Support\Facades\Input;
 class IndexController extends AppController {
 
     public function index() {
-        $header = getallheaders();
-        $ds_ua = explode('|', urldecode($header['Ds-User-Agent']));
-        $bundle_identifier = $ds_ua[2];
-        $version = Input::get('version');
-        $mac = Input::get('school_mac');
         $uid = DataBus::getUid();
-        $loan = Loan::getHomeLoanInfo($uid);
         $data = [];
-        $data['audit'] = $this->getAppStoreAudit($version, $bundle_identifier);
+        try {
+            $header = getallheaders();
+            $ds_ua = explode('|', urldecode($header['Ds-User-Agent']));
+            $bundle_identifier = $ds_ua[2];
+            $version = Input::get('version');
+            $data['audit'] = $this->getAppStoreAudit($version, $bundle_identifier);
+        } catch (\Exception $e) {
+            $data['audit'] = [];
+        }
         $data['banner'] = $this->getBanner();
         $data['customer_service'] = $this->getCustomerService();
-        $data['notice'] = $this->getNotice();
-        $data['loan'] = $this->getLoan($mac, $loan);
+        try {
+            $data['notice'] = $this->getNotice();
+        } catch (\Exception $e) {
+            $data['notice'] = [];
+        }
+        try {
+            $mac = Input::get('school_mac');
+            $loan = Loan::getHomeLoanInfo($uid);
+            $data['loan'] = $this->getLoan($mac, $loan);
+        } catch (\Exception $e) {
+            $data['loan'] = [];
+        }
         OutputUtil::out($data);
     }
 

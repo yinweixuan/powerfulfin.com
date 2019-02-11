@@ -44,9 +44,6 @@ class DataBus
         } else {
             self::$data['plat'] = 0;
         }
-        if (isset($_SERVER['HTTP_KZUA'])) {
-            self::$data['http_kzua'] = $_SERVER['HTTP_KZUA'];
-        }
         self::$data['cookie'] = $_COOKIE;
         self::$data['isMobile'] = $detect->isMobile();
         $checkCookie = self::checkCookie();

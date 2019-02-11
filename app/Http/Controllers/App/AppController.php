@@ -62,7 +62,7 @@ class AppController extends Controller
     public function isPFIOS()
     {
         $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        if (strpos($ua, 'iPhone') && strpos($ua, 'iOS')) {
+        if (stripos($ua, 'iphone') && stripos($ua, 'ios')) {
             return true;
         }
         return false;
