@@ -184,6 +184,7 @@ class Loan
 
         $loanProducts = array_values($loanProducts);
         $data = BULoanConfig::getConfig($org, $orgHead, $class, $loanProducts, $resource);
+        $data['courseOpenDefaultTime'] = date('Y-m-d', strtotime('+1 day'));//开课默认时间(当前日期加一天)
         return $data;
     }
 

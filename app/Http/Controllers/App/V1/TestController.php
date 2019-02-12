@@ -90,7 +90,10 @@ class TestController extends AppController
 //        }
 //        OutputUtil::info(0, 0, $lists);
 
-        throw new PFException(111, 111);
+//        throw new PFException(111, 111);
+
+        $redis = app('redis.connection');
+        var_dump($redis);
 
     }
 }

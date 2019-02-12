@@ -44,7 +44,6 @@ class BULoanConfig
             $data = array(
                 'loanProducts' => $loanProducts,  //所支持的费率类型
                 'course' => self::getClassInfo($class, $orgHead, $resource),   //课程信息描述
-                'courseOpenDefaultTime' => date('Y-m-d', strtotime('+1 day')),//开课默认时间(当前日期加一天)
                 'statement_pic' => self::getStatementPic($org['hid']),//是否需要上传申明图片，需要 true，不需要 FALSE
                 'train' => BULoanConfig::getTrainingContractSwitch($resource, $orgHead['hid']),
                 'course_open_time_switch' => true, //开课时间
