@@ -41,8 +41,8 @@ class OrgController extends AdminController
         $data['info'] = $info;
         $key = "PF_PROVINCE";
         if (Redis::exists($key)) {
-            $data = Redis::get($key);
-            $province = json_decode($data, true);
+            $tmp = Redis::get($key);
+            $province = json_decode($tmp, true);
         } else {
             $province = ARPFAreas::getAreas(0);
             Redis::set($key, json_encode($province), 86400);

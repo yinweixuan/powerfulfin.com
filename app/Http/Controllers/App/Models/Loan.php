@@ -254,86 +254,87 @@ class Loan
             'repay_money' => 0,
             'can_repay' => 0,
         ];
-        if (!is_null($uid) && is_numeric($uid)) {
-            $loan = DB::table(ARPFLoan::TABLE_NAME)->select('*')
-                ->where('uid', $uid)
-                ->orderByDesc('id')
-                ->first();
-            if (!empty($loan)) {
-                $data['id'] = $loan['id'];
-                $data['data'] = $loan;
+        if (empty($uid) || is_null($uid) || !is_numeric($uid)) {
+            return $data;
+        }
+        $loan = DB::table(ARPFLoan::TABLE_NAME)->select('*')
+            ->where('uid', $uid)
+            ->orderByDesc('id')
+            ->first();
+        if (!empty($loan)) {
+            $data['id'] = $loan['id'];
+            $data['data'] = $loan;
+            if (in_array($loan['status'], [
+                    LOAN_1200_SURE_FILE,
+                    LOAN_4500_STUDENT_SURE
+                ]
+            )) {
+                //待确认
+                $data['step'] = 2;
+            } elseif (in_array($loan['status'], [
+                    LOAN_2100_SCHOOL_REFUSE,
+                    LOAN_3100_PF_REFUSE,
+                    LOAN_4100_P2P_REFUSE,
+                    LOAN_5100_SCHOOL_REFUSE,
+                    LOAN_14000_FOREVER_REFUSE,
+                ]
+            )) {
+                //已拒绝
+                $data['step'] = 3;
+            } elseif (in_array($loan['status'], [
+                    LOAN_5200_SCHOOL_STOP,
+                    LOAN_5400_CHANGE_RESOURCE,
+                    LOAN_5500_PAY_TIME_OUT,
+                    LOAN_10100_REFUSE,
+                    LOAN_10200_REVOCATION,
+                    LOAN_11500_BAD,
+                    LOAN_12000_DROP,
+                ]
+            )) {
+                //已终止
+                $data['step'] = 4;
+            } elseif (in_array($loan['status'], [
+                    LOAN_10000_REPAY,
+                    LOAN_11100_OVERDUE,
+                ]
+            )) {
+                //还款/逾期中
+                $data['step'] = 5;
+                $loan_bill = ARPFLoanBill::getLoanBillByLidAndUid($loan['id'], $uid);
+                $bill_date = '';
+                foreach ($loan_bill as $bill) {
+                    if (in_array($bill['status'], [ARPFLoanBill::STATUS_NO_REPAY, ARPFLoanBill::STATUS_OVERDUE]) && ($bill['bill_date'] < $bill_date || !$bill_date)) {
+                        $data['repay_date'] = date('Y-m-d', strtotime($bill['bill_date'] . '15'));
+                        $data['repay_money'] = $bill['miss_total'];
+                        $bill_date = $bill['bill_date'];
+                    }
+                }
+                if (in_array($loan['resource'], [RESOURCE_JCFC])) {
+                    $data['can_repay'] = 1;
+                }
                 if (in_array($loan['status'], [
-                        LOAN_1200_SURE_FILE,
-                        LOAN_4500_STUDENT_SURE
-                    ]
-                )) {
-                    //待确认
-                    $data['step'] = 2;
-                } elseif (in_array($loan['status'], [
-                        LOAN_2100_SCHOOL_REFUSE,
-                        LOAN_3100_PF_REFUSE,
-                        LOAN_4100_P2P_REFUSE,
-                        LOAN_5100_SCHOOL_REFUSE,
-                        LOAN_14000_FOREVER_REFUSE,
-                    ]
-                )) {
-                    //已拒绝
-                    $data['step'] = 3;
-                } elseif (in_array($loan['status'], [
-                        LOAN_5200_SCHOOL_STOP,
-                        LOAN_5400_CHANGE_RESOURCE,
-                        LOAN_5500_PAY_TIME_OUT,
-                        LOAN_10100_REFUSE,
-                        LOAN_10200_REVOCATION,
-                        LOAN_11500_BAD,
-                        LOAN_12000_DROP,
-                    ]
-                )) {
-                    //已终止
-                    $data['step'] = 4;
-                } elseif (in_array($loan['status'], [
-                        LOAN_10000_REPAY,
                         LOAN_11100_OVERDUE,
                     ]
                 )) {
-                    //还款/逾期中
-                    $data['step'] = 5;
-                    $loan_bill = ARPFLoanBill::getLoanBillByLidAndUid($loan['id'], $uid);
-                    $bill_date = '';
-                    foreach ($loan_bill as $bill) {
-                        if (in_array($bill['status'], [ARPFLoanBill::STATUS_NO_REPAY, ARPFLoanBill::STATUS_OVERDUE]) && ($bill['bill_date'] < $bill_date || !$bill_date)) {
-                            $data['repay_date'] = date('Y-m-d', strtotime($bill['bill_date'] . '15'));
-                            $data['repay_money'] = $bill['miss_total'];
-                            $bill_date = $bill['bill_date'];
-                        }
-                    }
-                    if (in_array($loan['resource'], [RESOURCE_JCFC])) {
-                        $data['can_repay'] = 1;
-                    }
-                    if (in_array($loan['status'], [
-                            LOAN_11100_OVERDUE,
-                        ]
-                    )) {
-                        $data['is_overdue'] = 1;
-                    }
-                } elseif (in_array($loan['status'], [
-                        LOAN_11000_FINISH,
-                        LOAN_13000_EARLY_FINISH,
-                    ]
-                )) {
-                    //已结清
-                    $data['step'] = 6;
-                } elseif (in_array($loan['status'], [
-                        LOAN_6000_NOTICE_MONEY,
-                        LOAN_6300_SUPPLY_INFO
-                    ]
-                )) {
-                    //待放款
-                    $data['step'] = 7;
-                } else {
-                    //审核中
-                    $data['step'] = 1;
+                    $data['is_overdue'] = 1;
                 }
+            } elseif (in_array($loan['status'], [
+                    LOAN_11000_FINISH,
+                    LOAN_13000_EARLY_FINISH,
+                ]
+            )) {
+                //已结清
+                $data['step'] = 6;
+            } elseif (in_array($loan['status'], [
+                    LOAN_6000_NOTICE_MONEY,
+                    LOAN_6300_SUPPLY_INFO
+                ]
+            )) {
+                //待放款
+                $data['step'] = 7;
+            } else {
+                //审核中
+                $data['step'] = 1;
             }
         }
         return $data;
