@@ -7,11 +7,11 @@ return [
     //顶部banner
     'banner' => [
         [
-            'img' => 'http://www.powerfulfin.com/img/banner/banner1.png',
+            'img' => 'https://www.powerfulfin.com/img/banner/banner1.png',
             'url' => '',
         ],
         [
-            'img' => 'http://www.powerfulfin.com/img/banner/banner2.png',
+            'img' => 'https://www.powerfulfin.com/img/banner/banner2.png',
             'url' => '',
         ],
     ],
