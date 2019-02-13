@@ -79,8 +79,8 @@ class IndexController extends AppController {
             //审核中
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => 'https://www.powerfulfin.com/img/loan/audit2x.png',
-                'status_img_3x' => 'https://www.powerfulfin.com/img/loan/audit3x.png',
+                'status_img_2x' => 'https://app.powerfulfin.com/img/loan/audit2x.png',
+                'status_img_3x' => 'https://app.powerfulfin.com/img/loan/audit3x.png',
                 'status_desp' => '审核中',
                 'remark' => '您的分期正在审核中，请耐心等待',
                 'buttons' => [
@@ -91,8 +91,8 @@ class IndexController extends AppController {
             //待确认
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => 'https://www.powerfulfin.com/img/loan/confirm2x.png',
-                'status_img_3x' => 'https://www.powerfulfin.com/img/loan/confirm3x.png',
+                'status_img_2x' => 'https://app.powerfulfin.com/img/loan/confirm2x.png',
+                'status_img_3x' => 'https://app.powerfulfin.com/img/loan/confirm3x.png',
                 'status_desp' => '待确认',
                 'remark' => '请您确认分期',
                 'buttons' => [
@@ -113,8 +113,8 @@ class IndexController extends AppController {
             }
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => 'https://www.powerfulfin.com/img/loan/refused2x.png',
-                'status_img_3x' => 'https://www.powerfulfin.com/img/loan/refused3x.png',
+                'status_img_2x' => 'https://app.powerfulfin.com/img/loan/refused2x.png',
+                'status_img_3x' => 'https://app.powerfulfin.com/img/loan/refused3x.png',
                 'status_desp' => '已拒绝',
                 'remark' => $remark,
                 'buttons' => [
@@ -126,8 +126,8 @@ class IndexController extends AppController {
             //已终止
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => 'https://www.powerfulfin.com/img/loan/end2x.png',
-                'status_img_3x' => 'https://www.powerfulfin.com/img/loan/end3x.png',
+                'status_img_2x' => 'https://app.powerfulfin.com/img/loan/end2x.png',
+                'status_img_3x' => 'https://app.powerfulfin.com/img/loan/end3x.png',
                 'status_desp' => '已终止',
                 'remark' => '您的分期订单已终止',
                 'buttons' => [
@@ -158,8 +158,8 @@ class IndexController extends AppController {
             //已结清
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => 'https://www.powerfulfin.com/img/loan/end2x.png',
-                'status_img_3x' => 'https://www.powerfulfin.com/img/loan/end3x.png',
+                'status_img_2x' => 'https://app.powerfulfin.com/img/loan/end2x.png',
+                'status_img_3x' => 'https://app.powerfulfin.com/img/loan/end3x.png',
                 'status_desp' => '已结清',
                 'remark' => '恭喜您还款完成，再来学习吧',
                 'buttons' => [
@@ -170,8 +170,8 @@ class IndexController extends AppController {
             //待放款
             $data_detail = [
                 'status' => '1',
-                'status_img_2x' => 'https://www.powerfulfin.com/img/loan/audit2x.png',
-                'status_img_3x' => 'https://www.powerfulfin.com/img/loan/audit3x.png',
+                'status_img_2x' => 'https://app.powerfulfin.com/img/loan/audit2x.png',
+                'status_img_3x' => 'https://app.powerfulfin.com/img/loan/audit3x.png',
                 'status_desp' => '审核中',
                 'remark' => '信用审核已通过，正在进行放款确认',
                 'buttons' => [
@@ -256,8 +256,8 @@ class IndexController extends AppController {
     public function getRecommend($mac = null) {
         $recommend = [
             'status' => '0',
-            'status_img_2x' => 'https://www.powerfulfin.com/img/loan/noresult2x.png',
-            'status_img_3x' => 'https://www.powerfulfin.com/img/loan/noresult3x.png',
+            'status_img_2x' => 'https://app.powerfulfin.com/img/loan/noresult2x.png',
+            'status_img_3x' => 'https://app.powerfulfin.com/img/loan/noresult3x.png',
             'buttons' => [
                 $this->getButton(5)
             ]
@@ -278,8 +278,8 @@ class IndexController extends AppController {
                         'status' => '0',
                         'school_id' => $school['id'],
                         'school_name' => $school['org_name'],
-                        'status_img_2x' => 'https://www.powerfulfin.com/img/loan/recommend2x.png',
-                        'status_img_3x' => 'https://www.powerfulfin.com/img/loan/recommend3x.png',
+                        'status_img_2x' => 'https://app.powerfulfin.com/img/loan/recommend2x.png',
+                        'status_img_3x' => 'https://app.powerfulfin.com/img/loan/recommend3x.png',
                         'buttons' => [
                             $this->getButton(4, $school['id']),
                             $this->getButton(5)
