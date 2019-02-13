@@ -54,8 +54,6 @@ class FcsSoap {
      */
     public static function prepare4test($func, $sorted_params) {
         if (config('app.env') == 'local') {
-            $test_lid = 154085;
-            $test_img = '/163249_1492677169_2571.png';
             $pic_arr = array(
                 'attachment1', 'attachment2', 'attachment3',
                 'attachment4', 'attachment5', 'attachment7',
@@ -67,7 +65,7 @@ class FcsSoap {
                     $v = '---';
                 }
                 if ($func == 'KZCreateLoan' && in_array($k, $pic_arr) && !$v) {
-                    $v = FcsFtp::getFile($test_lid, ($n + 2) . '_' . $test_img);
+                    $v = FcsFtp::parsePath(config('fcs.blank_pic'));
                     $n++;
                 }
                 if ($func == 'KZCreateLoan' && $k == 'YLZD06') {

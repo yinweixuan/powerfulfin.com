@@ -28,7 +28,7 @@ return [
     //富登取ftp文件地址前缀
     'fcs_ftp_prefix' => '//ecsvm-winftp.semmchina.com/ftproot',
     //白色的占位图（富登ftp上文件的地址）
-    'blank_pic' => '//ecsvm-winftp.semmchina.com/ftproot/blank.jpg',
+    'blank_pic' => 'blank.jpg',
     //产品
     'product' => '课栈教育分期合作方案',
     //渠道号

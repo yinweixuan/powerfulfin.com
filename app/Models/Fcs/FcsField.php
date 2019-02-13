@@ -215,10 +215,10 @@ class FcsField {
             }
         }
         //已取消的字段，但是因为是必填，所以补充白图。
-        $data['training_contract_first'] = config('fcs.blank_pic');
-        $data['school_pic'] = config('fcs.blank_pic');
-        $data['idcard_person_pic'] = config('fcs.blank_pic');
-        $data['bank_account_pic'] = config('fcs.blank_pic');
+        $data['training_contract_first'] = FcsFtp::parsePath(config('fcs.blank_pic'));
+        $data['school_pic'] = FcsFtp::parsePath(config('fcs.blank_pic'));
+        $data['idcard_person_pic'] = FcsFtp::parsePath(config('fcs.blank_pic'));
+        $data['bank_account_pic'] = FcsFtp::parsePath(config('fcs.blank_pic'));
         //富登参数
         $fcs_params = array();
         //资金方信息
