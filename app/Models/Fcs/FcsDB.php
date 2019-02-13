@@ -119,7 +119,7 @@ class FcsDB {
             ->where('resource_loan_id', $fcs_loan_id)
             ->whereRaw('resource in(' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') ')
             ->first();
-        if (!$loan && !config('app.env') == 'local') {
+        if (!$loan) {
             throw new \Exception('没有查到对应的贷款');
         }
         return $loan;
