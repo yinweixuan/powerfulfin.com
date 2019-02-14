@@ -146,11 +146,10 @@ class MsgInit
             }
         }
         try {
-//            $queueName = self::getQueueName();
-//            QueueUtil::sendMessage($queueName, $data, $delaySeconds, $priority);
-            self::sendMsg($data);
+            $queueName = self::getQueueName();
+            QueueUtil::sendMessage($queueName, $data, $delaySeconds, $priority);
         } catch (PFException $exception) {
-            throw new PFException($exception->getMessage());
+            throw new PFException($exception->getMessage(), ERR_SYS_UNKNOWN);
         }
     }
 
@@ -159,15 +158,15 @@ class MsgInit
      * @return bool|null
      * @throws PFException
      */
-    public static function sendMsg($data)
+    public static function sendMsg()
     {
-//        $queueName = self::getQueueName();
-//        $queueData = QueueUtil::receiveMessage($queueName);
-//        if (empty($queueData)) {
-//            return null;
-//        }
-//
-//        $data = json_decode($queueData, true);
+        $queueName = self::getQueueName();
+        $queueData = QueueUtil::receiveMessage($queueName);
+        if (empty($queueData)) {
+            return null;
+        }
+
+        $data = json_decode($queueData, true);
         $type = strtolower($data['type']);
         if ($type == self::SEND_MSG_TYPE_SMS) {
             try {
@@ -175,7 +174,7 @@ class MsgInit
                 MsgSMS::sendSMS($data['device'], $data['content']);
                 ARPFSms::_update($result, array('status' => STATUS_SUCCESS, 'plat' => env('SMS_PLAT')));
             } catch (PFException $exception) {
-                throw new PFException($exception->getMessage());
+                throw new PFException($exception->getMessage(), ERR_SYS_UNKNOWN);
             }
         } else if ($type == self::SEND_MSG_TYPE_JPUSH) {
             try {
@@ -185,7 +184,7 @@ class MsgInit
                     MsgJPUSH::sendPush(MsgJPUSH::SEND_SCENES_SPECIFY, $data['title'], $data['title'], $data['content'], $data['params']['extras'], $data['device']);
                 }
             } catch (PFException $exception) {
-                throw new PFException($exception->getMessage());
+                throw new PFException($exception->getMessage(), ERR_SYS_UNKNOWN);
             }
         } else if ($type == self::SEND_MSG_TYPE_EMAIL) {
 
@@ -205,10 +204,10 @@ class MsgInit
                 );
 //                ARKzLetter::_insert($fieldData);
             } catch (PFException $exception) {
-                throw new PFException($exception->getMessage());
+                throw new PFException($exception->getMessage(), ERR_SYS_UNKNOWN);
             }
         } else {
-            throw new PFException("消息类型异常");
+            throw new PFException("消息类型异常", ERR_SYS_UNKNOWN);
         }
         return true;
     }
