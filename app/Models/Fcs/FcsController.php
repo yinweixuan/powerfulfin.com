@@ -12,7 +12,7 @@ class FcsController {
     }
 
     //贷款状态更新接口
-    public function actionUpdateStatus() {
+    public function updateStatus() {
         try {
             $lid = FcsLoan::pullStatus($this->params);
         } catch (\Exception $ex) {
@@ -22,7 +22,7 @@ class FcsController {
     }
 
     //协议上传接口
-    public function actionUploadContract() {
+    public function uploadContract() {
         try {
             $lid = FcsLoan::getContract($this->params);
         } catch (\Exception $ex) {
@@ -32,7 +32,7 @@ class FcsController {
     }
 
     //初始化队列
-    public function actionInitQueue() {
+    public function initQueue() {
         FcsQueue::initQueue();
     }
 

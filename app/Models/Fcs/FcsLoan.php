@@ -3,10 +3,10 @@
 namespace App\Models\Fcs;
 
 use App\Components\AliyunOSSUtil;
-use App\Components\RedisUtil;
 use App\Models\ActiveRecord\ARPfUsers;
 use App\Models\ActiveRecord\ARPFUsersPhonebook;
 use App\Models\Message\MsgSMS;
+use Illuminate\Support\Facades\Redis;
 
 class FcsLoan {
 
@@ -265,7 +265,7 @@ class FcsLoan {
             $reason = '富登审核永久拒绝';
         } elseif ($status_str == 'money_pass') {
             $update['status'] = LOAN_10000_REPAY;
-            $update['pay_time'] = date('Y-m-d 00:00:00', $time);
+            $update['loan_time'] = date('Y-m-d 00:00:00', $time);
             $reason = '富登放款成功';
         } elseif ($status_str == 'money_refuse') {
             $update['status'] = LOAN_10100_REFUSE;
@@ -361,17 +361,16 @@ class FcsLoan {
         //取数据库中最大的号码
         $i_db = FcsDB::getLargestContractNo();
         $i_db++;
-        $redis = RedisUtil::getInstance();
-        if ($redis) {
-            $key = 'FCS_CONTRACT_NO_' . $loan['resource'];
-            $i_r = $redis->incr($key);
+        try {
+            $key = 'PF_FCS_CONTRACT_NO_' . $loan['resource'];
+            $i_r = Redis::incr($key);
             if ($i_r >= $i_db) {
                 $i = $i_r;
             } else {
                 $i = $i_db;
-                $redis->set($key, $i);
+                Redis::set($key, $i);
             }
-        } else {
+        } catch (\Exception $ex) {
             $i = $i_db;
         }
         $index = str_pad($i, 7, '0', STR_PAD_LEFT);

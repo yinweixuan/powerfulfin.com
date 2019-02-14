@@ -15,3 +15,10 @@ Route::group(['namespace' => 'Inner'], function () {
      */
     Route::match(['get', 'post'], '/inner/udcredit/notify', 'UdcreditController@notify');
 });
+
+/**
+ * 富登接口
+ */
+Route::match(['get', 'post'], '/tp/fcs/updatestatus', '\App\Models\Fcs\FcsController@updateStatus');
+Route::match(['get', 'post'], '/tp/fcs/uploadcontract', '\App\Models\Fcs\FcsController@uploadContract');
+Route::match(['get', 'post'], '/tp/fcs/initqueue', '\App\Models\Fcs\FcsController@initQueue');

@@ -132,16 +132,12 @@ class FcsField {
      * 进件接口字段转化
      */
     public static function getApplyParams($data) {
-        /*
-         * 缺少的字段
-         * course_open_time
-         */
-
         $lid = $data['id'];
         //日期类字段转格式
         $date_fields = array(
             'idcard_start', 'idcard_expire', 'birthday',
-            'entrance_time', 'work_entry_time', 'created_at'
+            'entrance_time', 'work_entry_time', 'created_at',
+            'class_start_date'
         );
         foreach ($date_fields as $v) {
             if (array_key_exists($v, $data) && $data[$v]) {
@@ -215,10 +211,10 @@ class FcsField {
             }
         }
         //已取消的字段，但是因为是必填，所以补充白图。
-        $data['training_contract_first'] = config('fcs.blank_pic');
-        $data['school_pic'] = config('fcs.blank_pic');
-        $data['idcard_person_pic'] = config('fcs.blank_pic');
-        $data['bank_account_pic'] = config('fcs.blank_pic');
+        $data['training_contract_first'] = FcsFtp::parsePath(config('fcs.blank_pic'));
+        $data['school_pic'] = FcsFtp::parsePath(config('fcs.blank_pic'));
+        $data['idcard_person_pic'] = FcsFtp::parsePath(config('fcs.blank_pic'));
+        $data['bank_account_pic'] = FcsFtp::parsePath(config('fcs.blank_pic'));
         //富登参数
         $fcs_params = array();
         //资金方信息
@@ -265,7 +261,7 @@ class FcsField {
         //征信授权书
         $fcs_params['attachment6'] = $data['contract_credit'];
         //学历
-        if (array_key_exists('degree', $data)) {
+        if (array_key_exists('highest_education', $data)) {
             $degree = array(
                 '初中及以下' => '初中',
                 '中专' => '中专/高中/技校',
@@ -275,30 +271,30 @@ class FcsField {
                 '硕士' => '硕士及以上学历',
                 '博士及以上' => '硕士及以上学历',
             );
-            $fcs_params['degree'] = $degree[$data['degree']];
+            $fcs_params['degree'] = $degree[$data['highest_education']];
         }
         //婚姻状况
-        if (array_key_exists('marriage_status', $data)) {
+        if (array_key_exists('marital_status', $data)) {
             $marriage = array(
-                '1' => '已婚', //已婚有子女
-                '2' => '已婚', //已婚无子女
-                '3' => '未婚', //未婚
-                '4' => '离婚', //离异
-                '5' => '未婚', //其他
+                '已婚有子女' => '已婚',
+                '已婚无子女' => '已婚',
+                '未婚' => '未婚',
+                '离异' => '离婚',
+                '其他' => '未婚',
             );
-            $fcs_params['maritalStatus'] = $marriage[$data['marriage_status']];
+            $fcs_params['maritalStatus'] = $marriage[$data['marital_status']];
         }
         //住房状况
-        if (array_key_exists('house_status', $data)) {
+        if (array_key_exists('housing_situation', $data)) {
             $house_status = array(
-                '1' => '宿舍', //宿舍
-                '2' => '租房', //租房
-                '3' => '与父母同住', //与父母同住
-                '4' => '与其他亲属同住', //与其他亲属同住
-                '5' => '自有住房', //自有住房
-                '6' => '其他', //其他
+                '宿舍' => '宿舍',
+                '租房' => '租房',
+                '与父母同住' => '与父母同住',
+                '与其他亲属同住' => '与其他亲属同住',
+                '自有住房' => '自有住房',
+                '其他' => '其他',
             );
-            $fcs_params['housingStatus'] = $house_status[$data['house_status']];
+            $fcs_params['housingStatus'] = $house_status[$data['housing_situation']];
         }
         //还款账户-开户银行
         $fcs_params['hkOpenBank'] = $data['bank_name'];
@@ -323,8 +319,8 @@ class FcsField {
         $data['work_contact'] = str_replace(array('-', '_', '#', '+', ' ', '(', ')', '（', '）'), '', $data['work_phone']);
         //富登-课栈字段对应关系
         $map = array(
-            'merchantAddrPhone' => 'contact_mobile', //机构地址电话
-            'merchantAddress' => 'reg_address', //机构地址
+            'merchantAddrPhone' => 'contact_phone', //机构地址电话
+            'merchantAddress' => 'register_address', //机构地址
             'coursePrice' => 'class_price', //课程价格
             'custName' => 'full_name', //姓名
             'cardNum' => 'identity_number', //身份证号
@@ -362,10 +358,10 @@ class FcsField {
             'liveAddressCity' => 'home_city', //现居住址-市
             'liveAddressBorough' => 'home_area', //现居住址-区
             'liveDetailAddress' => 'home_address', //现居住址-详细地址
-            'phoneId' => 'phoneid', //手机id
-            'deviceFingerprint' => 'phoneid', //设备指纹
+            'phoneId' => 'phone_id', //手机id
+            'deviceFingerprint' => 'phone_id', //设备指纹
             'applyCourse' => 'class_name', //课程名称
-            'courseStartDate' => 'course_open_time', //开课时间
+            'courseStartDate' => 'class_start_date', //开课时间
             'courseLength' => 'class_days', //课程时长
             'merchantName' => 'org_full_name', //机构名称
             'tkAccountName' => 'org_full_name', //提款账户-开户名
@@ -399,11 +395,14 @@ class FcsField {
             'applyPosition' => 'location',//申请时地理位置
             'monthlyIncome' => 'monthly_income',//月收入
             'locationDistance' => 'distance',//定位距离
+            'historyRejectNum' => 'historyRejectNum',//历史拒绝次数
         );
         foreach ($map as $fcs_k => $kz_k) {
             if (!isset($fcs_params[$fcs_k])) {
                 if (isset($data[$kz_k])) {
                     $fcs_params[$fcs_k] = $data[$kz_k];
+                } elseif (isset($data[$fcs_k])) {
+                    $fcs_params[$fcs_k] = $data[$fcs_k];
                 } else {
                     $fcs_params[$fcs_k] = '';
                 }
