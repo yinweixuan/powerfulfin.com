@@ -162,4 +162,15 @@ class LoanController extends AdminController
         }
     }
 
+    public function tools(Content $content)
+    {
+        return $content->header('订单工具')
+            ->description('订单业务处理')
+            ->breadcrumb(
+                ['text' => '订单管理', 'url' => 'loan/index'],
+                ['text' => '订单工具', 'url' => '']
+            )
+            ->row(view('admin.loan.tools'));
+    }
+
 }

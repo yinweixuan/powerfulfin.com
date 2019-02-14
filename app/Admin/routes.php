@@ -11,6 +11,8 @@ Route::group([
 ], function (Router $router) {
 
     $router->any('/', 'HomeController@index');
+    $router->any('/home/success', 'HomeController@success');
+    $router->any('/home/err', 'HomeController@err');
     /**
      * 用户管理
      */
@@ -53,6 +55,8 @@ Route::group([
     $router->any('/loan/info', 'LoanController@info');
     $router->any('/loan/bill', 'LoanController@bill');
     $router->any('/loan/contract', 'LoanController@contract');
+    $router->any('/loan/tools', 'LoanController@tools');
+    $router->any('/tools/loanstatus', 'ToolsController@loanStatus');
 
     /**
      * 后台公用地址选择器

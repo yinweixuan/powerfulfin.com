@@ -96,6 +96,9 @@ define('ERR_UPLOAD_CONTENT', '文件系统异常');
 define('ERR_GPS', 21);
 define('ERR_GPS_CONTENT', 'GPS定位获取异常');
 
+define('ERR_LOAN_INFO', 22);
+define('ERR_LOAN_INFO_CONTENT', '暂未获取订单详情');
+
 /**
  * 队列,2201~2299
  */

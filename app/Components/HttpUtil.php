@@ -480,4 +480,28 @@ class HttpUtil
     {
         return '';
     }
+
+    public static function adminErrHtml($message, $jumpUrl)
+    {
+        $url = 'http://' . DOMAIN_ADMIN . '/admin/home/err';
+        $info = [
+            'message' => $message,
+            'url' => $jumpUrl
+        ];
+
+        $url .= '?' . http_build_query($info);
+        return header("Location: {$url}");
+    }
+
+    public static function adminSuccessHtml($message, $jumpUrl)
+    {
+        $url = 'http://' . DOMAIN_ADMIN . '/admin/home/success';
+        $info = [
+            'message' => $message,
+            'url' => $jumpUrl
+        ];
+
+        $url .= '?' . http_build_query($info);
+        return header("Location: {$url}");
+    }
 }
