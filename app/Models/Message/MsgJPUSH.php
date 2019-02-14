@@ -24,9 +24,13 @@ class MsgJPUSH
      * @var array
      */
     public static $_extras_link = array(
-        'loan_detail' => 'kezhanwang://loandetail?id=',
-        'loan_sure' => 'kezhanwang://loansure?lid=',
-        'loan_sure_contract' => 'kezhanwang://loansurecontract?lid=',
+        'apply' => 'powerfulfin://apply?oid=', //立即申请：powerfulfin://apply?oid=123
+        'qrapply' => 'powerfulfin://qrapply', //扫码申请：powerfulfin://qrapply
+        'msg_list' => 'powerfulfin://msglist',   //消息列表：powerfulfin://msglist
+        'loan_detail' => 'powerfulfin://loandetail?lid=', //订单详情：powerfulfin://loandetail?lid=123
+        'loan_confirm' => 'powerfulfin://loanconfirm?lid=',//分期协议 / 征信授权确认：powerfulfin://loanconfirm?lid=123
+        'repay_list' => 'powerfulfin://repaylist?lid=', //还款计划表：powerfulfin://repaylist?lid=123
+        'repay' => 'powerfulfin://repay?lid=',//去还款：powerfulfin://repay?lid=123
     );
 
 
