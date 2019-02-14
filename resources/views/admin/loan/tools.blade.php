@@ -48,13 +48,13 @@
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-2 control-label">订单号</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="loan_id" placeholder="订单号">
+                                    <input type="number" class="form-control" name="lid" placeholder="订单号">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-2 control-label">修正状态</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control">
+                                    <select class="form-control" name="status">
                                         <option value="">请选择状态码</option>
                                         @foreach(\App\Models\Server\BU\BULoanStatus::getStatusDescriptionForAdmin() as $item=>$value)
                                             @if(in_array($item,[LOAN_1200_SURE_FILE,LOAN_2100_SCHOOL_REFUSE,LOAN_3100_PF_REFUSE,LOAN_5100_SCHOOL_REFUSE,LOAN_5200_SCHOOL_STOP,LOAN_5300_SCHOOL_PAUSE]))

@@ -39,7 +39,7 @@ class ToolsController extends AdminController
             }
 
             ARPFLoan::_update($lid, ['status' => $status]);
-            ARPFLoanLog::insertLog($loan, $status, '状态变更', ['status' => $status]);
+            ARPFLoanLog::insertLogForAdmin($loan, $status, '状态变更', ['status' => $status]);
             HttpUtil::adminSuccessHtml(ERR_OK_CONTENT, '/admin/loan/tools');
         } catch (PFException $exception) {
             HttpUtil::adminErrHtml($exception->getMessage(), '/admin/loan/tools');
