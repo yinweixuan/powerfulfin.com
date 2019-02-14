@@ -64,4 +64,9 @@ Route::group([
     $router->any('/area/province', 'AreaController@province');
     $router->any('/area/city', 'AreaController@city');
     $router->any('/area/area', 'AreaController@area');
+
+    /**
+     * 风控
+     */
+    $router->any('/verify/lists', 'VerifyController@lists');
 });

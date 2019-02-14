@@ -57,10 +57,9 @@ class LoanModel
             $query->where('ur.identity_number', 'like', '%' . $data['identity_number'] . '%');
         }
 
-        if (!empty($data['status']) && !is_numeric($data['status'])) {
+        if (!empty($data['status']) && is_numeric($data['status'])) {
             $query->where('l.status', $data['status']);
         }
-
         if (!empty($data['phone']) && CheckUtil::phone($data['phone'])) {
             $query->where('u.phone', $data['phone']);
         }
