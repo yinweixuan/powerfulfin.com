@@ -124,6 +124,17 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label">对接运营</label>
+                <div class="col-sm-9">
+                    <select name="docking_op" style="width: 100%">
+                        <option value="">请选择</option>
+                        @foreach($op as $n=>$m)
+                            <option value="{{ $m['id'] }}">{{ $m['name'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">金融产品</label>
                 <div class="col-sm-9">
                     <table id="example2" class="table table-bordered table-hover dataTable"

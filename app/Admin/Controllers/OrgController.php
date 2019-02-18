@@ -89,13 +89,14 @@ class OrgController extends AdminController
         $data = $_POST;
         $loanProducts = BULoanProduct::getAllLoanType(null, false, STATUS_SUCCESS);
         $business = AdminUsersModel::getBusinessUsers();
+        $op = AdminUsersModel::getOpUsers();
         $view = $content->header('新增商户')
             ->description('添加商户信息')
             ->breadcrumb(
                 ['text' => '商户列表', 'url' => '/admin/org/head'],
                 ['text' => '新增商户', 'url' => '/admin/org/addhead']
             )
-            ->row(view('admin.org.addhead', ['loanProducts' => $loanProducts, 'business' => $business]));
+            ->row(view('admin.org.addhead', ['loanProducts' => $loanProducts, 'business' => $business, 'op' => $op]));
 
         if (!empty($data)) {
             try {
@@ -187,6 +188,7 @@ class OrgController extends AdminController
             $type = Input::get('type');
             $loanProducts = BULoanProduct::getAllLoanType(null, false, STATUS_SUCCESS);
             $business = AdminUsersModel::getBusinessUsers();
+            $op = AdminUsersModel::getOpUsers();
             $view = $content->header('新增商户')
                 ->description('添加商户信息')
                 ->breadcrumb(
@@ -205,7 +207,7 @@ class OrgController extends AdminController
                 }
             } else {
                 $info = OrgModel::getOrgHeadInfo($hid);
-                return $view->row(view('admin.org.edithead', ['loanProducts' => $loanProducts, 'org_head' => $info['org_head'], 'loan_product' => $info['loanProducts'], 'business' => $business]));;
+                return $view->row(view('admin.org.edithead', ['loanProducts' => $loanProducts, 'org_head' => $info['org_head'], 'loan_product' => $info['loanProducts'], 'business' => $business, 'op' => $op]));;
             }
         } catch (PFException $exception) {
             return Handler::renderException($exception);
