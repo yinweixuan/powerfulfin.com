@@ -30,6 +30,7 @@ class AdminUsersModel
     {
         $sql = "select au.id,au.name,au.username from pf_admin_users au left join pf_admin_role_users aru on aru.user_id=au.id where aru.role_id=2";
         $list = DB::select($sql);
+        $list = ArrayUtil::addKeyToArray($list, 'id');
         return $list;
     }
 

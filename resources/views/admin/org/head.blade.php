@@ -110,6 +110,7 @@
                                     <td>联系人</td>
                                     <td>联系电话</td>
                                     <td>状态</td>
+                                    <td>商务</td>
                                     <td>创建时间</td>
                                     <td>操作</td>
                                 </tr>
@@ -137,6 +138,7 @@
                                                 不可用
                                             @endif
                                         </td>
+                                        <td>{{ $business[$org['docking_business']]['name'] }}</td>
                                         <td>{{ date('Y-m-d',strtotime($org['create_time'])) }}</td>
                                         <td>
                                             <a href="/admin/org/addorg?hid={{ $org['hid'] }}"
@@ -159,6 +161,7 @@
                                     <td>联系人</td>
                                     <td>联系电话</td>
                                     <td>状态</td>
+                                    <td>商务</td>
                                     <td>创建时间</td>
                                     <td>操作</td>
                                 </tr>

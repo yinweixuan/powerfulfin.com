@@ -215,6 +215,7 @@ class OrgModel
             'credit_line',
             'security_deposit',
             'loan_product',
+            'docking_business'
         ];
 
         foreach ($params as $param) {

@@ -10,6 +10,7 @@ namespace App\Admin\Controllers;
 
 
 use App\Admin\AdminController;
+use App\Admin\Models\AdminUsersModel;
 use App\Admin\Models\OrgModel;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFAreas;
@@ -72,6 +73,7 @@ class OrgController extends AdminController
             'legal_person_idcard' => Input::get('legal_person_idcard'),
         ];
         $data['info'] = OrgModel::getOrgHeadList($data);
+        $data['business'] = AdminUsersModel::getBusinessUsers();
         admin_toastr('查询成功...', 'success');
         return $content
             ->header('商户列表')
@@ -86,13 +88,14 @@ class OrgController extends AdminController
     {
         $data = $_POST;
         $loanProducts = BULoanProduct::getAllLoanType(null, false, STATUS_SUCCESS);
+        $business = AdminUsersModel::getBusinessUsers();
         $view = $content->header('新增商户')
             ->description('添加商户信息')
             ->breadcrumb(
                 ['text' => '商户列表', 'url' => '/admin/org/head'],
                 ['text' => '新增商户', 'url' => '/admin/org/addhead']
             )
-            ->row(view('admin.org.addhead', ['loanProducts' => $loanProducts]));
+            ->row(view('admin.org.addhead', ['loanProducts' => $loanProducts, 'business' => $business]));
 
         if (!empty($data)) {
             try {
@@ -183,6 +186,7 @@ class OrgController extends AdminController
             }
             $type = Input::get('type');
             $loanProducts = BULoanProduct::getAllLoanType(null, false, STATUS_SUCCESS);
+            $business = AdminUsersModel::getBusinessUsers();
             $view = $content->header('新增商户')
                 ->description('添加商户信息')
                 ->breadcrumb(
@@ -201,7 +205,7 @@ class OrgController extends AdminController
                 }
             } else {
                 $info = OrgModel::getOrgHeadInfo($hid);
-                return $view->row(view('admin.org.edithead', ['loanProducts' => $loanProducts, 'org_head' => $info['org_head'], 'loan_product' => $info['loanProducts']]));;
+                return $view->row(view('admin.org.edithead', ['loanProducts' => $loanProducts, 'org_head' => $info['org_head'], 'loan_product' => $info['loanProducts'], 'business' => $business]));;
             }
         } catch (PFException $exception) {
             return Handler::renderException($exception);

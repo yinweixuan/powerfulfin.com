@@ -87,7 +87,6 @@
                 <div class="col-sm-9">
                     <select name="business_type" style="width: 100%">
                         <option value="">请选择</option>
-                        IT、语言、财会、学历、驾校、健身、K12、其他
                         <option value="IT">IT</option>
                         <option value="语言">语言</option>
                         <option value="财会">财会</option>
@@ -111,6 +110,17 @@
                 <div class="col-sm-9 input-group">
                     <input type="text" class="form-control" placeholder="请填写保证金比例" value="" name="security_deposit">
                     <span class="input-group-addon">%</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">对接商务</label>
+                <div class="col-sm-9">
+                    <select name="docking_business" style="width: 100%">
+                        <option value="">请选择</option>
+                        @foreach($business as $k=>$v)
+                            <option value="{{ $v['id'] }}">{{ $v['name'] }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="form-group">

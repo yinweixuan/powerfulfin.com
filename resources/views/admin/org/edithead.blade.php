@@ -130,6 +130,18 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label">对接商务</label>
+                <div class="col-sm-9">
+                    <select name="docking_business" style="width: 100%">
+                        <option value="">请选择</option>
+                        @foreach($business as $k=>$v)
+                            <option value="{{ $v['id'] }}"
+                                    @if($v['id'] == $org_head['docking_business']) selected @endif>{{ $v['name'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">金融产品</label>
                 <div class="col-sm-9">
                     <table id="example2" class="table table-bordered table-hover dataTable"
