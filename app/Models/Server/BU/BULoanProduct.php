@@ -62,10 +62,6 @@ class BULoanProduct
                 $tmp = $config[$id];
                 $nameAndDesp = self::getLoanTypeNameAndDesp($tmp);
                 $tmp = array_merge($tmp, $nameAndDesp);
-
-                if ($status) {
-                    $tmp['name'] .= "({$tmp['cate']})";
-                }
                 $ret[$id] = $tmp;
             }
         }
