@@ -89,6 +89,14 @@
                             <td>{{ \App\Models\Calc\CalcMoney::yuanToFen($org_head['security_deposit']) }}%</td>
                         </tr>
                         <tr>
+                            <td>对接商务</td>
+                            <td>{{ $business[$org_head['docking_business']]['name'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>对接运营</td>
+                            <td>{{ $op[$org_head['docking_op']]['name'] }}</td>
+                        </tr>
+                        <tr>
                             <td>金融产品</td>
                             <td>
                                 <table class="table table-bordered table-hover dataTable"

@@ -332,7 +332,7 @@ class OrgModel
         $loanProducts = [];
         $orgHead['loan_product'] = !empty($orgHead['loan_product']) ? explode(',', $orgHead['loan_product']) : [];
         if ($orgHead['loan_product']) {
-            $loanProducts = BULoanProduct::getLoanTypeByIds($loanProducts);
+            $loanProducts = BULoanProduct::getLoanTypeByIds($orgHead['loan_product']);
         }
 
         foreach ($orgs as &$org) {
@@ -343,7 +343,9 @@ class OrgModel
         $info = [
             'org_head' => $orgHead,
             'orgs' => $orgs,
-            'loanProducts' => $loanProducts
+            'loanProducts' => $loanProducts,
+            'business' => AdminUsersModel::getBusinessUsers(),
+            'op' => AdminUsersModel::getOpUsers()
         ];
         return $info;
     }
