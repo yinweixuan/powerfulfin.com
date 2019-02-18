@@ -37,18 +37,19 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
-        $credentials = $request->only([$this->username(), 'password']);
+        $credentials = $request->only([$this->username(), 'password', 'captcha']);
 
         /** @var \Illuminate\Validation\Validator $validator */
         $validator = Validator::make($credentials, [
-            $this->username()   => 'required',
-            'password'          => 'required',
+            $this->username() => 'required',
+            'password' => 'required',
+            'captcha' => 'required|captcha'
         ]);
 
         if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
         }
-
+        unset($credentials['captcha']);
         if ($this->guard()->attempt($credentials)) {
             return $this->sendLoginResponse($request);
         }

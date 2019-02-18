@@ -67,9 +67,11 @@
                         </label><br>
                     @endforeach
                 @endif
-
-                <input type="tt-text" class="form-control" placeholder="验证码" name="captcha">{!! captcha_img() !!}
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                <div class="input-group">
+                    <input type="text" class="form-control" style="width: 58%" placeholder="验证码" name="captcha">
+                    &nbsp;&nbsp;
+                    {!! captcha_img() !!}
+                </div>
             </div>
 
             <div class="row">
