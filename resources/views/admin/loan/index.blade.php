@@ -181,18 +181,23 @@
                                         <td>￥{{ $item['borrow_money'] }}</td>
                                         <td>{{ $loan_product[$item['id']]['loan_product_name'] }}</td>
                                         <td>{{ \App\Models\Server\BU\BULoanStatus::getStatusDescriptionForAdmin($item['status']) }}</td>
-                                        <td>{{ $item['create_time'] }}</td>
-                                        <td>{{ $item['loan_time'] }}</td>
+                                        <td>{{ date('m-d H:i',$item['create_time']) }}</td>
+                                        <td>{{ !empty($item['loan_time'])? date('Y-m-d',$item['loan_time']):'' }}</td>
                                         <td>
-                                            <a href="/admin/loan/info?lid={{ $item['id'] }}">
+                                            <a href="{{ admin_base_path('loan/info') }}?lid={{ $item['id'] }}">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a href="/admin/loan/bill?lid={{ $item['id'] }}">
-                                                <i class="fa fa-bars"></i>
-                                            </a>
-                                            <a href="/admin/loan/contract?lid={{ $item['id'] }}" target="_blank">
-                                                <i class="fa fa-cloud-download"></i>
-                                            </a>
+                                            @if(in_array($item['status'],[LOAN_10000_REPAY,LOAN_11100_OVERDUE,LOAN_12000_DROP,LOAN_13000_EARLY_FINISH]))
+                                                <a href="{{ admin_base_path('loan/bill') }}?lid={{ $item['id'] }}">
+                                                    <i class="fa fa-bars"></i>
+                                                </a>
+                                            @endif
+                                            @if(in_array($item['status'],[LOAN_10000_REPAY,LOAN_11100_OVERDUE,LOAN_12000_DROP,LOAN_13000_EARLY_FINISH]))
+                                                <a href="{{ admin_base_path('loan/contract') }}?lid={{ $item['id'] }}"
+                                                   target="_blank">
+                                                    <i class="fa fa-cloud-download"></i>
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
