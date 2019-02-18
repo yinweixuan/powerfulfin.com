@@ -70,7 +70,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" style="width: 58%" placeholder="验证码" name="captcha">
                     &nbsp;&nbsp;
-                    {!! captcha_img('inverse') !!}
+                    {!! captcha_img() !!}
                 </div>
             </div>
 
