@@ -31,6 +31,7 @@ class AliyunOSSUtil {
     const ENDPOINT_INNER = 'http://oss-cn-zhangjiakou-internal.aliyuncs.com';
 
     public static $oss_client = null;
+    public static $oss_client_out = null;
 
     /**
      * 获取访问域名
@@ -61,6 +62,12 @@ class AliyunOSSUtil {
      * 获取oss client
      */
     public static function getOSSClient($out = false) {
+        if ($out) {
+            if (!is_object(self::$oss_client_out)) {
+                self::$oss_client_out = new \OSS\OssClient(env('ALIYUN_OSS_ACCESS_KEY_ID'), env('ALIYUN_OSS_ACCESS_KEY_SECRET'), self::getEndpoint($out));
+            }
+            return self::$oss_client_out;
+        }
         if (!is_object(self::$oss_client)) {
             self::$oss_client = new \OSS\OssClient(env('ALIYUN_OSS_ACCESS_KEY_ID'), env('ALIYUN_OSS_ACCESS_KEY_SECRET'), self::getEndpoint($out));
         }
