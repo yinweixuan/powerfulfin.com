@@ -1,4 +1,4 @@
-<div class="box box-danger collapsed-box">
+<div class="box box-danger">
     <div class="box-header with-border">
         <h3 class="box-title">搜索</h3>
         <div class="box-tools pull-right">
@@ -67,14 +67,14 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>银行列表:</label>
+                        <label>风控人员:</label>
                         <select class="form-control" style="width: 100%;"
-                                tabindex="-1" aria-hidden="true" name="bank_code">
+                                tabindex="-1" aria-hidden="true" name="check_user">
                             <option value="0">请选择...</option>
-                            @foreach(\App\Models\Server\BU\BUBanks::getBanksInfo() as $key=>$value)
-                                <option value="{{$value['bank_code']}}"
-                                        @if($bank_code == $value['bank_code']) selected @endif>
-                                    {{$value['bank_code']}}-{{ $value['bankname'] }}</option>
+                            @foreach($check_users as $key=>$value)
+                                <option value="{{$value['id']}}"
+                                        @if($check_user == $value['id']) selected @endif>
+                                    {{$value['id']}}-{{ $value['name'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -99,6 +99,7 @@
         </div>
         <div class="box-footer">
             <input type="submit" class="btn btn-sm btn-danger" value='查询'/>
+            <input id="btnaudit" type="button" class="btn btn-sm btn-danger" value="抢单">
         </div>
     </form>
 </div>
@@ -124,7 +125,7 @@
                                     <th>金融产品</th>
                                     <th>状态</th>
                                     <th>申请时间</th>
-                                    <th>放款时间</th>
+                                    <th>抢单</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -134,22 +135,25 @@
                                         <td>{{ $item['id'] }}</td>
                                         <td>{{ \App\Models\ActiveRecord\ARPFLoanProduct::$resourceCompanySimple[$item['resource']] }}</td>
                                         <td>{{ $item['org_name'] }}</td>
-                                        <td>{{ $item['full_name'] }}({{ $item['uid'] }}
-                                            )<br/>{{ $item['identity_number'] }}</td>
+                                        <td>{{ $item['full_name'] }}</td>
                                         <td>￥{{ $item['borrow_money'] }}</td>
                                         <td>{{ $loan_product[$item['id']]['loan_product_name'] }}</td>
                                         <td>{{ \App\Models\Server\BU\BULoanStatus::getStatusDescriptionForAdmin($item['status']) }}</td>
-                                        <td>{{ $item['create_time'] }}</td>
-                                        <td>{{ $item['loan_time'] }}</td>
+                                        <td>{{ date('m-d H:i',$item['create_time']) }}</td>
+                                        <td>
+                                            @if(empty($item['auditer']))
+                                                @if(array_key_exists(\Encore\Admin\Facades\Admin::user()->id ,$check_users))
+                                                    <input type="checkbox" value="{{ $item['id'] }}" class="auditor">
+                                                @else
+                                                    无权抢单
+                                                @endif
+                                            @else
+                                                {{ $check_users[$item['auditer']]['name'] }}
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="/admin/loan/info?lid={{ $item['id'] }}">
                                                 <i class="fa fa-eye"></i>
-                                            </a>
-                                            <a href="/admin/loan/bill?lid={{ $item['id'] }}">
-                                                <i class="fa fa-bars"></i>
-                                            </a>
-                                            <a href="/admin/loan/contract?lid={{ $item['id'] }}" target="_blank">
-                                                <i class="fa fa-cloud-download"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -165,7 +169,7 @@
                                     <th>金融产品</th>
                                     <th>状态</th>
                                     <th>申请时间</th>
-                                    <th>放款时间</th>
+                                    <th>抢单</th>
                                     <th>操作</th>
                                 </tr>
                                 </tfoot>
@@ -184,4 +188,36 @@
         </div>
     </div>
 </div>
-
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $('#btnaudit').click(function () {
+            var ids = [];
+            $('.auditor:checked').each(function () {
+                ids.push(this.value);
+            });
+            if (ids.length == 0) {
+                alert("请选中要抢的订单");
+                return false;
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/admin/verify/collect',
+                data: {ids: ids.join(',')},
+                dataType: 'json',
+                success: function (responseData) {
+                    if (responseData.code == 0) {
+                        alert('操作成功.锁定订单:' + responseData.data.ids);
+                        document.location.reload();
+                        return true;
+                    } else if (responseData.msg) {
+                        alert(responseData.msg);
+                        return false;
+                    } else {
+                        alert('未知错误');
+                        return false;
+                    }
+                }
+            });
+        });
+    });
+</script>

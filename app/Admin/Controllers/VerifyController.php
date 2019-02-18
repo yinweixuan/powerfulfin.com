@@ -10,7 +10,12 @@ namespace App\Admin\Controllers;
 
 
 use App\Admin\AdminController;
+use App\Admin\Models\AdminUsersModel;
 use App\Admin\Models\LoanModel;
+use App\Admin\Models\VerifyModel;
+use App\Components\ArrayUtil;
+use App\Components\OutputUtil;
+use App\Components\PFException;
 use App\Models\Server\BU\BULoanProduct;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
@@ -33,7 +38,7 @@ class VerifyController extends AdminController
             'phone' => Input::get('phone', ''),
             'resource' => Input::get('resource', ''),
             'hid' => Input::get('hid', ''),
-            'bank_code' => Input::get('bank_code', ''),
+            'check_user' => Input::get('check_user', ''),
         ];
         $data['info'] = LoanModel::getLoanList($data);
 
@@ -42,11 +47,28 @@ class VerifyController extends AdminController
             $loanProduct = array_shift($loanProducts);
             $data['loan_product'][$datum['id']]['loan_product_name'] = $loanProduct['name'];
         }
+        $checkUsers = AdminUsersModel::getCheckUsers();
+        $data['check_users'] = $checkUsers;
         return $content->header('审核列表')
             ->description('审核订单信息列表')
             ->breadcrumb(
                 ['text' => '审核列表', 'url' => '/admin/loan']
             )
             ->row(view('admin.verify.lists', $data));
+    }
+
+    /**
+     * 抢单
+     */
+    public function collect()
+    {
+        $ids = Input::get('ids', '');
+        $ids = ArrayUtil::trimArray(explode(',', $ids));
+        try {
+            $modifyIds = VerifyModel::collect($ids);
+            OutputUtil::info(ERR_OK, '', array('ids' => implode(',', $modifyIds)));
+        } catch (PFException $exception) {
+            OutputUtil::err($exception->getMessage(), ERR_SYS_PARAM);
+        }
     }
 }

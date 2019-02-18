@@ -80,6 +80,10 @@ class LoanModel
             $query->where('ub.bank_code', $data['bank_code']);
         }
 
+        if (!empty($data['check_user'])) {
+            $query->where('l.auditer', $data['check_user']);
+        }
+
         $query->orderByDesc('l.id');
         $info = $query->paginate(10, ['l.id'], 'page', $data['page'])
             ->appends($data);

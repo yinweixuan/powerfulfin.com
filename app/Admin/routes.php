@@ -69,4 +69,5 @@ Route::group([
      * 风控
      */
     $router->any('/verify/lists', 'VerifyController@lists');
+    $router->any('/verify/collect', 'VerifyController@collect');
 });
