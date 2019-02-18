@@ -152,7 +152,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="/admin/loan/info?lid={{ $item['id'] }}">
+                                            <a href="{{ admin_base_path('verify/info') }}?lid={{ $item['id'] }}">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </td>
