@@ -34,6 +34,7 @@
                 <li class="active"><a href="#activity" data-toggle="tab">订单信息</a></li>
                 <li><a href="#picinfo" data-toggle="tab">图片信息</a></li>
                 <li><a href="#phonebook" data-toggle="tab">通讯录</a></li>
+                <li><a href="#loanbill" data-toggle="tab">还款计划表</a></li>
                 <li><a href="#timeline" data-toggle="tab">操作记录</a></li>
             </ul>
             <div class="tab-content">
@@ -383,6 +384,29 @@
                                 </tr>
                             @endforeach
                         @endif
+                    </table>
+                </div>
+                <div class="tab-pane" id="loanbill">
+                    <h3>以最终放款结果为准，此还款计划表仅做临时参考。</h3>
+                    <table class="table table-hover table-bordered table-striped ">
+                        <thead>
+                        <tr style="white-space: nowrap;">
+                            <td>账期</td>
+                            <td>还款日</td>
+                            <td>还款总额</td>
+                            <td>本金</td>
+                            <td>手续费</td>
+                        </tr>
+                        </thead>
+                        @foreach($loan_bill['repay'] as $k=>$v)
+                            <tr>
+                                <td>{{ substr($v['repay'],0,6) }}</td>
+                                <td>{{ substr($v['repay'],0,4).'-'.substr($v['repay'],4,2).'-'.substr($v['repay'],6) }}</td>
+                                <td>{{ $v['total'] }}</td>
+                                <td>{{ $v['principal'] }}</td>
+                                <td>{{ $v['interest'] }}</td>
+                            </tr>
+                        @endforeach
                     </table>
                 </div>
                 <div class="tab-pane" id="timeline">

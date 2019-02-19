@@ -152,9 +152,13 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ admin_base_path('verify/info') }}?lid={{ $item['id'] }}">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
+                                            {{--@if(\Encore\Admin\Facades\Admin::user()->id == $item['auditer'])--}}
+                                                <a href="{{ admin_base_path('verify/info') }}?lid={{ $item['id'] }}">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            {{--@else--}}
+                                                {{--请抢单--}}
+                                            {{--@endif--}}
                                         </td>
                                     </tr>
                                 @endforeach

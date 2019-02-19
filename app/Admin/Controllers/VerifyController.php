@@ -20,6 +20,7 @@ use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFAdminUsers;
 use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFLoanLog;
+use App\Models\Calc\CalcLoanBill;
 use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BULoanProduct;
 use Encore\Admin\Layout\Content;
@@ -140,6 +141,8 @@ class VerifyController extends AdminController
             $school = ARPFAreas::getArea($loan['work']['school_area']);
             $loan['work']['school_area'] = str_replace(',', '', $school['joinname']) . $loan['work']['school_area'];
         }
+        $loanbill = CalcLoanBill::createLoanBill($loan['base']['loan_product'], date('Y-m-d H:i:s'), $loan['base']['borrow_money']);
+        $loan['loan_bill'] = $loanbill;
 
         return $content->header('订单详情')
             ->description($loan['real']['full_name'])
@@ -147,6 +150,6 @@ class VerifyController extends AdminController
                 ['text' => '订单管理', 'url' => 'loan/index'],
                 ['text' => '订单详情', 'url' => 'loan/info?lid=' . $lid]
             )
-            ->row(view('admin.loan.info', $loan));
+            ->row(view('admin.verify.info', $loan));
     }
 }
