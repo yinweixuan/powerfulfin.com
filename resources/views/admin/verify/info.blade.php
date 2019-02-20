@@ -24,6 +24,7 @@
                             期</a>
                     </li>
                 </ul>
+                <a href="{{ admin_base_path('verify/verify') }}?lid={{ $base['id'] }}" class="btn btn-block btn-danger">审核</a>
             </div>
         </div>
     </div>

@@ -15,6 +15,7 @@ use App\Admin\Models\LoanModel;
 use App\Admin\Models\VerifyModel;
 use App\Components\AliyunOSSUtil;
 use App\Components\ArrayUtil;
+use App\Components\HttpUtil;
 use App\Components\OutputUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFAdminUsers;
@@ -23,6 +24,7 @@ use App\Models\ActiveRecord\ARPFLoanLog;
 use App\Models\Calc\CalcLoanBill;
 use App\Models\Server\BU\BULoanApply;
 use App\Models\Server\BU\BULoanProduct;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
 
@@ -33,6 +35,11 @@ class VerifyController extends AdminController
         parent::__construct();
     }
 
+    /**
+     * 订单列表
+     * @param Content $content
+     * @return Content
+     */
     public function lists(Content $content)
     {
         $data = [
@@ -78,6 +85,12 @@ class VerifyController extends AdminController
         }
     }
 
+    /**
+     * 订单详情
+     * @param Content $content
+     * @return Content
+     * @throws PFException
+     */
     public function info(Content $content)
     {
         $lid = Input::get('lid');
@@ -106,7 +119,6 @@ class VerifyController extends AdminController
                 foreach ($tmp as $item) {
                     $picArr[$pic[$i]][] = AliyunOSSUtil::getAccessUrl(AliyunOSSUtil::getLoanBucket(), $item);
                 }
-
             }
         }
 
@@ -151,5 +163,66 @@ class VerifyController extends AdminController
                 ['text' => '订单详情', 'url' => 'loan/info?lid=' . $lid]
             )
             ->row(view('admin.verify.info', $loan));
+    }
+
+    public function verify(Content $content)
+    {
+        $lid = Input::get('lid');
+        if (empty($lid)) {
+            HttpUtil::adminErrHtml(ERR_SYS_PARAM_CONTENT, admin_base_path('verify/lists'));
+        }
+
+        $loan = BULoanApply::getDetailById($lid);
+        if (empty($loan)) {
+            HttpUtil::adminErrHtml(ERR_LOAN_INFO_CONTENT, admin_base_path('verify/lists'));
+        }
+
+        if ($loan['base']['status'] != LOAN_2000_SCHOOL_CONFIRM) {
+            HttpUtil::adminErrHtml('订单审核状态异常', admin_base_path('verify/info?lid=' . $lid));
+        }
+
+        if ($loan['base']['auditer'] != Admin::user()->id) {
+            HttpUtil::adminErrHtml('请勿审核他人订单', admin_base_path('verify/info?lid=' . $lid));
+        }
+
+        return $content->header('订单审核')
+            ->description($loan['real']['full_name'])
+            ->breadcrumb(
+                ['text' => '订单管理', 'url' => 'loan/index'],
+                ['text' => '订单详情', 'url' => 'loan/info?lid=' . $lid]
+            )
+            ->row(view('admin.verify.verify', $loan));
+
+    }
+
+    public function check()
+    {
+        $lid = Input::get('lid');
+        $result = Input::get('result');
+        $remarks = Input::get('remarks');
+
+        if (empty($lid) || empty($result)) {
+            HttpUtil::adminErrHtml(ERR_SYS_PARAM_CONTENT, admin_base_path('verify/lists'));
+        }
+
+        $loan = BULoanApply::getDetailById($lid);
+        if (empty($loan)) {
+            HttpUtil::adminErrHtml(ERR_LOAN_INFO_CONTENT, admin_base_path('verify/lists'));
+        }
+
+        if ($loan['base']['status'] != LOAN_2000_SCHOOL_CONFIRM) {
+            HttpUtil::adminErrHtml('订单审核状态异常', admin_base_path('verify/info?lid=' . $lid));
+        }
+
+        if ($loan['base']['auditer'] != Admin::user()->id) {
+            HttpUtil::adminErrHtml('请勿审核他人订单', admin_base_path('verify/info?lid=' . $lid));
+        }
+
+        try {
+            VerifyModel::checkLoan($loan, $result, $remarks);
+            HttpUtil::adminSuccessHtml('订单审核完成', admin_base_path('verify/lists'));
+        } catch (PFException $exception) {
+            HttpUtil::adminErrHtml('订单审核状态异常', admin_base_path('verify/verify?lid=' . $lid));
+        }
     }
 }

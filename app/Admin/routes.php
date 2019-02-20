@@ -71,4 +71,6 @@ Route::group([
     $router->any('/verify/lists', 'VerifyController@lists');
     $router->any('/verify/collect', 'VerifyController@collect');
     $router->any('/verify/info', 'VerifyController@info');
+    $router->any('/verify/verify', 'VerifyController@verify');
+    $router->any('/verify/check', 'VerifyController@check');
 });

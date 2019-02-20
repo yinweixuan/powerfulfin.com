@@ -12,6 +12,7 @@ namespace App\Admin\Models;
 use App\Components\ArrayUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFLoan;
+use App\Models\ActiveRecord\ARPFLoanLog;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\DB;
 
@@ -42,6 +43,48 @@ class VerifyModel
         $res = DB::select($sql);
         $ret = ArrayUtil::getSomeKey($res, 'id');
         return $ret;
+    }
+
+    /**
+     * 审核操作
+     * @param array $loan
+     * @param $result
+     * @param $remarks
+     * @return bool
+     * @throws PFException
+     */
+    public static function checkLoan(array $loan, $result, $remarks)
+    {
+        switch ($result) {
+            case 1:
+                $update = ['status' => LOAN_3000_PF_CONFIRM];
+                break;
+            case 2:
+                $update = ['status' => LOAN_3100_PF_REFUSE];
+                break;
+            case 3:
+                $update = ['status' => LOAN_14000_FOREVER_REFUSE];
+                break;
+            case 4:
+            case 5:
+                $update = [];
+                break;
+            default:
+                throw new PFException('审核结果异常', ERR_SYS_PARAM);
+                break;
+        }
+
+        $update['audit_opinion'] = $remarks;
+
+        if ($result == 4) {
+            ARPFLoan::_update($loan['base']['id'], $update);
+        } else if ($result == 5) {
+            ARPFLoan::_update($loan['base']['id'], ['audit_opinion' => '', 'auditer' => 0]);
+        } else {
+            ARPFLoan::_update($loan['base']['id'], $update);
+            ARPFLoanLog::insertLogForAdmin($loan['base'], $update['status'], '审核结果', $update);
+        }
+        return true;
     }
 
 }
