@@ -73,10 +73,10 @@
                     //把拒绝的审批状态放到后面来处理
                     $rejectLoans = array();
                     foreach ($loan as $item) {
-                    if (in_array($item['status'], array(111, 130, 360, 331,))) {
+                    if (in_array($item['status'], array(LOAN_11100_OVERDUE, LOAN_13000_EARLY_FINISH))) {
                         continue;
                     }
-                    if (in_array($item['status'], array(21, 31, 41,))) {
+                    if (in_array($item['status'], array(LOAN_2100_SCHOOL_REFUSE, LOAN_3100_PF_REFUSE, LOAN_4100_P2P_REFUSE,))) {
                         $rejectLoans[] = $item;
                         continue;
                     }
