@@ -51,12 +51,13 @@ Route::group([
     /**
      * 订单管理
      */
-    $router->any('/loan/index', 'LoanController@index');
-    $router->any('/loan/info', 'LoanController@info');
-    $router->any('/loan/bill', 'LoanController@bill');
-    $router->any('/loan/contract', 'LoanController@contract');
-    $router->any('/loan/tools', 'LoanController@tools');
-    $router->any('/tools/loanstatus', 'ToolsController@loanStatus');
+    $router->any('/loan/index', 'LoanController@index');    //订单列表
+    $router->any('/loan/info', 'LoanController@info');  //订单信息
+    $router->any('/loan/bill', 'LoanController@bill');  //还款计划表
+    $router->any('/loan/contract', 'LoanController@contract');  //合同下载
+    $router->any('/loan/tools', 'LoanController@tools');    //订单工具
+    $router->any('/tools/loanstatus', 'ToolsController@loanStatus');    //工具类：更新订单状态
+    $router->any('/loan/summary', 'LoanController@summary');  //订单汇总
 
     /**
      * 后台公用地址选择器

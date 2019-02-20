@@ -173,4 +173,16 @@ class LoanController extends AdminController
             ->row(view('admin.loan.tools'));
     }
 
+    public function summary(Content $content)
+    {
+        $info = LoanModel::summary();
+        return $content->header('订单汇总')
+            ->description('汇总信息')
+            ->breadcrumb(
+                ['text' => '订单汇总', 'url' => 'loan/summary']
+            )
+            ->row(view('admin.loan.summary', $info));
+
+    }
+
 }
