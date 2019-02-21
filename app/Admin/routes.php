@@ -74,4 +74,10 @@ Route::group([
     $router->any('/verify/info', 'VerifyController@info');
     $router->any('/verify/verify', 'VerifyController@verify');
     $router->any('/verify/check', 'VerifyController@check');
+
+    /**
+     * 贷后管理
+     */
+    $router->any('/repay/lists', 'RepayController@lists');
+    $router->any('/repay/overdue', 'RepayController@overdue');
 });
