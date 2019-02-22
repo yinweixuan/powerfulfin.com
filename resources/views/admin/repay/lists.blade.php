@@ -191,7 +191,9 @@
                                 </tfoot>
                             </table>
                         </div>
-                        {{ $info->links() }}
+                        @if(!empty($info))
+                            {{ $info->links() }}
+                        @endif
                     </div>
                 </div>
             </div>
