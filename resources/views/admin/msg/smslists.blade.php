@@ -86,6 +86,7 @@
                                 <tfoot>
                                 <tr>
                                     <th>ID</th>
+                                    <th>UID</th>
                                     <th>手机号</th>
                                     <th>内容</th>
                                     <th>发送时间</th>
