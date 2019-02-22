@@ -80,4 +80,9 @@ Route::group([
      */
     $router->any('/repay/lists', 'RepayController@lists');
     $router->any('/repay/overdue', 'RepayController@overdue');
+
+    /**
+     * 消息管理
+     */
+    $router->any('/msg/smslists', 'MsgController@smslists');
 });
