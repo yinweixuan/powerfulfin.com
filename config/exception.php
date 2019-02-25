@@ -99,6 +99,9 @@ define('ERR_GPS_CONTENT', 'GPS定位获取异常');
 define('ERR_LOAN_INFO', 22);
 define('ERR_LOAN_INFO_CONTENT', '暂未获取订单详情');
 
+define('ERR_VERIFY_CODE_TOO_FREQUENT', 23);
+define('ERR_VERIFY_CODE_TOO_FREQUENT_CONTENT', '短信验证码发送过于频繁，请稍后再试');
+
 /**
  * 队列,2201~2299
  */

@@ -69,14 +69,14 @@ class VerifyCode
         }
         $limitKey = 'PHONE_CODE_LIMIT_' . $phone . '_' . md5(ip2long($ip));
         if (Redis::exists($limitKey)) {
-            throw new PFException(ERR_VERIFY_CODE_CONTENT . ":", ERR_VERIFY_CODE);
+            throw new PFException(ERR_VERIFY_CODE_TOO_FREQUENT_CONTENT . ":", ERR_VERIFY_CODE_TOO_FREQUENT);
         }
         $redisKey = 'PHONE_CODE_' . $phone . '_' . md5(ip2long($ip));
         if (Redis::exists($redisKey)) {
             $params = json_decode(Redis::get($redisKey), true);
             if ($params['number'] > 5) {
                 Redis::set($limitKey, 1, 30 * 60);
-                throw new PFException(ERR_VERIFY_CODE_CONTENT, ERR_VERIFY_CODE);
+                throw new PFException(ERR_VERIFY_CODE_TOO_FREQUENT_CONTENT, ERR_VERIFY_CODE_TOO_FREQUENT);
             } else {
                 $params['number']++;
                 Redis::set($redisKey, json_encode($params), 5 * 60);
