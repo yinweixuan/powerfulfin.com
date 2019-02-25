@@ -450,7 +450,7 @@
  binding="tns:FCS_spcKeZhan_spcLoan_spcRepayment_spcschedule_spcWS"
  name="FCS_spcKeZhan_spcLoan_spcRepayment_spcschedule_spcWS"
 ><soap:address
- location="http://10.200.201.36/eai_chs/start.swe?SWEExtSource=WebService&amp;SWEExtCmd=Execute&amp;WSSOAP=1;&amp;UserName=EAIUSER&amp;Password=EAIUSER"
+ location="http://10.200.201.36/eai_anon_chs/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
 ></soap:address
 ></port
 ></service

@@ -26,7 +26,17 @@ class FcsSoap {
                 }
             }
             $sorted_params = self::prepare4test($func, $sorted_params);
+            $wsse = 'http://schemas.xmlsoap.org/ws/2002/07/secext';
+            $token_xml = '<wsse:Security xmlns:wsse="http://schemas.xmlsoap.org/ws/2002/07/secext">';
+            $token_xml .= '<wsse:UsernameToken xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility">';
+            $token_xml .= '<wsse:Username>' . config('fcs.soap_username') . '</wsse:Username>';
+            $token_xml .= '<wsse:Password Type="wsse:PasswordText">' . config('fcs.soap_password') . '</wsse:Password>';
+            $token_xml .= '</wsse:UsernameToken>';
+            $token_xml .= '</wsse:Security>';
+            $user_token = new \SoapVar($token_xml, XSD_ANYXML);
+            $soap_header = new \SoapHeader($wsse, 'Security', $user_token, false);
             $client = new \SOAPClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE,));
+            $client->__setSoapHeaders($soap_header);
             $time1 = microtime(true);
             $r = $client->__soapCall($func, $sorted_params);
         } catch (\SoapFault $sf) {

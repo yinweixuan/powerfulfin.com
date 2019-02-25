@@ -137,7 +137,8 @@ class FcsField {
         $date_fields = array(
             'idcard_start', 'idcard_expire', 'birthday',
             'entrance_time', 'work_entry_time', 'created_at',
-            'class_start_date'
+            'class_start_date', 'start_date', 'idcard_expired',
+            'end_date'
         );
         foreach ($date_fields as $v) {
             if (array_key_exists($v, $data) && $data[$v]) {
@@ -194,16 +195,14 @@ class FcsField {
         }
         //云慧眼的照片优先
         if ($data['front_card']) {
-            $data['idcard_pic'] = $data['front_card'];
+//            $data['idcard_information_pic'] = $data['front_card'];
         }
         if ($data['back_card']) {
-            $data['idcard_pic_back'] = $data['back_card'];
+//            $data['idcard_national_pic'] = $data['back_card'];
         }
         $img_fields = array(
-            'training_contract_first', 'photo_grid',
-            'idcard_pic', 'idcard_pic_back', 'idcard_person_pic',
-            'photo_living', 'school_pic', 'bank_account_pic',
-            'pic_education'
+            'idcard_information_pic', 'idcard_national_pic',
+            'photo_grid', 'photo_living', 'pic_education'
         );
         foreach ($img_fields as $imgf) {
             if ($data[$imgf]) {
@@ -316,7 +315,7 @@ class FcsField {
         $fcs_params['YLZD02'] = $data['class_type'] ? $data['class_type'] : $data['business_type'];
         //规范数据，防止富登出错
         $data['identity_number'] = strtoupper($data['identity_number']);
-        $data['work_contact'] = str_replace(array('-', '_', '#', '+', ' ', '(', ')', '（', '）'), '', $data['work_phone']);
+        $data['work_contact'] = str_replace(array('-', '_', '#', '+', ' ', '(', ')', '（', '）'), '', $data['work_contact']);
         //富登-课栈字段对应关系
         $map = array(
             'merchantAddrPhone' => 'contact_phone', //机构地址电话
@@ -332,8 +331,8 @@ class FcsField {
             'birth' => 'birthday', //出生日期
             'phone' => 'phone', //手机号码
             'applyAmount' => 'borrow_money', //申请金额
-            'attachment1' => 'idcard_pic', //身份证正面照片
-            'attachment2' => 'idcard_pic_back', //身份证反面照片
+            'attachment1' => 'idcard_information_pic', //身份证正面照片
+            'attachment2' => 'idcard_national_pic', //身份证反面照片
             'attachment3' => 'idcard_person_pic', //手持身份证照片
             'attachment4' => 'school_pic', //申请人与销售人员合影
             'attachment5' => 'bank_account_pic', //申请人银行卡照片

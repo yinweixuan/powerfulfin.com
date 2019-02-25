@@ -161,7 +161,7 @@
  binding="tns:FCS_spcKeZhan_spcLoan_spcQuery_spcWS"
  name="FCS_spcKeZhan_spcLoan_spcQuery_spcWS"
 ><soap:address
- location="http://10.200.5.158/eai_chs/start.swe?SWEExtSource=WebService&amp;SWEExtCmd=Execute&amp;WSSOAP=1;&amp;UserName=EAIUSER&amp;Password=EAIUSER"
+ location="http://10.200.5.158/eai_anon_chs/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
 ></soap:address
 ></port
 ></service

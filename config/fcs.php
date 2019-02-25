@@ -5,6 +5,10 @@ return [
     'repay_day' => 15,
     //soap超时时间
     'default_socket_timeout' => 300,
+    //soap用户名
+    'soap_username' => 'EAIUSER',
+    //soap密码
+    'soap_password' => 'EAIUSER',
     //请求最大尝试次数（包含首次申请）
     'max_try' => 8,
     //请求默认最小尝试时间间隔（秒）

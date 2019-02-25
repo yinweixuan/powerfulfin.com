@@ -178,7 +178,7 @@ class FcsCommon {
             $timestamp = time();
         }
         if (is_numeric($billorid)) {
-            $bill = ARPayLoanBill::getBillById($billorid);
+            $bill = ARPFLoanBill::getLoanBillByLid($billorid);
         } elseif (is_array($billorid)) {
             $bill = $billorid;
         }

@@ -16,7 +16,7 @@ class FcsFtp {
         if (config('app.env') == 'local') {
             $root_path = config('fcs.ftp_root') . '_test/';
         } else {
-            $root_path = config('fcs.ftp_root');
+            $root_path = config('fcs.ftp_root') . 'pf/';
         }
         return $root_path;
     }

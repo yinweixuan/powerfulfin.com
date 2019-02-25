@@ -169,5 +169,30 @@ class FcsDB {
         return $loan;
     }
 
+    public static function getNewLoanList() {
+        $yesterday = date('Y-m-d 00:00:00', time() - 86400);
+        $list = DB::table(ARPFLoan::TABLE_NAME)
+            ->select()
+            ->whereRaw('loan_time>="' . $yesterday . '" and status = ' . LOAN_10000_REPAY . ' and resource in (' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') and resource_loan_id != ""')
+            ->get()->toArray();
+        return $list;
+    }
+
+    public static function getUpdateBillList() {
+        $this_month = date('Y-m-01 00:00:00');
+        $list = DB::table(ARPFLoan::TABLE_NAME)
+            ->select()
+            ->whereRaw('loan_time<"' . $this_month . '" and status in (' . LOAN_10000_REPAY . ',' . LOAN_11100_OVERDUE . ') and resource in (' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') and resource_loan_id != ""')
+            ->get()->toArray();
+        return $list;
+    }
+
+    public static function getNightAuditList(){
+        $list = DB::table(ARPFLoan::TABLE_NAME)
+            ->select()
+            ->whereRaw('hid=124704 and status=' . LOAN_4200_DATA_P2P_SEND . ' and resource in (' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') and resource_loan_id != ""')
+            ->get()->toArray();
+        return $list;
+    }
 
 }
