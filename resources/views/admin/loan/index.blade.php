@@ -181,8 +181,8 @@
                                         <td>￥{{ $item['borrow_money'] }}</td>
                                         <td>{{ $loan_product[$item['id']]['loan_product_name'] }}</td>
                                         <td>{{ \App\Models\Server\BU\BULoanStatus::getStatusDescriptionForAdmin($item['status']) }}</td>
-                                        <td>{{ date('m-d H:i',$item['create_time']) }}</td>
-                                        <td>{{ !empty($item['loan_time'])? date('Y-m-d',$item['loan_time']):'' }}</td>
+                                        <td>{{ date('m-d H:i',strtotime($item['create_time'])) }}</td>
+                                        <td>{{ !empty($item['loan_time'])? date('Y-m-d',strtotime($item['loan_time'])):'' }}</td>
                                         <td>
                                             <a href="{{ admin_base_path('loan/info') }}?lid={{ $item['id'] }}">
                                                 <i class="fa fa-eye"></i>
