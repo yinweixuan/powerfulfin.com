@@ -26,6 +26,7 @@ if ($_SERVER['SERVER_NAME'] == DOMAIN_WWW) {
      * 下载页
      */
     Route::get('download', 'HomeController@download');
+    Route::get('downloadpackage', 'HomeController@downloadPackage');
 
     Route::match(['get', 'post'], '/home/qrscan', 'HomeController@qrscan');       //二维码扫描申请
 }

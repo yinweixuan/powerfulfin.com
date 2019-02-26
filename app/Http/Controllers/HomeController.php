@@ -17,15 +17,29 @@ class HomeController extends Controller {
         return view('web.home.index');
     }
 
+    /**
+     * 下载页面
+     */
     public function download() {
-        if (HttpUtil::isWX()) {
-            $content = file_get_contents(PATH_RESOURCES . '/views/wx_download/wx_download.html');
-            echo $content;
-            return;
-        }
         $detect = new \Mobile_Detect();
-        $is_iphone = $detect->is('iphone');
-        if ($is_iphone) {
+        $isIOS = $detect->is('iphone');
+        $isWX = HttpUtil::isWX();
+        return view('web.home.download', ['isWX' => $isWX, 'isIOS' => $isIOS,]);
+        /*
+        $content = file_get_contents(PATH_RESOURCES . '/views/wx_download/wx_download.html');
+        echo $content;
+        return;
+        */
+    }
+
+    /**
+     * 下载包的内容
+     */
+    public function downloadPackage()
+    {
+        $detect = new \Mobile_Detect();
+        $isIOS = $detect->is('iphone');
+        if ($isIOS) {
             $hearder = ['Content-Type' => 'application/ipa;charset=utf-8'];
             return response()->download(storage_path('apk/powerfulfin.ipa'), 'powerfulfin.ipa', $hearder);
             //header('Location: https://itunes.apple.com/app/id1026601319?mt=8');
