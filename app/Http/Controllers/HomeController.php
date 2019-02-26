@@ -18,8 +18,7 @@ class HomeController extends Controller {
     }
 
     public function download() {
-        $is_wx = (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'micromessenger') !== false ? true : false);
-        if ($is_wx) {
+        if (HttpUtil::isWX()) {
             $content = file_get_contents(PATH_RESOURCES . '/views/wx_download/wx_download.html');
             echo $content;
             return;
@@ -27,14 +26,14 @@ class HomeController extends Controller {
         $detect = new \Mobile_Detect();
         $is_iphone = $detect->is('iphone');
         if ($is_iphone) {
-            header('Location: https://itunes.apple.com/app/id1026601319?mt=8');
-            return;
+            $hearder = ['Content-Type' => 'application/ipa;charset=utf-8'];
+            return response()->download(storage_path('apk/powerfulfin.ipa'), 'powerfulfin.ipa', $hearder);
+            //header('Location: https://itunes.apple.com/app/id1026601319?mt=8');
+            //return;
         } else {
             $hearder = ['Content-Type' => 'application/apk;charset=utf-8'];
             return response()->download(storage_path('apk/powerfulfin.apk'), 'powerfulfin.apk', $hearder);
         }
-
-
     }
 
     /**
