@@ -30,18 +30,19 @@
 <body>
 <div id="page" data-role = "page" class="free">
     <div data-role = "none" class="content">
+        <?php
+        if ($isWX) {
+        ?>
         <a href="javascript:void(0)" onclick="document.getElementById('download').style.display='block'">
-            <?php
-                if ($isWX) {
-            ?>
             <div class="button">下载</div>
             <div class='tc' id="download" style="display:none"></div>
-            <?php } else if($isIOS) {?>
-                <a class="button" href="itms-services://?action=download-manifest&url=https://www.powerfulfin.com/app/manifest.plist">下载</a>
-            <?php } else {?>
-                <a class="button" href="https://www.powerfulfin.com/home/downloadPackage?from=download">下载</a>
-            <?php } ?>
         </a>
+            <?php } else if($isIOS) {?>
+                <a class="button" href="itms-services://?action=download-manifest&url=https://app.powerfulfin.com/web/app/manifest.plist">下载</a>
+            <?php } else {?>
+                <a class="button" href="http://www.powerfulfin.com/downloadpackage?f=download">下载</a>
+            <?php } ?>
+
 
 
     </div>
