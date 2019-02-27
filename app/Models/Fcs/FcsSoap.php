@@ -69,17 +69,17 @@ class FcsSoap {
                 'attachment4', 'attachment5', 'attachment7',
                 'attachment8', 'attachment9', 'YLZD01', 'YLZD08'
             );
-            $n = 0;
             foreach ($sorted_params as $k => &$v) {
-                if ($k == 'liveDetailAddress' && !$v) {
-                    $v = '---';
-                }
-                if ($func == 'KZCreateLoan' && in_array($k, $pic_arr) && !$v) {
-                    $v = FcsFtp::parsePath(config('fcs.blank_pic'));
-                    $n++;
-                }
-                if ($func == 'KZCreateLoan' && $k == 'YLZD06') {
-                    $v = mt_rand(100000, 999999);
+                if ($func == 'KZCreateLoan') {
+                    if ($k == 'liveDetailAddress' && !$v) {
+                        $v = '---';
+                    }
+                    if (in_array($k, $pic_arr) && !$v) {
+                        $v = FcsFtp::parsePath(config('fcs.blank_pic'));
+                    }
+                    if ($k == 'YLZD06') {
+                        $v = mt_rand(100000, 999999);
+                    }
                 }
             }
         }

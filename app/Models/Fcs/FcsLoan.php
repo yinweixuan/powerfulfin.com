@@ -285,7 +285,7 @@ class FcsLoan {
         FcsDB::updateLoan($loan['id'], $update, $loan, $reason);
         if ($status_str == 'money_pass') {
             //生成还款计划表
-            FcsCommon::genLoanBill($loan['id']);
+            FcsUtil::genLoanBill($loan['id']);
             //短信通知
             if (!config('app.env') == 'local') {
                 $user = ARPfUsers::getUserInfoByID($loan['uid']);
@@ -320,10 +320,7 @@ class FcsLoan {
         }
         $file_list = array();
         //合同地址
-        $filePath = PATH_STORAGE . '/app/fcs/' . (floor($loan['id'] / 10000)) . '/' . $loan['id'];
-        if (!file_exists($filePath)) {
-            mkdir($filePath, 0755, true);
-        }
+        $filePath = FcsFtp::getLocalFileDir($loan['id']);
         foreach ($data['filelist'] as $item) {
             $arr = array();
             $arr[0] = $filePath . '/signed_loan_contract.' . pathinfo($item['file'], PATHINFO_EXTENSION);

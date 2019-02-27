@@ -1,7 +1,12 @@
 <?php
 
+/**
+ * 富登数据库操作
+ */
+
 namespace App\Models\Fcs;
 
+use App\Models\ActiveRecord\ARPFLoanBill;
 use App\Models\ActiveRecord\ARPFLoanLog;
 use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\ActiveRecord\ARPFOrg;
@@ -39,12 +44,14 @@ class FcsDB {
             ->join(ARPFOrgClass::TABLE_NAME . ' as oc', 'oc.cid', '=', 'l.cid')
             ->join(ARPFLoanProduct::TABLE_NAME . ' as lp', 'lp.loan_product', '=', 'l.loan_product')
             ->select([
-                '*', 'l.id', 'l.id as lid', 'oh.full_name as org_full_name',
+                '*', 'l.id', 'l.id as lid', 'oh.full_name as org_full_name', 'ua.id as uaid',
                 'ur.full_name as full_name', 'l.status as status', 'ul.id as location_id'
             ])
             ->where('l.id', $lid)
             ->whereRaw('l.resource in(' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') and ub.type=1 '
-                . 'and (l.resource_loan_id="" or l.resource_loan_id is null) ')
+                . 'and (l.resource_loan_id="" or l.resource_loan_id is null) '
+                . 'and ua.result_auth=2 and ua.be_idcard>0.8')
+            ->orderByDesc('uaid')
             ->orderByDesc('location_id')
             ->first();
         if (!empty($data)) {
@@ -85,7 +92,6 @@ class FcsDB {
      */
     public static function updateLoan($lid, $update, $loan = [], $reason = '') {
         if (isset($update['audit_opinion'])) {
-            $update['audit_opinion'] = substr($update['audit_opinion'], 0, 240);
             if (!$reason) {
                 $reason = $update['audit_opinion'];
             }
@@ -120,7 +126,7 @@ class FcsDB {
             ->whereRaw('resource in(' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') ')
             ->first();
         if (!$loan) {
-            throw new \Exception('没有查到对应的贷款');
+            throw new \Exception('没有查到对应的分期');
         }
         return $loan;
     }
@@ -169,6 +175,9 @@ class FcsDB {
         return $loan;
     }
 
+    /**
+     * 获取前一日新增已放款分期
+     */
     public static function getNewLoanList() {
         $yesterday = date('Y-m-d 00:00:00', time() - 86400);
         $list = DB::table(ARPFLoan::TABLE_NAME)
@@ -178,21 +187,39 @@ class FcsDB {
         return $list;
     }
 
+    /**
+     * 获取待更新还款计划表的分期
+     */
     public static function getUpdateBillList() {
-        $this_month = date('Y-m-01 00:00:00');
-        $list = DB::table(ARPFLoan::TABLE_NAME)
-            ->select()
-            ->whereRaw('loan_time<"' . $this_month . '" and status in (' . LOAN_10000_REPAY . ',' . LOAN_11100_OVERDUE . ') and resource in (' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') and resource_loan_id != ""')
+        $bill_date = FcsUtil::getCurrentBillDate();
+        $list = DB::table(ARPFLoan::TABLE_NAME . ' as l')
+            ->join(ARPFLoanBill::TABLE_NAME . ' as b', 'b.lid', '=', 'l.id')
+            ->select(['l.id'])
+            ->whereRaw('l.status in (' . LOAN_10000_REPAY . ',' . LOAN_11100_OVERDUE . ') '
+                . 'and l.resource in (' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') '
+                . 'and l.resource_loan_id != "" '
+                . 'and b.bill_date="' . $bill_date . '"'
+                . 'and b.status in (' . ARPFLoanBill::STATUS_NO_REPAY . ',' . ARPFLoanBill::STATUS_OVERDUE . ')')
             ->get()->toArray();
         return $list;
     }
 
-    public static function getNightAuditList(){
+    /**
+     * 获取夜间审核分期列表
+     */
+    public static function getNightAuditList() {
         $list = DB::table(ARPFLoan::TABLE_NAME)
             ->select()
             ->whereRaw('hid=124704 and status=' . LOAN_4200_DATA_P2P_SEND . ' and resource in (' . RESOURCE_FCS . ',' . RESOURCE_FCS_SC . ') and resource_loan_id != ""')
             ->get()->toArray();
         return $list;
+    }
+
+    /**
+     * 删除现有的还款计划表
+     */
+    public static function deleteLoanBill($lid) {
+        return DB::table(ARPFLoanBill::TABLE_NAME)->where('lid', $lid)->delete();
     }
 
 }

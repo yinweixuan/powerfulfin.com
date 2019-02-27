@@ -1,11 +1,16 @@
 <?php
 
+/**
+ * 富登合同相关
+ */
+
 namespace App\Models\Fcs;
 
 use App\Components\AliyunOSSUtil;
 use App\Components\EsignUtil;
 use App\Components\MPDFUtil;
 use App\Models\ActiveRecord\ARPFLoan;
+use App\Models\ActiveRecord\ARPFLoanProduct;
 use App\Models\ActiveRecord\ARPFUsersBank;
 use App\Models\ActiveRecord\ARPFUsersReal;
 
@@ -33,7 +38,7 @@ class FcsContract {
         return $data;
     }
 
-    public static function getContractPdf($template_name, $file_path, $loan, $data, $margin_top = null) {
+    public static function getContractPdf($template_name, $file_path, $loan, $data) {
         if (is_file($file_path)) {
             unlink($file_path);
         }
@@ -139,24 +144,23 @@ class FcsContract {
         $data = self::getResData($loan);
         $data = array_merge($data, $loan, $user);
         $data['contract_no'] = FcsLoan::getContractNo($lid);
-        if ($loan['loan_type'] == 2) {
+        if ($loan['loan_type'] == ARPFLoanProduct::LOAN_TYPE_DISCOUNT) {
             //贴息
             $data['repayment'] = '等额本金';
             $data['grace_period'] = 0;
             $data['rate'] = 0;
-        } elseif ($loan['loan_type'] == 3) {
+        } elseif ($loan['loan_type'] == ARPFLoanProduct::LOAN_TYPE_EQUAL) {
             //等额
             $data['repayment'] = '等额本息';
             $data['grace_period'] = 0;
             $data['rate'] = round($loan['real_rate'] / 12, 2);
-        } elseif ($loan['loan_type'] == 1) {
+        } elseif ($loan['loan_type'] == ARPFLoanProduct::LOAN_TYPE_XY) {
             //弹性
             $data['repayment'] = '等额本息（宽限期内仅归还当期利息）';
             $data['grace_period'] = $loan['rate_time_x'];
             $data['rate'] = round($loan['real_rate'] / 12, 2);
         }
         $data['repay_need'] = $loan['rate_time_x'] + $loan['rate_time_y'];
-        var_dump($data);
         self::getContractPdf('loan.php', $file_path, $loan, $data);
         $signInfos = array(
             array(

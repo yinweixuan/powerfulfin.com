@@ -34,11 +34,11 @@ return [
     //白色的占位图（富登ftp上文件的地址）
     'blank_pic' => 'blank.jpg',
     //产品
-    'product' => '课栈教育分期合作方案',
+    'product' => '大圣分期教育消费贷',
     //渠道号
     'channel' => 'kezhan',
     //客户渠道名
-    'cust_channel' => '北京弟傲思时代信息技术有限公司',
+    'cust_channel' => '北京中宇育达科技有限公司',
     //合作方编号
     'partner_no' => '03',
     //特殊的逾期日期，周末不影响

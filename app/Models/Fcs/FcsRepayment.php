@@ -70,7 +70,7 @@ class FcsRepayment {
             $loan_bill = ARPFLoanBill::getLoanBillByLid($lid);
         }
         if (empty($loan_bill)) {
-            FcsCommon::genLoanBill($lid);
+            FcsUtil::genLoanBill($lid);
             $loan_bill = ARPFLoanBill::getLoanBillByLid($lid);
         }
         return $loan_bill;
@@ -289,11 +289,11 @@ class FcsRepayment {
             $db_repay_flag = in_array($row['status'], $not_overdue_status) && in_array($loan['id'], $wepay_lids);
             if (!$update_repay_flag && !$db_repay_flag) {
                 //富登没有上期逾期本期逾期的规则，上期逾期本期仍会有宽限期
-                if (FcsCommon::isOverdue($row['bill_date'])) {
+                if (FcsUtil::isOverdue($row['bill_date'])) {
                     $repay_update[$row['id']]['status'] = ARPFLoanBill::STATUS_OVERDUE;
-                    $repay_update[$row['id']]['overdue_fees'] = FcsCommon::getOverdueFee($loan['id']);
-                    $repay_update[$row['id']]['overdue_days'] = FcsCommon::calOverdueDays($row, $now, true);
-                    $repay_update[$row['id']]['overdue_fine_interest'] = FcsCommon::calFineInterest($row, $now, true);
+                    $repay_update[$row['id']]['overdue_fees'] = FcsUtil::getOverdueFee($loan['id']);
+                    $repay_update[$row['id']]['overdue_days'] = FcsUtil::calOverdueDays($row, $now, true);
+                    $repay_update[$row['id']]['overdue_fine_interest'] = FcsUtil::calFineInterest($row, $now, true);
 //                    $repay_update[$row['id']]['total'] = $row['principal'] + $row['interest'] + $repay_update[$row['id']]['overdue_fees'] + $repay_update[$row['id']]['overdue_fine_interest'];
                 }
             }

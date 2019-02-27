@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * 富登字段处理
+ */
+
 namespace App\Models\Fcs;
 
-use App\Components\AliyunOSSUtil;
 use App\Components\CheckUtil;
 use App\Components\MapUtil;
 use App\Models\ActiveRecord\ARPFAreas;

@@ -47,7 +47,7 @@ class FcsCommand extends Command {
             //人工推送n单上传通讯录到队列，参数1：lids
             $this->batchOP($args[1], 'pushPhonebook');
         } elseif ($args[0] == 'query') {
-            //查询订单状态，参数1：lids，参数2：是否更新（默认否）（目前不支持更新）
+            //查询订单状态，参数1：lids
             $this->batchOP($args[1], 'query', $args[2]);
         } elseif ($args[0] == 'keepalive') {
             //测试，保持连接（自动）
@@ -90,6 +90,7 @@ class FcsCommand extends Command {
             do {
                 $input = $this->ask('Please enter your command');
                 $args = explode(' ', $input);
+                //todo args[0]
                 $result = $this->runcmd($args);
             } while ($result == 'nomatch');
         }
@@ -141,13 +142,6 @@ class FcsCommand extends Command {
     public function runPerSec($func) {
         set_time_limit(0);
         $t1 = time();
-//        $pause_start = strtotime('2018-05-11 00:00:00');
-//        $pause_end = strtotime('2018-05-11 01:00:00');
-//        //'apply','updateLoan'
-//        $pause_funcs = array('apply', 'updateLoan');
-//        if (in_array($func, $pause_funcs) && $t1 > $pause_start && $t1 < $pause_end) {
-//            return;
-//        }
         do {
             $this->$func();
             $t2 = time();

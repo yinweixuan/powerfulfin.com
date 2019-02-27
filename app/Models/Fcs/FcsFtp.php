@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * 富登ftp
+ */
+
 namespace App\Models\Fcs;
 
 use App\Components\AliyunOSSUtil;
@@ -13,6 +17,7 @@ class FcsFtp {
      */
     public static function getRootPath() {
         //富登测试和正式环境使用的ftp是一个，区分目录，前后带/
+        //大圣与课栈使用同一ftp服务
         if (config('app.env') == 'local') {
             $root_path = config('fcs.ftp_root') . '_test/';
         } else {

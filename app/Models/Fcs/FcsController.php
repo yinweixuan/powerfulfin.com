@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * 富登对外接口
+ */
+
 namespace App\Models\Fcs;
 
 class FcsController {
