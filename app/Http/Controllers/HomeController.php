@@ -40,7 +40,7 @@ class HomeController extends Controller {
         $detect = new \Mobile_Detect();
         $isIOS = $detect->is('iphone');
         if ($isIOS) {
-            $hearder = ['Content-Type' => 'application/ipa;charset=utf-8'];
+            $hearder = ['Content-Type' => 'application/octet-stream;charset=utf-8'];
             return response()->download(storage_path('apk/powerfulfin.ipa'), 'powerfulfin.ipa', $hearder);
             //header('Location: https://itunes.apple.com/app/id1026601319?mt=8');
             //return;
