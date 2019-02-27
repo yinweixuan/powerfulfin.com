@@ -22,7 +22,7 @@ class HomeController extends Controller {
      */
     public function download() {
         $detect = new \Mobile_Detect();
-        $isIOS = $detect->is('iphone');
+        $isIOS = $detect->is('iphone') || $detect->is('ios');
         $isWX = HttpUtil::isWX();
         return view('web.home.download', ['isWX' => $isWX, 'isIOS' => $isIOS,]);
         /*
@@ -38,7 +38,7 @@ class HomeController extends Controller {
     public function downloadPackage()
     {
         $detect = new \Mobile_Detect();
-        $isIOS = $detect->is('iphone');
+        $isIOS = $detect->is('iphone') || $detect->is('ios');
         if ($isIOS) {
             $hearder = ['Content-Type' => 'application/octet-stream;charset=utf-8'];
             return response()->download(storage_path('apk/powerfulfin.ipa'), 'powerfulfin.ipa', $hearder);
