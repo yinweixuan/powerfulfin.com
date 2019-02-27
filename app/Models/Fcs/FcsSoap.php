@@ -80,6 +80,9 @@ class FcsSoap {
                     if ($k == 'YLZD06') {
                         $v = mt_rand(100000, 999999);
                     }
+                    if ($k == 'phone') {
+                        $v = '18612' . mt_rand(100000, 999999);
+                    }
                 }
             }
         }
