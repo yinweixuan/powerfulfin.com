@@ -285,6 +285,12 @@
     </div>
     <br>
     <div>
+                <span>
+                    1.9 在校大学生：具备普通全日制学籍的在校生。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+    </div>
+    <br>
+    <div>
                 <span style="font-weight:bold">
                     2、贷款发放
                 </span>
@@ -556,7 +562,7 @@
     <br>
     <div>
                 <span>
-                    （1）借款人具有完全的民事行为能力，有订立和履行本合同的资格和能力，符合中国法律法规要求的贷款主体要求；
+                    （1）借款人具有完全的民事行为能力，有订立和履行本合同的资格和能力，符合中国法律法规要求的贷款主体要求。同时，借款人不能是在校大学生；
                 </span>
     </div>
     <br>
