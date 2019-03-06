@@ -70,10 +70,7 @@ class ARPFOrg extends Model
                 $ar->$key = $info[$key];
             }
         }
-
-        if (!$ar->save()) {
-
-        }
+        $ar->save();
         return $ar->getAttributes();
     }
 
@@ -86,7 +83,8 @@ class ARPFOrg extends Model
         return DB::table(self::TABLE_NAME)->where('id', $id)->update($update);
     }
 
-    public static function getSearchList($oid1, $oid2 = null) {
+    public static function getSearchList($oid1, $oid2 = null)
+    {
         if (!$oid2) {
             $oid2 = $oid1;
         }
