@@ -289,7 +289,7 @@ class FcsLoan {
             //短信通知
             if (!config('app.env') == 'local') {
                 $user = ARPfUsers::getUserInfoByID($loan['uid']);
-                $content = '尊敬的客户，您通过课栈网向富登小额贷#款有限公司'
+                $content = '尊敬的客户，您通过大圣分期向富登小额贷#款有限公司'
                     . '申请的' . $loan['borrow_money'] . '元培训借#款额*度，'
                     . '已经成功发放至培训方。'
                     . '详情请访问http://www.powerfulfin.com或下载大圣分期app。';

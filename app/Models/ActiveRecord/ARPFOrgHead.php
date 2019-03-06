@@ -71,7 +71,7 @@ class ARPFOrgHead extends Model
         if (empty($info)) {
             throw new PFException(ERR_SYS_PARAM_CONTENT, ERR_SYS_PARAM);
         }
-        
+
         $ar = new ARPFOrgHead();
         $columns = Schema::getColumnListing(self::TABLE_NAME);
         foreach ($columns as $key) {
@@ -79,10 +79,7 @@ class ARPFOrgHead extends Model
                 $ar->$key = $info[$key];
             }
         }
-
-        if (!$ar->save()) {
-
-        }
+        $ar->save();
         return $ar->getAttributes();
 
     }

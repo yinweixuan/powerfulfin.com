@@ -12,6 +12,7 @@ namespace App\Admin\Controllers;
 use App\Admin\AdminController;
 use App\Admin\Models\AdminUsersModel;
 use App\Admin\Models\OrgModel;
+use App\Components\AliyunOpenSearchUtil;
 use App\Components\PFException;
 use App\Models\ActiveRecord\ARPFAreas;
 use App\Models\ActiveRecord\ARPFOrg;
@@ -248,6 +249,7 @@ class OrgController extends AdminController
                     $data = $_POST;
                     $result = OrgModel::addOrg($data);
                     if ($result) {
+                        AliyunOpenSearchUtil::pushOrgData($result['id']);
                         return Redirect::to("/admin/org/index")->send();
                     }
                 } catch (PFException $exception) {
@@ -293,6 +295,7 @@ class OrgController extends AdminController
                     $data = $_POST;
                     $result = OrgModel::updateOrg($data);
                     if ($result) {
+                        AliyunOpenSearchUtil::pushOrgData($oid);
                         return Redirect::to("/admin/org/index")->send();
                     }
                 } catch (PFException $exception) {
