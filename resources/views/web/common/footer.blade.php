@@ -18,15 +18,19 @@
                 </div>
             </div>
 
-            <div class="col-lg-3"></div>
-            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div align="center">
+                    <img src="http://www.powerfulfin.com/web/app/download.png" width="140px">
+                    <p style="color: #0b0b0b">扫描二维码下载APP</p>
+                </div>
+            </div>
         </div>
     </div>
     <div id="sub-footer">
         <div class="container">
-            <div class="row">
+            <div class="row" >
                 <div class="col-lg-12">
-                    <div class="copyright">
+                    <div class="copyright" style="text-align: center">
                         <p>
                             &copy; 2018.powerfulfin.com {{ config('app.company_name') }}
                             &nbsp;&nbsp; {{ config('app.website_filing') }}
