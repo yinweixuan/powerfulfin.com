@@ -108,7 +108,12 @@ class OutputUtil
 
     public static function json_decode($json, $assoc = true)
     {
-        return json_decode($json, $assoc);
+        $ret = json_decode($json, $assoc);
+        //如果转换json失败结果为null,并且原参数不为空,则直接将原参数套入数组返回.
+        if ($ret === null && $json . '' != '') {
+            $ret = [$json];
+        }
+        return $ret;
     }
 
     /**
