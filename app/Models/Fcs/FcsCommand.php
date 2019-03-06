@@ -90,7 +90,6 @@ class FcsCommand extends Command {
             do {
                 $input = $this->ask('Please enter your command');
                 $args = explode(' ', $input);
-                //todo args[0]
                 $result = $this->runcmd($args);
             } while ($result == 'nomatch');
         }
