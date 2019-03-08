@@ -41,7 +41,7 @@ class MPDFUtil {
 
         $pdf->ignore_invalid_utf8 = true;
         $pdf->text_input_as_HTML = true;
-        $pdf->useAdobeCJK = true;
+//        $pdf->useAdobeCJK = true;//富登解析不了
         $pdf->autoScriptToLang = true;
         $pdf->autoLangToFont = true;
         $pdf->showWatermarkText = true;

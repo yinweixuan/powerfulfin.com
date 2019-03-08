@@ -165,16 +165,16 @@ class FcsContract {
         $signInfos = array(
             array(
                 'type' => EsignUtil::SIGN_TYPE_KZ,
-                'posPage' => 9,
+                'posPage' => 10,
                 'posX' => 150,
-                'posY' => 180,
+                'posY' => 640,
             ),
             array(
                 'type' => EsignUtil::SIGN_TYPE_PERSON,
                 'id' => $loan['uid'],
-                'posPage' => 9,
+                'posPage' => 10,
                 'posX' => 150,
-                'posY' => 95,
+                'posY' => 555,
             ),
         );
         EsignUtil::sign($file_path, $file_path_signed, $signInfos);
