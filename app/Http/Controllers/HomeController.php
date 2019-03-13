@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 
 use App\Components\HttpUtil;
+use App\Components\OutputUtil;
 use Illuminate\Support\Facades\Input;
 
 class HomeController extends Controller {
@@ -35,8 +36,7 @@ class HomeController extends Controller {
     /**
      * 下载包的内容
      */
-    public function downloadPackage()
-    {
+    public function downloadPackage() {
         $detect = new \Mobile_Detect();
         $isIOS = $detect->is('iphone') || $detect->is('ios');
         if ($isIOS) {
@@ -53,8 +53,7 @@ class HomeController extends Controller {
     /**
      * 申请分期二维码扫描之后的
      */
-    public function qrscan()
-    {
+    public function qrscan() {
         if (!HttpUtil::isSelf()) {
             $url = "http://www." . DOMAIN_WEB . "/download?f=qr";
         } else {
@@ -62,6 +61,35 @@ class HomeController extends Controller {
             $url = "powerfulfin://apply?oid={$oid}";
         }
         HttpUtil::goUrl($url);
+    }
+
+    public function appUpdate() {
+        $version = Input::get('version');
+        $header = getallheaders();
+        $ds_ua = explode('|', urldecode($header['Ds-User-Agent']));
+        $type = $ds_ua[6];
+        if (strtolower($type) == 'ios') {
+            $update = config('app_update.ios');
+        } else {
+            $update = config('app_update.android');
+        }
+        $version_arr = explode('.', $version);
+        $latest_version_arr = explode('.', $update['version']);
+        $result = [
+            'update' => false
+        ];
+        foreach ($latest_version_arr as $k => $v) {
+            if ($v > $version_arr[$k]) {
+                $result['update'] = true;
+                break;
+            } elseif ($v < $version_arr[$k]) {
+                break;
+            }
+        }
+        if ($result['update'] == true) {
+            $result = array_merge($update, $result);
+        }
+        OutputUtil::out($result);
     }
 
 }
