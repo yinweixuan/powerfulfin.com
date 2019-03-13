@@ -310,7 +310,7 @@
     <br>
     <div>
                 <span>
-                    贷款期限：自本协议生效之日起【<?php echo $data['repay_need'] ?>】个月（下称“分期期数”）。其中宽限期【<?php echo $data['grace_period'] ?>】个月，宽限期内每期仅归还当期利息。
+                    贷款期限：自本协议生效之日起【<?php echo $data['loan_term'] ?>】个月（下称“分期期数”）。其中宽限期【<?php echo $data['grace_period'] ?>】个月，宽限期内每期仅归还当期利息。
                 </span>
     </div>
     <br>

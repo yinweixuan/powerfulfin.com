@@ -13,6 +13,7 @@ class FcsSoap {
             //正式环境
             $wsdl = dirname(__FILE__) . '/wsdl_prod/' . $wsdl_name;
         }
+        $time1 = microtime(true);
         try {
             $xmlobj = simplexml_load_string(file_get_contents($wsdl));
             $xmlarr = json_decode(json_encode($xmlobj), true);
@@ -37,9 +38,8 @@ class FcsSoap {
             $soap_header = new \SoapHeader($wsse, 'Security', $user_token, false);
             $client = new \SOAPClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE,));
             $client->__setSoapHeaders($soap_header);
-            $time1 = microtime(true);
             $r = $client->__soapCall($func, $sorted_params);
-        } catch (\SoapFault $sf) {
+        } catch (\Exception $sf) {
             $error = $sf->getMessage();
         }
         $time2 = microtime(true);

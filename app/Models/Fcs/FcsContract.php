@@ -18,10 +18,16 @@ class FcsContract {
 
     const TITLE = 'powerfulfin.com';
 
+    /**
+     * 获取合同模板目录
+     */
     public static function getContractTemplateDir() {
         return __DIR__ . '/contract';
     }
 
+    /**
+     * 获取合同基本信息
+     */
     public static function getResData($loan) {
         $data = [];
         $data['intermediary'] = '北京中宇育达科技有限公司';
@@ -38,6 +44,9 @@ class FcsContract {
         return $data;
     }
 
+    /**
+     * 生成合同pdf
+     */
     public static function getContractPdf($template_name, $file_path, $loan, $data) {
         if (is_file($file_path)) {
             unlink($file_path);
@@ -160,7 +169,7 @@ class FcsContract {
             $data['grace_period'] = $loan['rate_time_x'];
             $data['rate'] = round($loan['real_rate'] / 12, 2);
         }
-        $data['repay_need'] = $loan['rate_time_x'] + $loan['rate_time_y'];
+        $data['loan_term'] = FcsUtil::getLoanTerm($loan);
         self::getContractPdf('loan.php', $file_path, $loan, $data);
         $signInfos = array(
             array(

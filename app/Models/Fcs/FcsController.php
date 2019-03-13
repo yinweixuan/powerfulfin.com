@@ -21,6 +21,7 @@ class FcsController {
             $lid = FcsLoan::pullStatus($this->params);
         } catch (\Exception $ex) {
             FcsHttp::fail($ex->getMessage());
+            return;
         }
         FcsHttp::success([], $lid);
     }
@@ -31,6 +32,7 @@ class FcsController {
             $lid = FcsLoan::getContract($this->params);
         } catch (\Exception $ex) {
             FcsHttp::fail($ex->getMessage());
+            return;
         }
         FcsHttp::success([], $lid);
     }

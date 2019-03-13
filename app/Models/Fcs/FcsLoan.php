@@ -55,6 +55,7 @@ class FcsLoan {
         //处理结果
         if (is_array($result) && array_key_exists('code', $result)) {
             $update = array();
+            $update['supply_info'] = json_encode($params);
             if ($result['code'] == 0 && $result['loanId']) {
                 //提交成功
                 $update['resource_loan_id'] = $result['loanId'];
@@ -177,6 +178,8 @@ class FcsLoan {
                     $reason = '同步上课确认给富登成功';
                 } elseif ($params['loanStatue'] == 'cancel') {
                     $reason = '同步取消放款给富登成功';
+                } else {
+                    $reason = '';
                 }
                 FcsDB::updateLoan($lid, $update, $loan, $reason);
             } else {

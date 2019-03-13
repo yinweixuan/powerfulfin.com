@@ -15,6 +15,9 @@ class FcsCommand extends Command {
     protected $signature = 'fcs {args?*}';
     protected $description = 'Commands for FCS';
 
+    /**
+     * 执行命令
+     */
     public function runcmd($args) {
         if ($args[0] == 'apply') {
             //申请贷款（自动）
@@ -61,6 +64,9 @@ class FcsCommand extends Command {
         return 'done';
     }
 
+    /**
+     * 使用说明
+     */
     public function getManual() {
         $this_file = file_get_contents(__FILE__);
         $start = strpos($this_file, 'public function runcmd($args)') + 30;
@@ -80,6 +86,9 @@ class FcsCommand extends Command {
         return $manual;
     }
 
+    /**
+     * 命令入口
+     */
     public function handle() {
         set_time_limit(0);
         $arguments = $this->arguments();
@@ -95,6 +104,9 @@ class FcsCommand extends Command {
         }
     }
 
+    /**
+     * 保持连接，应该不会使用了
+     */
     public function keepAlive($args = array()) {
         $params = array();
         $params['channel'] = config('fcs.channel');
@@ -138,6 +150,9 @@ class FcsCommand extends Command {
         }
     }
 
+    /**
+     * 持续执行方法
+     */
     public function runPerSec($func) {
         set_time_limit(0);
         $t1 = time();
@@ -152,6 +167,9 @@ class FcsCommand extends Command {
         return;
     }
 
+    /**
+     * 转化参数为数组
+     */
     public function getInputArr($input, $sanitize_int = true) {
         if (!is_array($input)) {
             $input_str = str_replace(array('，', ' ', '+', '-'), array(',', '', '', ''), $input);
@@ -160,12 +178,16 @@ class FcsCommand extends Command {
             $input_arr = $input;
         }
         if ($sanitize_int) {
+            //Remove all characters except digits, plus and minus sign.
             $input_arr = filter_var_array($input_arr, FILTER_SANITIZE_NUMBER_INT);
         }
         $result_arr = array_unique(array_filter($input_arr));
         return array_values($result_arr);
     }
 
+    /**
+     * 批量操作
+     */
     public function batchOP($lids, $func, $args = null) {
         $lid_arr = $this->getInputArr($lids);
         foreach ($lid_arr as $lid) {
@@ -183,6 +205,9 @@ class FcsCommand extends Command {
         echo 'all done' . PHP_EOL;
     }
 
+    /**
+     * 分期订单操作，包含推队列和立即执行
+     */
     public function loanOp($loan, $op) {
         $lid = $loan['id'];
         if (!$loan['resource_loan_id']) {

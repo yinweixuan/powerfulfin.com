@@ -44,6 +44,9 @@ class FcsFtp {
         return $upload_dir;
     }
 
+    /**
+     * 获取本地文件路径
+     */
     public static function getLocalFileDir($lid) {
         $file_dir = PATH_STORAGE . '/data/fcs/' . (floor($lid / 10000)) . '/' . $lid;
         if (!file_exists($file_dir)) {
@@ -94,6 +97,9 @@ class FcsFtp {
         }
     }
 
+    /**
+     * 转化地址为富登可解析的地址
+     */
     public static function parsePath($remote_file) {
         $root_path = self::getRootPath();
         return str_replace('/', '\\', config('fcs.fcs_ftp_prefix') . $root_path . $remote_file);
@@ -112,7 +118,7 @@ class FcsFtp {
 
     /**
      * 下载文件
-     * @param array $file_list 二维数组，[[本地文件，远程文件],[],[]]
+     * $file_list 二维数组，[[本地文件，远程文件],[],[]]
      */
     public static function download($file_list) {
         $conn = self::getConnection();

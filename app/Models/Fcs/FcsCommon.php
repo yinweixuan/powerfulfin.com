@@ -42,7 +42,7 @@ class FcsCommon {
 
     /**
      * 退课，提前还款
-     * @param int $type 1：退课；2：提前还款
+     * $type 1：退课；2：提前还款
      */
     public static function cancelLoan($lid, $type, $timestamp) {
         if ($timestamp) {
@@ -61,6 +61,8 @@ class FcsCommon {
             $loan_type = 'kztx';
         } elseif (strpos($loan['loan_product'], 'KZDE') !== false) {
             $loan_type = 'kzde';
+        } else {
+            $loan_type = '';
         }
         $bill_date = FcsUtil::getNextBillDate($time);
         $bill = ARPFLoanBill::getLoanBillByLid($lid);
@@ -116,6 +118,9 @@ class FcsCommon {
         } elseif ($type == 2) {
             //提前还款
             $rate = 0.02;
+            $tiexi_rate = 0;
+        } else {
+            $rate = 0;
             $tiexi_rate = 0;
         }
         if ($loan_type == 'kztx' && $type == 1) {

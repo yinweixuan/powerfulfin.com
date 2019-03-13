@@ -4,6 +4,7 @@ namespace App\Models\Fcs;
 
 use App\Models\ActiveRecord\ARPFLoan;
 use App\Models\ActiveRecord\ARPFLoanBill;
+use App\Models\ActiveRecord\ARPFLoanProduct;
 
 class FcsRepayment {
 
@@ -210,9 +211,10 @@ class FcsRepayment {
 
 
     public static function getRepayListUpdate($loan, $fcs_data, $loan_bill, $repay_update) {
-        $kz_sign = strpos($loan['loan_product'], 'KZTX');
-        if (is_array($fcs_data['repay_list']) && count($fcs_data['repay_list']) == $loan['repay_need']) {
-            if ($fcs_data['baseinfo']->repaymentMethod != '等额本金' && $kz_sign === false) {
+        if (is_array($fcs_data['repay_list']) && !empty($fcs_data['repay_list'])) {
+            $loan_product = ARPFLoanProduct::getLoanProductByProduct($loan['loan_product']);
+            $loan_term = FcsUtil::getLoanTerm($loan_product);
+            if (count($fcs_data['repay_list']) == $loan_term && $loan_product['loan_type'] != ARPFLoanProduct::LOAN_TYPE_DISCOUNT) {
                 foreach ($fcs_data['repay_list'] as $item) {
                     foreach ($loan_bill as $row) {
                         if ($row['installment_plan'] == $item->Periods) {
@@ -338,7 +340,7 @@ class FcsRepayment {
                 $update['status'] = LOAN_11100_OVERDUE;
             }
         }
-        if ($row['status'] == ARPFLoanBill::STATUS_REPAY) {
+        if (isset($row) && $row['status'] == ARPFLoanBill::STATUS_REPAY) {
             $update['status'] = LOAN_11000_FINISH;
         }
         return $update;
