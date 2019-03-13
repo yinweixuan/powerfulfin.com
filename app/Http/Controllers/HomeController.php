@@ -76,17 +76,17 @@ class HomeController extends Controller {
         $version_arr = explode('.', $version);
         $latest_version_arr = explode('.', $update['version']);
         $result = [
-            'update' => false
+            'update' => '0'
         ];
         foreach ($latest_version_arr as $k => $v) {
             if ($v > $version_arr[$k]) {
-                $result['update'] = true;
+                $result['update'] = '1';
                 break;
             } elseif ($v < $version_arr[$k]) {
                 break;
             }
         }
-        if ($result['update'] == true) {
+        if ($result['update'] == '1') {
             $result = array_merge($update, $result);
         }
         OutputUtil::out($result);
