@@ -41,12 +41,12 @@ class HomeController extends Controller {
         $isIOS = $detect->is('iphone') || $detect->is('ios');
         if ($isIOS) {
             $hearder = ['Content-Type' => 'application/octet-stream;charset=utf-8'];
-            return response()->download(storage_path('apk/powerfulfin.ipa'), 'powerfulfin.ipa', $hearder);
+            return response()->download(storage_path('upload/pkg/powerfulfin.ipa'), 'powerfulfin.ipa', $hearder);
             //header('Location: https://itunes.apple.com/app/id1026601319?mt=8');
             //return;
         } else {
             $hearder = ['Content-Type' => 'application/apk;charset=utf-8'];
-            return response()->download(storage_path('apk/powerfulfin.apk'), 'powerfulfin.apk', $hearder);
+            return response()->download(storage_path('upload/pkg/powerfulfin.apk'), 'powerfulfin.apk', $hearder);
         }
     }
 
