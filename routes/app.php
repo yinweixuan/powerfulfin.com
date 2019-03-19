@@ -20,9 +20,14 @@ Route::get('downloadpackage.ipa', 'HomeController@downloadPackage');
 Route::match(['get', 'post'], 'app/update', 'HomeController@appUpdate');
 
 /**
- * app升级检测接口
+ * app平台审核接口
  */
 Route::match(['get', 'post'], 'app/audit', 'HomeController@appAudit');
+
+/**
+ * app天气接口
+ */
+Route::match(['get', 'post'], 'app/weather', 'HomeController@weather');
 
 Route::group(['namespace' => 'App\V1'], function () {
     // Controllers Within The "App\Http\Controllers\APP\V1" Namespace

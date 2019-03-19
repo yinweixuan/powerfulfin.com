@@ -107,4 +107,38 @@ class HomeController extends Controller {
         $result['audit'] = $audit_info[$version][$channel] ? $audit_info[$version][$channel] : '0';
         OutputUtil::out($result);
     }
+
+    public function weather() {
+        $lng = Input::get('lng');
+        $lat = Input::get('lat');
+        //默认地址
+        $location = 'beijing';
+        if ($lng < 1 || $lat < 1) {
+            $ip = \App\Models\DataBus::get('ip_addr');
+            if ($ip && $ip != '127.0.0.1') {
+                $location = $ip;
+            }
+        } else {
+            $location = $lat . ':' . $lng;
+        }
+        $params = [];
+        $params['key'] = 'aeh6u6uodepugnpe';
+        $params['location'] = $location;
+        $params['language'] = 'zh-Hans';
+        $params['unit'] = 'c';
+        $host = 'https://api.seniverse.com/v3/weather/now.json';
+        $url = $host . '?' . http_build_query($params);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $content = curl_exec($ch);
+        curl_close($ch);
+        $weather = json_decode($content, true);
+        $result = empty($weather['results'][0]) ? [] : $weather['results'][0];
+        OutputUtil::out($result);
+    }
 }
