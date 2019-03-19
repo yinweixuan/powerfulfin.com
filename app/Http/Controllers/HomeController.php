@@ -92,4 +92,19 @@ class HomeController extends Controller {
         OutputUtil::out($result);
     }
 
+    public function appAudit() {
+        $header = getallheaders();
+        $ds_ua = explode('|', urldecode($header['Ds-User-Agent']));
+        $channel = $ds_ua[1];
+        $version = $ds_ua[2];
+        $type = $ds_ua[6];
+        if (strtolower($type) == 'ios') {
+            $audit_info = config('app_audit.ios');
+        } else {
+            $audit_info = config('app_audit.android');
+        }
+        $result = [];
+        $result['audit'] = $audit_info[$version][$channel] ? $audit_info[$version][$channel] : '0';
+        OutputUtil::out($result);
+    }
 }
