@@ -47,3 +47,9 @@ if ($_SERVER['SERVER_NAME'] == DOMAIN_INNER) {
     });
 }
 
+if ($_SERVER['SERVER_NAME'] == DOMAIN_ADMIN) {
+    if (strpos($_SERVER['REQUEST_URI'], '/admin') === false) {
+        return head('Location:http://' . DOMAIN_ADMIN . '/admin');
+    }
+}
+
