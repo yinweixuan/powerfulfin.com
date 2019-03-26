@@ -178,7 +178,7 @@ class HomeController extends Controller {
 
     public function getWeather($location, $only_cache = false) {
         $weather = false;
-        $weather_key = 'PF_AUDIT_WEATHER_' . date('YmdH') . '_' . $location;
+        $weather_key = 'PF_AUDIT_WEATHER:' . date('YmdH') . '_' . str_replace(':', '_', $location);
         try {
             $weather_cache = Redis::get($weather_key);
             if ($weather_cache) {

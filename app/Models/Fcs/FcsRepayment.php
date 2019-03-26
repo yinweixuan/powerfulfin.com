@@ -328,8 +328,7 @@ class FcsRepayment {
     public static function getLoanUpdate($loan, $fcs_data, $loan_bill, $repay_update, $update, $ignored_bill_ids) {
         $update['status'] = LOAN_10000_REPAY;
         $update['loan_time'] = date('Y-m-d 00:00:00', strtotime($fcs_data['baseinfo']->loanDate));
-        $update['fcs_sequence'] = $fcs_data['baseinfo']->loanSequence;
-        $update['fcs_service'] = $fcs_data['baseinfo']->serviceReceivable;
+        $update['resource_order_id'] = $fcs_data['baseinfo']->loanSequence;
         foreach ($loan_bill as $row) {
             foreach ($repay_update as $id => $item) {
                 if ($row['id'] == $id && !in_array($id, $ignored_bill_ids)) {
