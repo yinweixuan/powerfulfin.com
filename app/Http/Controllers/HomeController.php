@@ -100,6 +100,12 @@ class HomeController extends Controller {
      * app审核接口
      */
     public function appAudit() {
+        $result = [];
+        $result['audit'] = self::isAudit();
+        OutputUtil::out($result);
+    }
+
+    public static function isAudit() {
         $header = getallheaders();
         $ds_ua = explode('|', urldecode($header['Ds-User-Agent']));
         $channel = $ds_ua[1];
@@ -110,9 +116,7 @@ class HomeController extends Controller {
         } else {
             $audit_info = config('app_audit.android');
         }
-        $result = [];
-        $result['audit'] = $audit_info[$version][$channel] ? $audit_info[$version][$channel] : '0';
-        OutputUtil::out($result);
+        return $audit_info[$version][$channel] ? $audit_info[$version][$channel] : '0';
     }
 
     /**

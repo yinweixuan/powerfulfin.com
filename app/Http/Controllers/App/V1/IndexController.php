@@ -13,6 +13,7 @@ use App\Http\Controllers\App\AppController;
 use App\Components\OutputUtil;
 use App\Components\AliyunOpenSearchUtil;
 use App\Http\Controllers\App\Models\Loan;
+use App\Http\Controllers\HomeController;
 use App\Models\DataBus;
 use Illuminate\Support\Facades\Input;
 
@@ -22,11 +23,7 @@ class IndexController extends AppController {
         $uid = DataBus::getUid();
         $data = [];
         try {
-            $header = getallheaders();
-            $ds_ua = explode('|', urldecode($header['Ds-User-Agent']));
-            $bundle_identifier = $ds_ua[2];
-            $version = Input::get('version');
-            $data['audit'] = $this->getAppStoreAudit($version, $bundle_identifier);
+            $data['audit'] = $this->getAppStoreAudit();
         } catch (\Exception $e) {
             $data['audit'] = [];
         }
@@ -294,13 +291,10 @@ class IndexController extends AppController {
     /**
      * 首页ios审核信息
      */
-    public function getAppStoreAudit($version = null, $bundle_identifier = null) {
-        $flag = '0';
+    public function getAppStoreAudit() {
+        $flag = HomeController::isAudit();
         $list = [];
-        $is_audit_version = config('index.ios_audit_version') && $version == config('index.ios_audit_version');
-        $is_audit_bundle = config('index.ios_audit_bundle_identifier') && $bundle_identifier == config('index.ios_audit_bundle_identifier');
-        if ($is_audit_version || $is_audit_bundle) {
-            $flag = '1';
+        if ($flag == '1') {
             $data = AliyunOpenSearchUtil::searchSchool('恒企');
             if (!empty($data['list'])) {
                 foreach ($data['list'] as $item) {
