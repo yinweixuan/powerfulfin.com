@@ -295,7 +295,21 @@ class IndexController extends AppController {
         $flag = HomeController::isAudit();
         $list = [];
         if ($flag == '1') {
-            $data = AliyunOpenSearchUtil::searchSchool('恒企');
+            $keyword = '教育';
+            $lng = Input::get('lng');
+            $lat = Input::get('lat');
+            $page = Input::get('page', '1');
+            $pagesize = Input::get('pagesize', '10');
+            if ($lng < 1 || $lat < 1) {
+                $ip = \App\Models\DataBus::get('ip');
+                if ($ip) {
+                    $ip = $ip == 2130706433 ? null : $ip;
+                    $location = \App\Components\MapUtil::getPosByIp($ip);
+                    $lng = $location['lng'];
+                    $lat = $location['lat'];
+                }
+            }
+            $data = AliyunOpenSearchUtil::searchSchool($keyword, $lng, $lat, $page, $pagesize);
             if (!empty($data['list'])) {
                 foreach ($data['list'] as $item) {
                     $new_item = [];
