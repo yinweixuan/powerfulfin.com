@@ -12,7 +12,7 @@ return [
             'inner' => '1',
             'oppo' => '1',
             'vivo' => '1',
-            '360' => '1',
+            's360' => '1',
             'xiaomi' => '1',
             'huawei' => '1',
             'yingyongbao' => '1',
