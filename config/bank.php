@@ -49,9 +49,9 @@ return [
         'jcfc_bank_code_tl' => '0302',    //JCFC 对应人行code
         'logo' => 'http://www.powerfulfin.com/img/banks/citic.png',
     ),
-    'HXB' => array(
+    'CEB' => array(
         'bankname' => '中国光大银行',
-        'bank_code' => 'HXB',
+        'bank_code' => 'CEB',
         'jcfc_bank_code' => '303100000006',   //JCFC 银行code
         'jcfc_bank_code_tl' => '0303',    //JCFC 对应人行code
         'logo' => 'http://www.powerfulfin.com/img/banks/hxb.png',
