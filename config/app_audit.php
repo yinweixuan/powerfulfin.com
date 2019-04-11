@@ -15,7 +15,7 @@ return [
             's360' => '1',
             'xiaomi' => '1',
             'huawei' => '1',
-            'yingyongbao' => '1',
+            'yingyongbao' => '0',
         ]
     ]
 ];
