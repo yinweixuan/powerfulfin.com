@@ -78,6 +78,7 @@
                                     <th>手机号</th>
                                     <th>姓名</th>
                                     <th>注册时间</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -87,7 +88,11 @@
                                         <td>{{$item['username']}}</td>
                                         <td>{{$item['phone']}}</td>
                                         <td>{{$item['full_name']}}</td>
-                                        <td>{{$item['created_at']}}</td>
+                                        <td>{{substr($item['created_at'],0,10)}}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-danger"
+                                               href="{{ admin_base_path('users/real') }}?uid={{ $item['id'] }}">查看实名</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -98,6 +103,7 @@
                                     <th>手机号</th>
                                     <th>姓名</th>
                                     <th>注册时间</th>
+                                    <th>操作</th>
                                 </tr>
                                 </tfoot>
                             </table>

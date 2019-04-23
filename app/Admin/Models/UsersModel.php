@@ -46,7 +46,7 @@ class UsersModel
             ->leftJoin(ARPfUsers::TABLE_NAME . ' as u', 'ur.uid', '=', 'u.id');
 
         if (!empty($uid) && is_numeric($uid)) {
-            $query->where('ur.id', $uid);
+            $query->where('ur.uid', $uid);
         }
 
         if (!empty($phone)) {
@@ -64,7 +64,7 @@ class UsersModel
         $query->orderByDesc('ur.uid');
 
         $info = $query->paginate(10, ['ur.uid'], 'page', $page)
-            ->appends(['uid' => $uid, 'phone' => $phone, 'full_name' => $full_name, 'identity_number' => $identity_number]);
+            ->appends(['ur.uid' => $uid, 'phone' => $phone, 'full_name' => $full_name, 'identity_number' => $identity_number]);
         return $info;
     }
 
