@@ -1,3 +1,4 @@
+{!! Admin::css(admin_asset('plugins/viewerjs/dist/viewer.css')) !!}
 <style>
     .nav-tabs-custom > .nav-tabs > li.active {
         border-top-color: #dd4b39;
@@ -28,7 +29,7 @@
         </div>
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-9" id="galley">
         <div class="nav-tabs-custom" style="">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#activity" data-toggle="tab">订单信息</a></li>
@@ -164,7 +165,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="4" align="center">工作状态:<?php switch ($work['working_status']) {
+                            <td colspan="4" align="center">工作状态:<?php  switch ($work['working_status']) {
                                     case \App\Models\ActiveRecord\ARPFUsersWork::WORKING_CONDITION_WORKING:
                                         echo "在职";
                                         break;
@@ -271,18 +272,15 @@
                         <tr>
                             <td>身份证正面照</td>
                             <td>
-                                <a href="{{ $pic['idcard_information_pic'] }}"
-                                   target="_blank">
-                                    <img src="{{ $pic['idcard_information_pic'] }}"
-                                         style="width:200px">
-                                </a>
+
+                                <img data-original="{{ $pic['idcard_information_pic'] }}"
+                                     src="{{ $pic['idcard_information_pic'] }}"
+                                     style="width:200px">
                             <td>身份证反面照</td>
                             <td>
-                                <a href="{{ $pic['idcard_national_pic'] }}"
-                                   target="_blank">
-                                    <img src="{{ $pic['idcard_national_pic'] }}"
-                                         style="width:200px">
-                                </a>
+                                <img data-original="{{ $pic['idcard_national_pic'] }}"
+                                     src="{{ $pic['idcard_national_pic'] }}"
+                                     style="width:200px">
                             </td>
                         </tr>
                         <tr>
@@ -413,3 +411,37 @@
         </div>
     </div>
 </div>
+{!! Admin::js(admin_asset('plugins/viewerjs/dist/viewer.js')) !!}
+
+
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', function () {
+        var galley = document.getElementById('galley');
+        var viewer = new Viewer(galley, {
+            url: 'data-original',
+            toolbar: {
+                oneToOne: true,
+
+                prev: function () {
+                    viewer.prev(true);
+                },
+
+                play: true,
+
+                next: function () {
+                    viewer.next(true);
+                },
+
+                download: function () {
+                    const a = document.createElement('a');
+
+                    a.href = viewer.image.src;
+                    a.download = viewer.image.alt;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+            },
+        });
+    });
+</script>
