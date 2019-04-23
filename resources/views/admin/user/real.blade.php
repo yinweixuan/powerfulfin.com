@@ -55,7 +55,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-university"></i>
                             </div>
-                            <input type="text" name="identity_number" class="form-control input-sm" placeholder="姓名"
+                            <input type="text" name="identity_number" class="form-control input-sm" placeholder="身份证"
                                    value="{{$identity_number}}">
                         </div>
                     </div>
@@ -80,9 +80,8 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12" style="overflow-x: auto;">
-                            <table id="example2" class="table table-bordered table-hover dataTable"
-                                   role="grid" aria-describedby="example2_info">
-                                <thead>
+                            <table class="table table-bordered table-hover dataTable">
+                                <thead align="center">
                                 <tr>
                                     <th>用户UID</th>
                                     <th>手机号</th>
